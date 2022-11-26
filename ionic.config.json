@@ -1,0 +1,7 @@
+{
+  "name": "sleepers-ui",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
