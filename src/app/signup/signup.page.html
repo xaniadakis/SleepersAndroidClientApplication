@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>signup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="center">
+  <form #form="ngForm" (ngSubmit)="onSignup(form)">
+<!--    <ion-item lines="full">-->
+<!--      <ion-label position="floating">First name</ion-label>-->
+<!--      <ion-input type="text" required></ion-input>-->
+<!--    </ion-item>-->
+<!--    <ion-item lines="full">-->
+<!--      <ion-label position="floating">Last name</ion-label>-->
+<!--      <ion-input type="text" required></ion-input>-->
+<!--    </ion-item>-->
+    <ion-item lines="full">
+      <ion-label position="floating">Username</ion-label>
+      <ion-input type="text" name="username" [(ngModel)]="signup.username" ngControl="username" #username required ></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="text" name="email" [(ngModel)]="signup.email" ngControl="email"  #email required></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" name="password1" [(ngModel)]="signup.password1" ngControl="password1" #password1 required></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">Retype password</ion-label>
+      <ion-input type="password" name="password2" [(ngModel)]="signup.password2" ngControl="password2" #password2 required></ion-input>
+    </ion-item>
+    <ion-row>
+      <ion-col>
+        <label for="file-upload" class="custom-file-upload">
+          <i class="fa fa-cloud-upload"></i> Upload photo
+        </label>
+        <input id="file-upload" type="file" name="profilePic" (change)="onFileChanged($event)"/>
+        <ion-button type="submit"  color="danger" expand="block">Sign Up</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

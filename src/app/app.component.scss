@@ -1,0 +1,106 @@
+.logo{
+  width: 100px;
+  height: 35px;
+}
+
+#transparent{
+  --background: transparentize(#93e9be,1);
+  --color:  transparentize(#93e9be,1);
+
+}
+
+#menu{
+  --color: #fff7;
+  --background: #DA0037;
+  //--background-color: #EDEDED;
+}
+#logo-button {
+  --background: transparentize(#93e9be,1);
+  --background-hover: transparentize(#93e9be,1);
+  --background-activated: transparentize(#88f4be,1);
+  --background-focused: transparentize(#88f4be,1);
+  --color: blue;
+  --border-radius: 0;
+  --border-color: transparentize(#93e9be,1);
+  //--border-style: solid;
+  --border-width: 0px;
+  --box-shadow: 0 0 0 0 rgb(0, 0, 0, 1);
+  --ripple-color: deeppink;
+  --padding-left: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.card{
+  width: 100%;
+  margin: 0px;
+
+}
+
+
+
+#menu-button {
+  --background: transparentize(#93e9be,1);
+  --background-hover: transparentize(#93e9be,1);
+  --background-activated: transparentize(#88f4be,1);
+  --background-focused: transparentize(#88f4be,1);
+  --text-align: left;
+  --color: black;
+  width: 100%;
+  text-align: center;
+  //--border-radius: 0;
+  //--border-color: #000;
+  //--border-style: solid;
+  --border-width: 0px;
+
+  //--box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+  //--ripple-color: deeppink;
+
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  --padding-left: 0px;
+  --padding-right: 0px;
+
+  --width: 100%;
+}
+
+ion-menu{
+  type: reveal;
+}
+
+ion-menu::part(backdrop) {
+  background-color: #23238E;
+  //background-color: rgba(0, 150, 250, 0.5);
+}
+
+ion-menu::part(container) {
+  border-radius: 0 20px 20px 0;
+  background-image: ("../../assets/wallp.jpeg");
+  box-shadow: 4px 0px 16px rgba(20, 20, 100, 0.5);
+}
+
+ion-fab-button::part(native) {
+  //background-color: #b7f399;
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,.3), 0px 1px 3px 1px rgba(0,0,0,.15);
+  color: black;
+}
+
+ion-fab-list{
+  //margin-top: 10px;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+}
+
+ion-fab-button::part(native):hover::after {
+  background-color: #a3e681;
+}
+
+ion-fab-button::part(native):active::after {
+  background-color: #87d361;
+}

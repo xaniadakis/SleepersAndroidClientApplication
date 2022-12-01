@@ -76,7 +76,16 @@
   --ion-color-light-tint: #f5f6f9;
 }
 
-@media (prefers-color-scheme: dark) {
+:root[mode=ios] .robotoMono,
+:root[mode=md] .robotoMono{
+  --ion-font-family:  'RobotoMono'!important;
+  font-family:  'RobotoMono' !important;
+}
+ion-button {
+  text-transform: none;
+}
+
+@media (prefers-color-scheme: light) {
   /*
    * Dark Colors
    * -------------------------------------------

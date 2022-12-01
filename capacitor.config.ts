@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'sleepers-ui',
+  appId: 'com.glf.sleepers',
+  appName: 'Sleepers',
   webDir: 'www',
   bundledWebRuntime: false
 };

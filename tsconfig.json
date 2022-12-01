@@ -19,11 +19,20 @@
     "target": "es2015",
     "module": "es2020",
     "lib": [
-      "es2018", 
+      "es2018",
       "dom"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "strictPropertyInitialization": false
   },
+  "include": [
+    "src/**/*.ts",
+    "node_modules/@stencil/core/compiler/lib.es2020.bigint.d.ts",
+    "node_modules/@stencil/core/compiler/lib.es2020.bigint.d.ts",
+    "node_modules/@stencil/core/compiler/lib.es2020.bigint.d.ts",
+    "node_modules/@stencil/core/compiler/lib.es2020.bigint.d.ts",
+    "node_modules/@stencil/core/compiler/lib.es2020.bigint.d.ts"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
