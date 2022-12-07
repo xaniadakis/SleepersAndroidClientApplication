@@ -1,0 +1,182 @@
+<ion-header [translucent]="true">
+  <!--  <ion-toolbar>-->
+  <!--    <ion-title>-->
+  <!--      Tab 1-->
+  <!--    </ion-title>-->
+  <!--  </ion-toolbar>-->
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 1</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <form #form="ngForm" (ngSubmit)="createPost(form)">
+    <ion-card class="inline" id="postado-form">
+      <ion-col id="textarea-col">
+        <ion-textarea class="ion-float-left custom-textarea" placeholder="Post some art. . ."
+                      name="text" [(ngModel)]="postForm.text" ngControl="text">
+          <!--                    (input)="(presentToast('bottom','Feature aint ready yet bro, cant post some wisdom, gotta wait'))"-->
+        </ion-textarea>
+      </ion-col>
+      <ion-col id="button-col">
+        <label for="file-upload" class="custom-file-upload">
+          <i class="fa fa-cloud-upload"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
+               viewBox="0 0 15 15">
+            <path fill="#6082b6"
+                  d="M10.71 3L7.85.15a.5.5 0 0 0-.707-.003L7.14.15L4.29 3H1.5a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h12a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zM7.5 1.21L9.29 3H5.71zM13 12H2V4h11zM5 7a1 1 0 1 1 0-2a1 1 0 0 1 0 2zm7 4H4.5L6 8l1.25 2.5L9.5 6z"/>
+          </svg>
+        </label>
+        <input id="file-upload" type="file" accept="image/*" (input)="onFileChanged($event)"/>
+        <ion-button type="submit">
+          <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
+               viewBox="0 0 64 64">
+            <path fill="#d0d0d0"
+                  d="M24.5 35.5C17.8 42.9 2.9 60.9.6 63.1c0 0-.1 0-.1.1c-.9.9-.6 1.2.3.3c2-2 20.2-17.2 27.6-23.9l-3.9-4.1"/>
+            <path fill="#7393B3" d="M24.46 28.298L46.873 5.883L58.33 17.338L35.914 39.753z"/>
+            <path fill="#6082b6"
+                  d="M43.6 54.6c.9-7.8-2.5-17.1-9.8-24.3S17.2 19.6 9.4 20.4l34.2 34.2M64 22.9c-5.2.6-11.4-1.7-16.3-6.6c-4.9-4.9-7.2-11.1-6.6-16.3L64 22.9"/>
+          </svg>
+        </ion-button>
+      </ion-col>
+    </ion-card>
+  </form>
+
+
+  <tr *ngFor="let post of posts">
+    <ion-item-sliding>
+      <ion-item lines="none" class="ion-no-padding">
+        <ion-card class="ion-no-padding">
+          <ion-card-header>
+            <ion-card-subtitle type="dark">
+              <div class="ion-float-start">
+                <ion-chip id="post-owner-avatar">
+                  <ion-avatar>
+                    <img alt="avatar" src="{{imageApi+post.ownerProfilePic}}"/>
+                  </ion-avatar>
+                  <ion-label>{{post.owner}}</ion-label>
+                </ion-chip>
+              </div>
+              <div class="ion-float-end">
+                <ion-chip>
+                  <ion-label>{{post.postedAt}}</ion-label>
+                </ion-chip>
+              </div>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <div *ngIf="notEmpty(post.image)">
+            <img id="post-image" alt="ey where my pic at yo" src="{{ (imageApi+post.image) || (loading) }}"
+                 loading="lazy"/>
+          </div>
+          <div *ngIf="notEmpty(post.text)">
+            <ion-card-content>
+              <!--        <ion-card-title> {{post.title}}</ion-card-title>-->
+              <pre>{{post.text}}</pre>
+            </ion-card-content>
+          </div>
+        </ion-card>
+      </ion-item>
+      <div *ngIf="equals(post.owner)">
+        <ion-item-options id="outer">
+          <button id="edit-post-button rowado" style="background-color: darkslategray">
+            &nbsp;&nbsp;
+            <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
+                 viewBox="0 0 24 24">
+              <path fill="white"
+                    d="M5 19h1.4l8.625-8.625l-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2l1.4-1.4q.575-.575 1.413-.575q.837 0 1.412.575l1.4 1.4q.575.575.6 1.388q.025.812-.55 1.387ZM17.85 10.4L7.25 21H3v-4.25l10.6-10.6Zm-3.525-.725l-.7-.7l1.4 1.4Z"/>
+            </svg>
+            &nbsp;&nbsp;
+          </button>
+          <button id="delete-post-button rowado" style="background-color: #DA0037" (click)="deletePost(post.id)">
+            &nbsp;&nbsp;
+            <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
+                 viewBox="0 0 512 512">
+              <path fill="none" d="M296 64h-80a7.91 7.91 0 0 0-8 8v24h96V72a7.91 7.91 0 0 0-8-8Z"/>
+              <path fill="white"
+                    d="M432 96h-96V72a40 40 0 0 0-40-40h-80a40 40 0 0 0-40 40v24H80a16 16 0 0 0 0 32h17l19 304.92c1.42 26.85 22 47.08 48 47.08h184c26.13 0 46.3-19.78 48-47l19-305h17a16 16 0 0 0 0-32ZM192.57 416H192a16 16 0 0 1-16-15.43l-8-224a16 16 0 1 1 32-1.14l8 224A16 16 0 0 1 192.57 416ZM272 400a16 16 0 0 1-32 0V176a16 16 0 0 1 32 0Zm32-304h-96V72a7.91 7.91 0 0 1 8-8h80a7.91 7.91 0 0 1 8 8Zm32 304.57A16 16 0 0 1 320 416h-.58A16 16 0 0 1 304 399.43l8-224a16 16 0 1 1 32 1.14Z"/>
+            </svg>
+            &nbsp;&nbsp;
+          </button>
+        </ion-item-options>
+      </div>
+    </ion-item-sliding>
+  </tr>
+
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle type="dark">
+        <div class="ion-float-start">Μήτσος Μητσίδιος</div>
+        <div class="ion-float-end">23:45</div>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <img alt="ey where my pic at yo" src="./assets/4.webp"/>
+    <!--    <ion-card-content>-->
+    <!--    </ion-card-content>-->
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle type="dark">
+        <div class="ion-float-start">Άρης Κουκουνάρης</div>
+        <div class="ion-float-end">22:19</div>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <img alt="ey where my pic at yo" src="./assets/2.webp"/>
+    <ion-card-content>
+      <pre id="poem1">
+What happens to a dream deferred?
+
+Does it dry up
+like a raisin in the sun?
+Or fester like a sore—
+And then run?
+Does it stink like rotten meat?
+Or crust and sugar over—
+like a syrupy sweet?
+
+Maybe it just sags
+like a heavy load.
+
+Or does it explode?</pre>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle type="dark">
+        <div class="ion-float-start">Γιάννης Γιαγλίδιος</div>
+        <div class="ion-float-end">20:30</div>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <img alt="ey where my pic at yo" src="./assets/3.webp"/>
+    <!--    <ion-card-content>-->
+    <!--    </ion-card-content>-->
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle type="dark">
+        <div class="ion-float-start">Αλέκος Αμαξάκιας</div>
+        <div class="ion-float-end">16:06</div>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <img alt="ey where my pic at yo" src="./assets/1.webp"/>
+    <ion-card-content>
+      <pre id="poem2">
+If you can dream—and not make dreams your master;
+If you can think—and not make thoughts your aim;
+If you can meet with triumph and disaster
+And treat those two impostors just the same;
+If you can bear to hear the truth you’ve spoken
+Twisted by knaves to make a trap for fools,
+Or watch the things you gave your life to broken,
+And stoop and build ’em up with wornout tools;</pre>
+    </ion-card-content>
+  </ion-card>
+
+  <!--  <iframe width="1861" height="772" src="https://www.youtube.com/embed/zALuVOinquY" title="Η διαφοροποίηση αναζητήσεων των νέων - π. Αθανάσιος Μυτιληναίος" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+</ion-content>
