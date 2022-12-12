@@ -8,11 +8,9 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FormsModule} from "@angular/forms";
 import {HomePage} from "../home/home.page";
-import {StoriesService} from "../../service/stories.service";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {ToastService} from "../../service/toast.service";
-import {CarPostService} from "../../service/car-post.service";
-import {ArtPostService} from "../../service/art-post.service";
+import {PostService} from "../../service/post.service";
 import {SharedService} from "../../service/shared.service";
 import {TabsPage} from "../tabs/tabs.page";
 import {Tab3Page} from "../tab3/tab3.page";
@@ -21,8 +19,11 @@ import {Tab2Page} from "../tab2/tab2.page";
 import {AuthorizationInterceptorService} from "../../configuration/authentication/auth.inter.service";
 import {GuardService} from "../../configuration/authentication/guard.service";
 import {JwtHelperService} from "@auth0/angular-jwt";
-import {ServiceWorkerModule} from '@angular/service-worker';
-import {environment} from "../../../environments/environment.prod";
+import {EditPostModalComponent} from "../edit-post-modal/edit-post-modal.component";
+import {ShowPostModalComponent} from "../show-post-modal/show-post-modal.component";
+import {OuterPostService} from "../../service/outer-post.service";
+import {ModalService} from "../../service/modal.service";
+import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.component";
 
 @NgModule({
   declarations: [AppComponent
@@ -31,6 +32,9 @@ import {environment} from "../../../environments/environment.prod";
     , Tab1Page
     , Tab2Page
     , Tab3Page
+    , EditPostModalComponent
+    , ShowPostModalComponent
+    , CreatePostModalComponent
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],
@@ -39,19 +43,12 @@ import {environment} from "../../../environments/environment.prod";
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    // ServiceWorkerModule.register('ngsw-worker.js', {
-    //   enabled: !isDevMode(),
-    //   // Register the ServiceWorker as soon as the application is stable
-    //   // or after 30 seconds (whichever comes first).
-    //   registrationStrategy: 'registerWhenStable:30000'
-    // }),
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     // ScrollingModule,
   ],
   providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-    StoriesService,
-    CarPostService,
-    ArtPostService,
+    OuterPostService,
+    PostService,
+    ModalService,
     ToastService,
     SharedService,
     HttpClient,

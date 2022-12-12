@@ -2,9 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ToastController} from "@ionic/angular";
 import {Router} from "@angular/router";
 import jwt_decode from "jwt-decode";
-import {Headers} from 'node-fetch';
 import {NgForm} from '@angular/forms';
-import { Http, HttpResponse } from '@capacitor-community/http';
+import {Http} from '@capacitor-community/http';
 import {SignUpResponse} from "../../dto/sign-up-response";
 import {JwtTokenPayload} from "../../dto/jwt-token";
 import {GlobalConstants} from "../../util/global-constants";
@@ -98,13 +97,13 @@ export class SignupPage implements OnInit {
         if (response.status === 200) {
           const jsonResponse: SignUpResponse = await response.data;
           console.log(jsonResponse)
-          sessionStorage.setItem('token', jsonResponse.jwt);
+          localStorage.setItem('token', jsonResponse.jwt);
           console.log(JSON.stringify(jwt_decode(jsonResponse.jwt)))
           let tokenPayload: JwtTokenPayload = JSON.parse(JSON.stringify(jwt_decode(jsonResponse.jwt)));
-          sessionStorage.setItem('userId', tokenPayload.sub);
-          sessionStorage.setItem('name', tokenPayload.name);
-          sessionStorage.setItem('email', tokenPayload.email);
-          sessionStorage.setItem('profilePic', jsonResponse.profilePic);
+          localStorage.setItem('userId', tokenPayload.sub);
+          localStorage.setItem('name', tokenPayload.name);
+          localStorage.setItem('email', tokenPayload.email);
+          localStorage.setItem('profilePic', jsonResponse.profilePic);
           console.log(tokenPayload);
           presentToast(myToastController, "middle", "Welcome aboard " + tokenPayload.name + "!");
           myRouter.navigateByUrl("/home/tabs/tab2");
@@ -144,18 +143,18 @@ export class SignupPage implements OnInit {
         if (xhr.status == 200) {
           const jsonResponse: SignUpResponse = JSON.parse(this.responseText);
           console.log(jsonResponse)
-          sessionStorage.setItem('token', jsonResponse.jwt);
+          localStorage.setItem('token', jsonResponse.jwt);
           console.log(JSON.stringify(jwt_decode(jsonResponse.jwt)))
           let tokenPayload: JwtTokenPayload = JSON.parse(JSON.stringify(jwt_decode(jsonResponse.jwt)));
-          sessionStorage.setItem('userId', tokenPayload.sub);
-          sessionStorage.setItem('name', tokenPayload.name);
-          sessionStorage.setItem('email', tokenPayload.email);
-          sessionStorage.setItem('profilePic', jsonResponse.profilePic);
+          localStorage.setItem('userId', tokenPayload.sub);
+          localStorage.setItem('name', tokenPayload.name);
+          localStorage.setItem('email', tokenPayload.email);
+          localStorage.setItem('profilePic', jsonResponse.profilePic);
           sharedService.fire(true);
           console.log(tokenPayload);
           // onLoginLoadProfilePicado(tokenPayload.name, jsonResponse.profilePic)
           presentToast(myToastController, "middle", "Welcome aboard " + tokenPayload.name + "!");
-          myRouter.navigateByUrl("/home/tabs/tab2");
+          myRouter.navigateByUrl("/home/tabs/tab3");
         } else
           alert(xhr.status + xhr.responseText)
       }

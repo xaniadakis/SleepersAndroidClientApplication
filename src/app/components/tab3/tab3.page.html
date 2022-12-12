@@ -13,38 +13,51 @@
     </ion-toolbar>
   </ion-header>
 
-  <form #form="ngForm" (ngSubmit)="createPost(form)">
-    <ion-card class="inline" id="postado-form">
-      <ion-col id="textarea-col">
-        <ion-textarea class="ion-float-left custom-textarea" placeholder="Whatz crackalackin pimpalimpin?"
-                      name="text" [(ngModel)]="postForm.text" ngControl="text">
-          <!--                    (input)="(presentToast('bottom','Feature aint ready yet bro, cant post some wisdom, gotta wait'))"-->
-        </ion-textarea>
-      </ion-col>
-      <ion-col id="button-col">
-        <label for="file-upload" class="custom-file-upload">
-          <i class="fa fa-cloud-upload"></i>
-          <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
-               viewBox="0 0 24 24">
-            <path fill="white"
-                  d="M8 17h8v-.55q0-1.125-1.1-1.788Q13.8 14 12 14q-1.8 0-2.9.662Q8 15.325 8 16.45Zm4-4q.825 0 1.413-.588Q14 11.825 14 11t-.587-1.413Q12.825 9 12 9q-.825 0-1.412.587Q10 10.175 10 11q0 .825.588 1.412Q11.175 13 12 13Zm-8 8q-.825 0-1.412-.587Q2 19.825 2 19V7q0-.825.588-1.412Q3.175 5 4 5h3.15L8.4 3.65q.275-.325.662-.488Q9.45 3 9.875 3h4.25q.425 0 .813.162q.387.163.662.488L16.85 5H20q.825 0 1.413.588Q22 6.175 22 7v12q0 .825-.587 1.413Q20.825 21 20 21Z"/>
-          </svg>
-        </label>
-        <input id="file-upload" type="file" accept="image/*" (input)="onFileChanged($event)"/>
-        <ion-button type="submit">
-          <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
-               viewBox="0 0 24 24">
-            <path fill="white"
-                  d="m4.01 6.03l7.51 3.22l-7.52-1l.01-2.22m7.5 8.72L4 17.97v-2.22l7.51-1M2.01 3L2 10l15 2l-15 2l.01 7L23 12L2.01 3z"/>
-          </svg>
-        </ion-button>
-      </ion-col>
-    </ion-card>
-  </form>
+<!--  <form #form="ngForm" (ngSubmit)="createPost(form, this.postForm.image)">-->
+<!--    <ion-card id="postado-form">-->
+<!--      <ion-row style="background-color: #121212;" class="ion-justify-content-center" [hidden]="hidden">-->
+<!--        <div class="container">-->
+<!--          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-image"-->
+<!--               [src]="imageSrc || 'http://placehold.it/180'" alt="your image"/>-->
+<!--          <ion-button  class="fas fa-download" (click)="unloadImage()"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"-->
+<!--                                                                            viewBox="0 0 24 24">-->
+<!--            <path fill="#DA0037"-->
+<!--                  d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2zm4.207 12.793l-1.414 1.414L12 13.414l-2.793 2.793l-1.414-1.414L10.586 12L7.793 9.207l1.414-1.414L12 10.586l2.793-2.793l1.414 1.414L13.414 12l2.793 2.793z"/>-->
+<!--          </svg></ion-button>-->
+<!--        </div>-->
+<!--      </ion-row>-->
+<!--      <ion-row class="inline">-->
+<!--        <ion-col id="textarea-col">-->
+<!--          <ion-textarea  [autoGrow]="true"-->
+<!--                         class="ion-float-left custom-textarea" placeholder="{{postPlaceholder}}"-->
+<!--                         name="text" [(ngModel)]="postForm.text" ngControl="text">-->
+<!--            &lt;!&ndash;                    (input)="(presentToast('bottom','Feature aint ready yet bro, cant post some wisdom, gotta wait'))"&ndash;&gt;-->
+<!--          </ion-textarea>-->
+<!--        </ion-col>-->
+<!--        <ion-col id="button-col">-->
+<!--          <label for="file-upload" class="custom-file-upload">-->
+<!--            <i class="fa fa-cloud-upload"></i>-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"-->
+<!--                 viewBox="0 0 24 24">-->
+<!--              <path fill="white"-->
+<!--                    d="M6 17h12l-3.75-5l-3 4L9 13Zm-2 4q-.825 0-1.412-.587Q2 19.825 2 19V7q0-.825.588-1.412Q3.175 5 4 5h3.15L9 3h6l1.85 2H20q.825 0 1.413.588Q22 6.175 22 7v12q0 .825-.587 1.413Q20.825 21 20 21Zm16-2V7h-4.05l-1.825-2h-4.25L8.05 7H4v12Zm-8-7Z"/>-->
+<!--            </svg>-->
+<!--          </label>-->
+<!--          <input id="file-upload" type="file" accept="image/*" (input)="onFileChanged($event)"/>-->
+<!--          <ion-button type="submit">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"-->
+<!--                 viewBox="0 0 24 24">-->
+<!--              <path fill="white" d="M2.01 21L23 12L2.01 3L2 10l15 2l-15 2z"/>-->
+<!--            </svg>-->
+<!--          </ion-button>-->
+<!--        </ion-col>-->
+<!--      </ion-row>-->
+<!--    </ion-card>-->
+<!--  </form>-->
 
   <tr *ngFor="let post of posts">
     <ion-item-sliding>
-      <ion-item lines="none" class="ion-no-padding">
+      <ion-item lines="none" class="ion-no-padding" (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
         <ion-card class="ion-no-padding">
           <ion-card-header>
             <ion-card-subtitle type="dark">
@@ -70,36 +83,34 @@
           <div *ngIf="notEmpty(post.text)">
             <ion-card-content>
               <!--        <ion-card-title> {{post.title}}</ion-card-title>-->
-              <pre>{{post.text}}</pre>
+              <pre class="ion-no-padding">{{post.text}}</pre>
             </ion-card-content>
           </div>
         </ion-card>
       </ion-item>
       <div *ngIf="equals(post.owner)">
         <ion-item-options id="outer">
-          <button id="edit-post-button rowado" style="background-color: darkslategray">
-            &nbsp;&nbsp;
+          <button id="edit-post-button rowado" expand="block" (click)="modalService.openModal(post.image, post.text, this.postType)" style="background-color: darkslategray">
+            &nbsp;&nbsp;&nbsp;
             <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
                  viewBox="0 0 24 24">
               <path fill="white"
                     d="M5 19h1.4l8.625-8.625l-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2l1.4-1.4q.575-.575 1.413-.575q.837 0 1.412.575l1.4 1.4q.575.575.6 1.388q.025.812-.55 1.387ZM17.85 10.4L7.25 21H3v-4.25l10.6-10.6Zm-3.525-.725l-.7-.7l1.4 1.4Z"/>
             </svg>
-            &nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
           </button>
           <button id="delete-post-button rowado" style="background-color: #DA0037" (click)="deletePost(post.id)">
-            &nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
             <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
                  viewBox="0 0 512 512">
               <path fill="none" d="M296 64h-80a7.91 7.91 0 0 0-8 8v24h96V72a7.91 7.91 0 0 0-8-8Z"/>
               <path fill="white"
                     d="M432 96h-96V72a40 40 0 0 0-40-40h-80a40 40 0 0 0-40 40v24H80a16 16 0 0 0 0 32h17l19 304.92c1.42 26.85 22 47.08 48 47.08h184c26.13 0 46.3-19.78 48-47l19-305h17a16 16 0 0 0 0-32ZM192.57 416H192a16 16 0 0 1-16-15.43l-8-224a16 16 0 1 1 32-1.14l8 224A16 16 0 0 1 192.57 416ZM272 400a16 16 0 0 1-32 0V176a16 16 0 0 1 32 0Zm32-304h-96V72a7.91 7.91 0 0 1 8-8h80a7.91 7.91 0 0 1 8 8Zm32 304.57A16 16 0 0 1 320 416h-.58A16 16 0 0 1 304 399.43l8-224a16 16 0 1 1 32 1.14Z"/>
             </svg>
-            &nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
           </button>
         </ion-item-options>
       </div>
     </ion-item-sliding>
   </tr>
-
-
 </ion-content>

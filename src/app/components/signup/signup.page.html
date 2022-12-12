@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="center">
-  <form #form="ngForm" (ngSubmit)="onSignup(form)" #f="ngForm" novalidate>
+  <form #form="ngForm" (ngSubmit)="onSignup(form)" #f="ngForm">
 <!--    <ion-item lines="full">-->
 <!--      <ion-label position="floating">First name</ion-label>-->
 <!--      <ion-input type="text" required></ion-input>-->
@@ -16,7 +16,7 @@
 <!--    </ion-item>-->
     <ion-item lines="full">
       <ion-label position="floating">Username</ion-label>
-      <ion-input type="text" name="username" class="form-control" [(ngModel)]="signup.username" #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required></ion-input>
+      <ion-input type="text" name="username" class="form-control" [(ngModel)]="signup.username" #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="4"></ion-input>
       <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
         <div *ngIf="username.errors?.required">Username is required</div>
       </div>

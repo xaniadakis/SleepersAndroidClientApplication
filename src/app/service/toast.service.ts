@@ -1,6 +1,4 @@
 import {ToastController} from "@ionic/angular";
-import {ActivatedRoute, Router} from "@angular/router";
-import {StoriesService} from "./stories.service";
 import {Injectable} from "@angular/core";
 
 @Injectable()

@@ -1,0 +1,32 @@
+#logo-button {
+  --background: transparentize(#93e9be,1);
+  --background-hover: transparentize(#93e9be,1);
+  --background-activated: transparentize(#88f4be,1);
+  --background-focused: transparentize(#88f4be,1);
+  --color: blue;
+  --border-radius: 0;
+  --border-color: transparentize(#93e9be,1);
+  //--border-style: solid;
+  --border-width: 0px;
+  --box-shadow: 0 0 0 0 rgb(0, 0, 0, 1);
+  --ripple-color: deeppink;
+  --padding-left: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.commentator{
+  color: whitesmoke;
+  font-size: 16px
+}
+
+.comment{
+  color: darkslategrey;
+  font-style: italic;
+}
+
+.new-comment{
+  color: lightslategray;
+  box-shadow: inset -2px -2px 3.5px rgba(100, 100, 100, 0.5),
+  inset 1.5px 1.5px 3px rgba(10, 10, 10, 0.7);
+}

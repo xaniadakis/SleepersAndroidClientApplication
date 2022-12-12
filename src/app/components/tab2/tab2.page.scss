@@ -20,7 +20,7 @@ ion-col {
 ion-textarea.custom-textarea {
   --background: #DA0037;
   --color: #fff;
-  height: 18vh;
+  height: 14vh;
   width: 75vw;
   text-align: left;
   --padding-top: 10px;
@@ -39,14 +39,14 @@ ion-textarea.custom-textarea {
 }
 
 ion-button {
-  --background: transparentize(#123456,0.2);
+  --background: transparentize(#123456, 0.2);
   --color: #fff7;
   align-self: end;
   --border-radius: 0px;
   --border-color: #000;
   --border-style: solid;
   --border-width: 0px;
-  height: 9vh;
+  height: 7vh;
   font-family: RobotoMono;
 
   --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
@@ -65,6 +65,7 @@ input[type="file"] {
   margin: 0px;
   padding: 0px;
 }
+
 .custom-file-upload {
   //border: 1px solid #000;
   color: #fff7;
@@ -72,43 +73,44 @@ input[type="file"] {
   text-align: center;
   display: inline-block;
   font-family: RobotoMono;
-  padding-top: 3vh;
+  padding-top: 1.5vh;
   padding-bottom: 3vh;
   //padding: 10px 0px;
   cursor: pointer;
   float: top;
-  height: 9vh;
+  height: 7vh;
   margin: 0px;
   width: 100%;
 }
+
 .custom-file-upload:hover {
   background-color: #333333;
 }
 
-#file-input{
+#file-input {
   display: none;
-  --background: transparentize(#123456,0.2);
+  --background: transparentize(#123456, 0.2);
   --color: black;
   height: 40px;
   width: 100px;
   float: right;
-  top:0px;
+  top: 0px;
   margin: 0px;
   padding: 0px;
   //position: absolute;
 }
 
-#button-col{
+#button-col {
   width: 15vw;
   float: right;
 }
 
-#textarea-col{
+#textarea-col {
   width: 75vw;
   float: left;
 }
 
-ion-chip{
+ion-chip {
   background-color: transparent;
   padding-top: 0px !important;
   padding-bottom: 0px !important;
@@ -117,7 +119,7 @@ ion-chip{
   //font-family:  'RobotoMono' !important;
 }
 
-ion-item{
+ion-item {
   color: transparent;
   background: transparent;
   --background-color: transparent !important;
@@ -129,7 +131,7 @@ ion-item{
   width: 100%;
 }
 
-ion-card{
+ion-card {
   --ion-item-background: transparent !important;
   --padding-end: 0px;
   --inner-padding-end: 0px;
@@ -147,19 +149,24 @@ ion-card{
   height: auto;
 }
 
+#display-image {
+  max-width: 100%;
+  height: auto;
+}
+
 //ion-item-options{
 //  --background: #DA0037;
 //  background-color: #DA0037;
 //
 //}
 
-#delete-post-button{
+#delete-post-button {
   float: top;
   background-color: #DA0037 !important;
   height: 50%;
 }
 
-#edit-post-button{
+#edit-post-button {
   background-color: darkslategrey !important;
   float: bottom;
 }
@@ -168,13 +175,12 @@ ion-card{
   //display: flex;
   //flex-direction: column;
   margin-top: 4px;
-  position:absolute;
+  position: absolute;
   height: calc(100% - 8px);
   flex-wrap: wrap;
   //height: 98%;
   width: 70px;
 }
-
 
 
 #rowado {
@@ -184,7 +190,7 @@ ion-card{
   height: 50%;
 }
 
-pre{
+pre {
   text-align: left;
   //max-width: 400px;
   text-overflow: ellipsis;
@@ -198,10 +204,50 @@ pre{
   margin: 0px;
 }
 
-#postado-form{
+#postado-form {
   margin-top: 8px;
   margin-bottom: 4px;
   margin-right: 8px;
   margin-left: 8px;
 }
+
+.container {
+  position: relative;
+}
+
+.container img {
+  display: block;
+}
+
+.container .fa-download {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: max-content;
+  //border-radius: 50px;
+  padding: 7px;
+  border: white 2px ridge;
+}
+
+.container .fa-download:hover{
+  border-radius: 7px;
+  box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+}
+//ion-modal {
+//  --height: 50%;
+//  --border-radius: 16px;
+//  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+//}
+//
+//ion-modal::part(backdrop) {
+//  background: rgba(209, 213, 219);
+//  opacity: 1;
+//}
+//
+//ion-modal ion-toolbar {
+//  --background: rgb(14 116 144);
+//  --color: white;
+//}
+/////////////////////////////////////
 

@@ -62,46 +62,50 @@ export class LoginPage implements OnInit {
   ngOnInit(): void { }
 
   onLogin(form: NgForm){
-    var raw = JSON.stringify({
-      "username": form.controls["username"].value,
-      "password": form.controls["password"].value
-      // "email": form.controls["email"].value
-    });
+    if(form.valid) {
+      var raw = JSON.stringify({
+        "username": form.controls["username"].value,
+        "password": form.controls["password"].value
+        // "email": form.controls["email"].value
+      });
 
-    var xhr = new XMLHttpRequest();
-    console.log(raw);
+      var xhr = new XMLHttpRequest();
+      console.log(raw);
 
-    var myRouter = this.router;
-    var myToastController = this.toastController;
-    var sharedService = this.sharedService;
-    xhr.addEventListener("readystatechange", function() {
-      if(this.readyState === 4) {
-        console.log(JSON.stringify(JSON.parse(this.responseText)));
-        if (xhr.status == 200) {
-          const jsonResponse: SignInResponse = JSON.parse(this.responseText);
-          console.log(jsonResponse)
-          sessionStorage.setItem('token', jsonResponse.jwt);
-          console.log(JSON.stringify(jwt_decode(jsonResponse.jwt)))
-          let tokenPayload: JwtTokenPayload = JSON.parse(JSON.stringify(jwt_decode(jsonResponse.jwt)));
-          sessionStorage.setItem('userId', tokenPayload.sub);
-          sessionStorage.setItem('name', tokenPayload.name);
-          sessionStorage.setItem('email', tokenPayload.email);
-          sessionStorage.setItem('profilePic', jsonResponse.profilePic);
-          sharedService.fire(true);
-          console.log(tokenPayload);
-          presentToast(myToastController, "middle", "Welcome "+tokenPayload.name+"!");
-          // onLoginLoadProfilePicado(tokenPayload.name, jsonResponse.profilePic)
-          myRouter.navigateByUrl("/home/tabs/tab2");
-        } else
-          alert(xhr.status + xhr.responseText)
-      }
-    });
+      var myRouter = this.router;
+      var myToastController = this.toastController;
+      var sharedService = this.sharedService;
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+          console.log(JSON.stringify(JSON.parse(this.responseText)));
+          if (xhr.status == 200) {
+            const jsonResponse: SignInResponse = JSON.parse(this.responseText);
+            console.log(jsonResponse)
+            localStorage.setItem('token', jsonResponse.jwt);
+            console.log(JSON.stringify(jwt_decode(jsonResponse.jwt)))
+            let tokenPayload: JwtTokenPayload = JSON.parse(JSON.stringify(jwt_decode(jsonResponse.jwt)));
+            localStorage.setItem('userId', tokenPayload.sub);
+            localStorage.setItem('name', tokenPayload.name);
+            localStorage.setItem('email', tokenPayload.email);
+            localStorage.setItem('profilePic', jsonResponse.profilePic);
+            sharedService.fire(true);
+            console.log(tokenPayload);
+            presentToast(myToastController, "middle", "Welcome " + tokenPayload.name + "!");
+            // onLoginLoadProfilePicado(tokenPayload.name, jsonResponse.profilePic)
+            myRouter.navigateByUrl("/home/tabs/tab3");
+          } else
+            alert(xhr.status + xhr.responseText)
+        }
+      });
 
-    xhr.open("POST", GlobalConstants.APIURL+"/user/login");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.withCredentials = false;
-    xhr.send(raw);
+      xhr.open("POST", GlobalConstants.APIURL + "/user/login");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+      xhr.withCredentials = false;
+      xhr.send(raw);
+    }
+    else
+      presentToast(this.toastController, "middle", "Something's up with your creds, sign in properly")
   }
 
 }

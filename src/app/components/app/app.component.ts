@@ -1,19 +1,15 @@
 import {Component} from '@angular/core';
 import {ToastController} from "@ionic/angular";
 import {Router} from "@angular/router";
-import {NgForm} from "@angular/forms";
 import {Http} from "@capacitor-community/http";
-import jwt_decode from "jwt-decode";
-import {SignUpResponse} from "../../dto/sign-up-response";
-import {SignInResponse} from "../../dto/sign-in-response";
 import {SignOutResponse} from "../../dto/sign-out-response";
 import {GlobalConstants} from "../../util/global-constants";
-import {FileInfo} from "@capacitor/filesystem";
-import {JwtTokenPayload} from "../../dto/jwt-token";
 import {ProfilePicChangeResponse} from "../../dto/profile-pic-change-response";
 import {SharedService} from "../../service/shared.service";
-import {filter, Subscription} from "rxjs";
-import {SwUpdate, VersionReadyEvent} from "@angular/service-worker";
+import {Subscription} from "rxjs";
+import {SwUpdate} from "@angular/service-worker";
+import {ModalService} from "../../service/modal.service";
+import {PostType} from "../../dto/post-type";
 
 async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
   const toast = await toastController.create({
@@ -33,19 +29,24 @@ export class AppComponent {
   menuType: string = 'reveal';
   darkMode = false;
   profilePic: Blob;
-  profilePicSrc: string = GlobalConstants.APIURL + "/file/image?filename=" + sessionStorage.getItem('profilePic');
+  profilePicSrc: string = GlobalConstants.APIURL + "/file/image?filename=" + localStorage.getItem('profilePic');
   profilePicSrc2: string = "https://ionicframework.com/docs/img/demos/avatar.svg";
   loggedIn: boolean;
+
   private sharedServiceSubscription: Subscription;
 
   constructor(private toastController: ToastController,
               private router: Router,
               private sharedService: SharedService,
-              private swUpdate: SwUpdate) {
-    if (sessionStorage.getItem("userId") == null)
+              public modalService: ModalService
+  ) {
+    if (localStorage.getItem("userId") == null)
       this.loggedIn = false;
-    else
+    else {
       this.loggedIn = true;
+      localStorage.setItem("postType", PostType.STORY)
+      router.navigateByUrl("/home/tabs/tab3")
+    }
   }
 
   ngOnInit() {
@@ -66,12 +67,12 @@ export class AppComponent {
     //       }
     //     });
     // }
-    // this.loggedIn = sessionStorage.getItem("userId") != null;
+    // this.loggedIn = localStorage.getItem("userId") != null;
   }
 
   public toggleLoggedIn(value: boolean) {
     console.log("will toggle value")
-    // if(sessionStorage.getItem("userId")==null)
+    // if(localStorage.getItem("userId")==null)
     this.loggedIn = value;
     // else
     // this.loggedIn = true;
@@ -85,7 +86,7 @@ export class AppComponent {
     this.profilePic = event.target.files[0];
     console.log(event);
 
-    var requestParams: string = "?userId=" + sessionStorage.getItem("userId");
+    var requestParams: string = "?userId=" + localStorage.getItem("userId");
     var formData: FormData = new FormData()
     formData.append("profilePic", this.profilePic)
     var xhr = new XMLHttpRequest();
@@ -101,7 +102,7 @@ export class AppComponent {
         if (xhr.status == 200) {
           const jsonResponse: ProfilePicChangeResponse = JSON.parse(this.responseText);
           console.log(jsonResponse)
-          sessionStorage.setItem('profilePic', jsonResponse.profilePic);
+          localStorage.setItem('profilePic', jsonResponse.profilePic);
           myRouter.navigateByUrl("/home/tabs/tab2");
         } else
           alert(xhr.status + xhr.responseText)
@@ -118,11 +119,10 @@ export class AppComponent {
   }
 
   onLogout() {
-
     const profilePicDiv: HTMLElement | null = document.getElementById("profilePic");
     if (profilePicDiv != null)
       profilePicDiv.innerHTML = "";
-    if (sessionStorage.getItem("token") == null) {
+    if (localStorage.getItem("token") == null) {
       this.router.navigateByUrl('/welcome');
       this.toggleLoggedIn(false);
     } else {
@@ -141,9 +141,9 @@ export class AppComponent {
         if (xhr.status == 200) {
           const jsonResponse: SignOutResponse = JSON.parse(this.responseText);
           console.log(jsonResponse)
-          sessionStorage.removeItem('token');
-          sessionStorage.removeItem("profilePic");
-          sessionStorage.clear();
+          localStorage.removeItem('token');
+          localStorage.removeItem("profilePic");
+          localStorage.clear();
           myRouter.navigateByUrl('/welcome');
           if (GlobalConstants.DEBUG)
             presentToast(myToastController, "middle", "You are logged out!");
@@ -154,7 +154,7 @@ export class AppComponent {
       }
     });
 
-    xhr.open("GET", GlobalConstants.APIURL + "user/logout?userId=" + sessionStorage.getItem('userId'));
+    xhr.open("GET", GlobalConstants.APIURL + "user/logout?userId=" + localStorage.getItem('userId'));
     xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhr.withCredentials = false;
     xhr.send();
@@ -162,7 +162,7 @@ export class AppComponent {
 
   private capacitorHttpLogOutRequest() {
     const options = {
-      url: GlobalConstants.APIURL + "/user/logout?userId=" + sessionStorage.getItem('userId'),
+      url: GlobalConstants.APIURL + "/user/logout?userId=" + localStorage.getItem('userId'),
       headers: {
         "Accept": "*/*",
         "Access-Control-Allow-Origin": "*"
@@ -177,9 +177,9 @@ export class AppComponent {
           // console.log(data)
           // const jsonResponse: SignUpResponse = JSON.parse(data);
           console.log(jsonResponse)
-          sessionStorage.removeItem('token');
-          sessionStorage.removeItem("profilePic");
-          sessionStorage.clear();
+          localStorage.removeItem('token');
+          localStorage.removeItem("profilePic");
+          localStorage.clear();
           this.toggleLoggedIn(false);
           myRouter.navigateByUrl('/welcome');
           presentToast(myToastController, "middle", "You are logged out!");

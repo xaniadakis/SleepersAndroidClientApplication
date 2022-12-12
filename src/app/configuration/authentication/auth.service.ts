@@ -15,7 +15,7 @@ export class AuthenticationService {
     }
 
     isAuthenticated(): boolean{
-      const token: string | null = sessionStorage.getItem('token');
+      const token: string | null = localStorage.getItem('token');
       if (token!=null) {
         console.log("expiry date: " + this.jwtHelper.getTokenExpirationDate(token));
         return !this.jwtHelper.isTokenExpired(token);

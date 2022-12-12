@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {GlobalConstants} from "../../util/global-constants";
+import {Component, OnInit} from '@angular/core';
+import {SharedService} from "../../service/shared.service";
+import {PostType} from "../../dto/post-type";
 
 // function onLoginLoadProfilePicado(username:string | null, profilePicName: string | null){
 //   console.log("picado lanado")
@@ -33,14 +34,15 @@ import {GlobalConstants} from "../../util/global-constants";
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  private name: string | null = sessionStorage.getItem("name");
-  private profilePicado: string | null = sessionStorage.getItem("profilePic");
+  private name: string | null = localStorage.getItem("name");
+  private profilePicado: string | null = localStorage.getItem("profilePic");
 
-  constructor() { }
+  constructor(private sharedService: SharedService) { }
 
   handleRefresh(event: any) {
     setTimeout(() => {
-      location.reload();
+      // location.reload();
+      this.sharedService.posted(PostType.REFRESH);
       event.target.complete();
     }, 2000);
   };

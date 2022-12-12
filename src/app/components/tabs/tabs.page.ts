@@ -1,5 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {ActivationStart, Router, RouterOutlet} from "@angular/router";
+import {SharedService} from "../../service/shared.service";
+import {PostType} from "../../dto/post-type";
 
 @Component({
   selector: 'app-tabs',
@@ -13,11 +15,15 @@ export class TabsPage {
   width = "30px";
   height = "30px";
 
+  artType: PostType = PostType.ART;
+  carType: PostType = PostType.CAR;
+  storyType: PostType = PostType.STORY;
 
   @ViewChild(RouterOutlet) outlet: RouterOutlet;
 
   constructor(
-    private router: Router
+    private router: Router,
+    public sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
@@ -25,5 +31,10 @@ export class TabsPage {
       if (e instanceof ActivationStart && e.snapshot.outlet === "administration")
         this.outlet.deactivate();
     });
+  }
+
+  changedTab(postType: PostType) {
+    localStorage.setItem("postType", postType)
+    console.log("just changed tab to: "+postType)
   }
 }

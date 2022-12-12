@@ -63,7 +63,10 @@
                 <ion-row>
                   <ion-col>
                     <ion-item lines="none" color="white" routerLink="/welcome">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7Z"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+                           preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7Z"/>
+                      </svg>
                       <ion-label class="ion-text-left">
                         &nbsp;&nbsp;Welcome
                       </ion-label>
@@ -75,20 +78,34 @@
             </ion-card>
           </ion-row>
         </ng-template>
+<!--        <input type="checkbox" id="switch" name="switch">-->
+<!--        <label for="switch" class="switch"></label>-->
       </ion-menu-toggle>
 
     </ion-content>
   </ion-menu>
-  <div class="ion-page" id="main-content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-menu-toggle>
-            <ion-button id="logo-button">
+  <div class="ion-page" id="main-content" >
+    <ion-header class="ion-no-padding ion-no-margin">
+      <ion-toolbar class="ion-no-padding  ion-no-margin">
+        <ion-buttons class="ion-no-padding ion-no-margin" slot="start">
+          <ion-menu-toggle class="ion-no-padding ion-no-margin">
+            <ion-button id="logo-button" class="ion-no-padding ion-no-margin">
               <!--              [routerLink]="['/welcome']" -->
-              <ion-img fill="clear" class="logo" src="../assets/og_turtle_cropped.png" alt="logo"></ion-img>
+              <ion-img  style="margin-left: 2.5px; padding-bottom: 0; padding-top: 0; width:16vw;  height: 18vh;"
+                        fill="clear"
+                        class="logo ion-no-padding ion-no-margin"
+                       src="../assets/og_turtle_cropped.png" alt="logo"></ion-img>
             </ion-button>
           </ion-menu-toggle>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <div *ngIf="loggedIn as value;">
+            <div ontouchstart="">
+              <div id="postbutton" (click)="modalService.openCreatePostModal()">
+                <a>Post</a>
+              </div>
+            </div>
+          </div>
         </ion-buttons>
 
         <!--        <ion-fab horizontal="end" vertical="center">-->

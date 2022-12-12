@@ -1,0 +1,76 @@
+<ion-header class="ion-no-padding" (swiperight)="cancel()" (swipedown)="cancel()">
+  <ion-toolbar class="ion-no-padding">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()" id="logo-button">
+        <!--              [routerLink]="['/welcome']" -->
+        <ion-img  style="margin-left: 2.5px; padding-bottom: 0; padding-top: 0; width:16vw;  height: 16vh;"
+                  fill="clear"
+                 class="logo"
+                 src="../assets/og_turtle_cropped.png" alt="logo"></ion-img>
+      </ion-button>
+      <!--      <ion-button (click)="cancel()">Back</ion-button>-->
+    </ion-buttons>
+    <!--    <ion-title>Edit Post</ion-title>-->
+    <!--    <ion-buttons slot="end">-->
+    <!--      <ion-button (click)="confirm()">Confirm</ion-button>-->
+    <!--    </ion-buttons>-->
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <ion-item lines="none" class="ion-no-padding">
+    <ion-card class="ion-no-padding">
+      <div *ngIf="notEmpty(image)">
+        <img id="post-image" alt="ey where my pic at yo" src="{{ (imageApi+image) }}"
+             loading="lazy"/>
+      </div>
+      <div *ngIf="notEmpty(text)">
+        <ion-card-content>
+          <!--        <ion-card-title> {{post.title}}</ion-card-title>-->
+          <pre class="ion-no-padding">{{text}}</pre>
+        </ion-card-content>
+      </div>
+      <form #form="ngForm" (ngSubmit)="addComment(form)" #f="ngForm" novalidate>
+        <ion-item class="inline ion-no-padding">
+          <ion-chip style="padding-left: 20px;">
+            <!--          <ion-avatar>-->
+            <!--            <img alt="avatar" src="{{imageApi+profilePic}}"/>-->
+            <!--          </ion-avatar>-->
+            <ion-label class="ion-no-padding commentator">{{name}}</ion-label>
+          </ion-chip>
+          <ion-input placeholder="  Comment something"
+                     class="form-control new-comment" [(ngModel)]="comment.commentText"
+                     #commentText="ngModel" [ngClass]="{ 'is-invalid': f.submitted && commentText.invalid }"
+                     type="text" name="commentText" minlength="1" required="true"></ion-input>
+          <ion-button style="width: 10vw;" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                 viewBox="0 0 24 24">
+              <g transform="translate(24 0) scale(-1 1)">
+                <path fill="white"
+                      d="M7 14h10q.425 0 .712-.288Q18 13.425 18 13t-.288-.713Q17.425 12 17 12H7q-.425 0-.713.287Q6 12.575 6 13t.287.712Q6.575 14 7 14Zm0-3h10q.425 0 .712-.288Q18 10.425 18 10t-.288-.713Q17.425 9 17 9H7q-.425 0-.713.287Q6 9.575 6 10t.287.712Q6.575 11 7 11Zm0-3h10q.425 0 .712-.287Q18 7.425 18 7t-.288-.713Q17.425 6 17 6H7q-.425 0-.713.287Q6 6.575 6 7t.287.713Q6.575 8 7 8Zm13.3 12.3L18 18H4q-.825 0-1.412-.587Q2 16.825 2 16V4q0-.825.588-1.413Q3.175 2 4 2h16q.825 0 1.413.587Q22 3.175 22 4v15.575q0 .675-.612.937q-.613.263-1.088-.212Z"/>
+              </g>
+            </svg>
+          </ion-button>
+        </ion-item>
+      </form>
+      <tr *ngFor="let comment of comments">
+        <ion-item class="inline ion-no-padding">
+          <ion-chip style="padding-left: 20px;">
+            <!--          <ion-avatar>-->
+            <!--            <img alt="avatar" src="{{imageApi+profilePic}}"/>-->
+            <!--          </ion-avatar>-->
+            <ion-label class="ion-no-padding commentator">{{comment.owner}}</ion-label>
+          </ion-chip>
+
+          <pre class="comment">{{comment.text}}</pre>
+<!--          <div class="ion-float-right">-->
+<!--            <ion-chip>-->
+<!--              <ion-label>{{comment.commentedAt}}</ion-label>-->
+<!--            </ion-chip>-->
+<!--          </div>-->
+        </ion-item>
+      </tr>
+    </ion-card>
+  </ion-item>
+
+</ion-content>

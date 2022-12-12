@@ -11,11 +11,11 @@ export class AuthorizationInterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     console.log("Intercepting request");
-    const jwt = sessionStorage.getItem('token');
+    const jwt = localStorage.getItem('token');
 
     req = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + jwt) });
-    req = req.clone({ headers: req.headers.set('Content-Type', 'application/json') });
-    req = req.clone({ headers: req.headers.set('Accept', 'application/json') });
+    // req = req.clone({ headers: req.headers.set('Content-Type', 'application/json') });
+    // req = req.clone({ headers: req.headers.set('Accept', 'application/json') });
     console.log("AuthorizationInterceptorService sent the jwt: ",jwt);
     return next.handle(req)
         .pipe(
