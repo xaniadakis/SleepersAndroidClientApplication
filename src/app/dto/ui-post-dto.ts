@@ -6,4 +6,6 @@ export class UiPostDto {
   image: string;
   owner: string;
   ownerProfilePic: string;
+  reactionsSize: number;
+  commentsSize: number;
 }

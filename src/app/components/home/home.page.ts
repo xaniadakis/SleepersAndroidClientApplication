@@ -41,10 +41,11 @@ export class HomePage implements OnInit {
 
   handleRefresh(event: any) {
     setTimeout(() => {
+      console.log("gotta refresh");
       // location.reload();
-      this.sharedService.posted(PostType.REFRESH);
+      this.sharedService.posted(PostType[localStorage.getItem("postType") as keyof typeof PostType]);
       event.target.complete();
-    }, 2000);
+    }, 500);
   };
 
   ngOnInit() {

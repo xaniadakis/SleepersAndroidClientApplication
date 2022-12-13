@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, HammerModule} from '@angular/platform-browser';
 import {RouteReuseStrategy} from '@angular/router';
 
 import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
@@ -24,6 +24,7 @@ import {ShowPostModalComponent} from "../show-post-modal/show-post-modal.compone
 import {OuterPostService} from "../../service/outer-post.service";
 import {ModalService} from "../../service/modal.service";
 import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.component";
+import {ReactionsComponent} from "../reactions/reactions.component";
 
 @NgModule({
   declarations: [AppComponent
@@ -35,6 +36,7 @@ import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.c
     , EditPostModalComponent
     , ShowPostModalComponent
     , CreatePostModalComponent
+    , ReactionsComponent
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],
@@ -43,6 +45,7 @@ import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.c
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    HammerModule
     // ScrollingModule,
   ],
   providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy},

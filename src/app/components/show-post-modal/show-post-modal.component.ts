@@ -4,7 +4,7 @@ import {ModalController} from '@ionic/angular';
 import {GlobalConstants} from "../../util/global-constants";
 import {Subject} from 'rxjs';
 import {ToastService} from "../../service/toast.service";
-import {CommentsAndLikesDto, SimpleCommentDto, SimpleReactionDto} from "../../dto/get-post-respone";
+import {CommentsAndLikesDto, SimpleCommentDto, SimpleReactionDto} from "../../dto/get-post-response";
 import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
 import {PostType} from "../../dto/post-type";

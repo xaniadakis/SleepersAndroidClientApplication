@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {GetAllPostsResponse} from '../dto/get-all-posts-response';
 import {Observable} from 'rxjs';
 import {CreatePostResponse} from "../dto/create-post-response";
-import {UiPostDto} from "../dto/ui-post-dto";
 import {GlobalConstants} from "../util/global-constants";
-import {GetPostResponse} from "../dto/get-post-respone";
+import {GetPostResponse, ReactionEnum} from "../dto/get-post-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {PostType} from "../dto/post-type";
 
@@ -18,7 +17,7 @@ export class PostService {
   private modifyPostUrl: string;
   private deletePostUrl: string;
   private commentPostUrl: string;
-
+  private reactPostUrl: string;
   private getImageUrl: string;
 
   constructor(private http: HttpClient) {
@@ -27,8 +26,8 @@ export class PostService {
     this.savePostUrl = GlobalConstants.APIURL + '/post/';
     this.deletePostUrl = GlobalConstants.APIURL + '/post/';
     this.commentPostUrl = GlobalConstants.APIURL + '/post/comment/';
+    this.reactPostUrl = GlobalConstants.APIURL + '/post/react/';
     this.getPostCommentsAndLikesUrl = GlobalConstants.APIURL + '/post/commentsAndLikes/';
-
     this.getImageUrl = GlobalConstants.APIURL + "/file/image?filename=";
   }
 
@@ -51,6 +50,14 @@ export class PostService {
     comment.append("postId", postId.toString())
     comment.append("text", text)
     comment.append("postType", postType)
+    return this.http.post<CreatePostResponse>(this.commentPostUrl, comment);
+  }
+
+  public saveReaction(userId: string, postId:bigint, reaction: ReactionEnum) {
+    var comment: FormData = new FormData()
+    comment.append("userId", userId)
+    comment.append("postId", postId.toString())
+    comment.append("reaction", reaction)
     return this.http.post<CreatePostResponse>(this.commentPostUrl, comment);
   }
 

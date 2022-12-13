@@ -1,0 +1,81 @@
+<ion-content class="ion-no-padding">
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <!--      love -->
+      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+        <ion-button
+          class="ion-no-padding"
+          (pressup)="love()"
+          (click)="love()"
+          small round icon-only fill="clear">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
+               viewBox="0 0 24 24">
+            <path fill="red"
+                  d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z"/>
+          </svg>
+        </ion-button>
+      </ion-col>
+<!--      sad -->
+      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+        <ion-button class="ion-no-padding"
+                    (pressup)="sad()"
+                    (click)="sad()"
+                    small round icon-only fill="clear">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
+               viewBox="0 0 64 64">
+            <path fill="#ffdd67" d="M2 32c0 16.6 13.4 30 30 30s30-13.4 30-30S48.6 2 32 2S2 15.4 2 32z"/>
+            <path fill="#65b1ef" d="M47.7 37.6c0 8.6 11.7 8.6 11.7 0c0-6.3-5.8-12.4-5.8-12.4s-5.9 6.1-5.9 12.4"/>
+            <g fill="#664e27">
+              <circle cx="38.5" cy="35" r="5"/>
+              <circle cx="15.5" cy="35" r="5"/>
+            </g>
+            <path fill="#917524"
+                  d="M20.6 19.9c-3.2 2.7-7.5 3.9-11.7 3.1c-.6-.1-1.1 2-.4 2.2c4.8.9 9.8-.5 13.5-3.6c.5-.5-1-2.1-1.4-1.7m24.5 3c-4.2.7-8.5-.4-11.7-3.1c-.4-.4-2 1.2-1.4 1.7c3.7 3.2 8.7 4.5 13.5 3.6c.7-.2.2-2.3-.4-2.2"/>
+            <path fill="#664e27"
+                  d="M38.1 47.3c-5.8-1.5-12-.4-16.9 3c-1.2.9 1.1 4 2.3 3.2c3.2-2.3 8.4-3.8 13.7-2.4c1.3.3 2.4-3.3.9-3.8"/>
+          </svg>
+        </ion-button>
+      </ion-col>
+<!--      red card -->
+      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+        <ion-button
+          class="ion-no-padding"
+          (pressup)="redCard()"
+          (click)="redCard()"
+          round icon-only fill="clear">
+          <ion-img style="width: 45px; height: 45px; padding-top: 5px;" src='./assets/icons/red.png'></ion-img>
+        </ion-button>
+      </ion-col>
+      <!--      cringe -->
+<!--      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 10px;">-->
+<!--        <ion-button-->
+<!--          class="ion-no-padding"-->
+<!--          (pressup)="share()"-->
+<!--          (click)="share()"-->
+<!--          round icon-only fill="clear">-->
+<!--          <ion-img class="ion-no-padding" style="width: 35px; height: 35px; " src='./assets/icons/cringeIcon.png'></ion-img>-->
+<!--        </ion-button>-->
+<!--      </ion-col>-->
+      <!--      turd -->
+      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+        <ion-button
+          class="ion-no-padding"
+          (pressup)="turd()"
+          (click)="turd()"
+          round icon-only fill="clear">
+          <ion-img class="ion-no-padding" style="width: 35px; height: 35px; " src='./assets/icons/poop.png'></ion-img>
+        </ion-button>
+      </ion-col>
+      <!--      angry -->
+      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px; padding-right: 10px;">
+        <ion-button
+          class="ion-no-padding"
+          (pressup)="angryBird()"
+          (click)="angryBird()"
+          round icon-only fill="clear">
+          <ion-img class="ion-no-padding" style="width: 35px; height: 35px; " src='./assets/icons/angryBird.png'></ion-img>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

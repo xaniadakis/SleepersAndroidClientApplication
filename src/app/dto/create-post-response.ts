@@ -5,3 +5,7 @@ export class CreatePostResponse {
 export class CreateCommentResponse {
   message: string;
 }
+
+export class ReactResponse {
+  message: string;
+}

@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ToastService} from "../../service/toast.service";
 import {PostType} from "../../dto/post-type";
 import {OuterPostService} from "../../service/outer-post.service";
-import {ModalController} from "@ionic/angular";
+import {ModalController, PopoverController} from "@ionic/angular";
 import {EditPostModalComponent} from "../edit-post-modal/edit-post-modal.component";
 import {ShowPostModalComponent} from "../show-post-modal/show-post-modal.component";
 import {ModalService} from "../../service/modal.service";
@@ -13,6 +13,7 @@ import {PostService} from "../../service/post.service";
 import {NgForm} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {SharedService} from "../../service/shared.service";
+import {ReactionsComponent} from "../reactions/reactions.component";
 
 @Component({
   selector: 'app-tab3',
@@ -47,6 +48,7 @@ export class Tab3Page {
     , public postService: PostService
     , public modalService: ModalService
     , private sharedService: SharedService
+    , private popoverCtrl: PopoverController
   ) {
   }
 
@@ -58,6 +60,23 @@ export class Tab3Page {
         this.getAllPosts();
       }
     })
+  }
+
+
+  async showReactions(event: Event){
+    let reactions = await this.popoverCtrl.create({
+      component: ReactionsComponent,
+      event: event});
+    console.log("react")
+    await reactions.present();
+  }
+
+  like(event: Event){
+    window.alert("like");
+  }
+
+  likeIt(){
+    window.alert("like");
   }
 
   isModalOpen = false;

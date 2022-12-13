@@ -57,7 +57,7 @@
 
   <tr *ngFor="let post of posts">
     <ion-item-sliding>
-      <ion-item lines="none" class="ion-no-padding" (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
+      <ion-item lines="none" class="ion-no-padding" (dblclick)="likeIt()">
         <ion-card class="ion-no-padding">
           <ion-card-header>
             <ion-card-subtitle type="dark">
@@ -86,11 +86,47 @@
               <pre class="ion-no-padding">{{post.text}}</pre>
             </ion-card-content>
           </div>
+          <ion-row style="margin-top: -1vh; padding-bottom: 1vh;">
+            <ion-col>
+              <ion-button class="transparent-button ion-no-padding ion-no-margin"
+                          (click)="like($event)"
+                          (press)="showReactions($event)"
+                          icon-left>
+                <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" preserveAspectRatio="xMidYMid meet"
+                     viewBox="0 0 24 24">
+                  <path fill="red"
+                        d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z"/>
+                </svg>
+                <!--                  <div>12 Likes</div>-->
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button class="transparent-button ion-no-padding ion-no-margin"
+                          icon-left
+                          (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" preserveAspectRatio="xMidYMid meet"
+                     viewBox="0 0 24 24">
+                  <g transform="translate(24 0) scale(-1 1)">
+                    <path fill="white"
+                          d="M7 14h10q.425 0 .712-.288Q18 13.425 18 13t-.288-.713Q17.425 12 17 12H7q-.425 0-.713.287Q6 12.575 6 13t.287.712Q6.575 14 7 14Zm0-3h10q.425 0 .712-.288Q18 10.425 18 10t-.288-.713Q17.425 9 17 9H7q-.425 0-.713.287Q6 9.575 6 10t.287.712Q6.575 11 7 11Zm0-3h10q.425 0 .712-.287Q18 7.425 18 7t-.288-.713Q17.425 6 17 6H7q-.425 0-.713.287Q6 6.575 6 7t.287.713Q6.575 8 7 8Zm13.3 12.3L18 18H4q-.825 0-1.412-.587Q2 16.825 2 16V4q0-.825.588-1.413Q3.175 2 4 2h16q.825 0 1.413.587Q22 3.175 22 4v15.575q0 .675-.612.937q-.613.263-1.088-.212Z"/>
+                  </g>
+                </svg>
+                <!--                  <div>4 Comments</div>-->
+              </ion-button>
+            </ion-col>
+            <!--              <ion-col center text-center>-->
+            <!--                <ion-note> 11h ago </ion-note>-->
+            <!--              </ion-col>-->
+          </ion-row>
+
         </ion-card>
       </ion-item>
+
       <div *ngIf="equals(post.owner)">
         <ion-item-options id="outer">
-          <button id="edit-post-button rowado" expand="block" (click)="modalService.openModal(post.image, post.text, this.postType)" style="background-color: darkslategray">
+          <button id="edit-post-button rowado" expand="block"
+                  (click)="modalService.openModal(post.image, post.text, this.postType)"
+                  style="background-color: darkslategray">
             &nbsp;&nbsp;&nbsp;
             <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
                  viewBox="0 0 24 24">
@@ -113,4 +149,5 @@
       </div>
     </ion-item-sliding>
   </tr>
+
 </ion-content>

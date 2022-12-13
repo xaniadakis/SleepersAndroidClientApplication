@@ -26,7 +26,9 @@ export class SharedService {
         this.onCarPost.emit(true);
         break
       default:
-        this.onRefresh.emit(true);
+        this.onStory.emit(true);
+        this.onArtPost.emit(true);
+        this.onCarPost.emit(true);
     }
   }
 

@@ -3,16 +3,16 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {GlobalConstants} from "../../util/global-constants";
 import {UiPostDto} from "../../dto/ui-post-dto";
 import {ToastService} from "../../service/toast.service";
-import {ModalController, ToastController} from "@ionic/angular";
-import {EditPostModalComponent} from "../edit-post-modal/edit-post-modal.component";
-import {ShowPostModalComponent} from "../show-post-modal/show-post-modal.component";
 import {PostType} from "../../dto/post-type";
-import {OuterPostService} from "../../service/outer-post.service";
 import {ModalService} from "../../service/modal.service";
 import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
 import {Subscription} from "rxjs";
 import {SharedService} from "../../service/shared.service";
+// import {PopoverController} from "ionic-angular";
+import {ReactionsComponent} from "../reactions/reactions.component";
+import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.component";
+import {PopoverController} from "@ionic/angular";
 
 @Component({
   selector: 'app-tab2',
@@ -47,7 +47,10 @@ export class Tab2Page {
     , public postService: PostService
     , public modalService: ModalService
     , private sharedService: SharedService
+    ,  private popoverCtrl: PopoverController
   ) {
+    window.addEventListener("contextmenu", (e) => { e.preventDefault(); });
+
   }
 
   ngOnInit() {
@@ -58,6 +61,23 @@ export class Tab2Page {
         this.getAllPosts();
       }
     })
+  }
+
+  async showReactions(event: Event, postId: bigint){
+    let reactions = await this.popoverCtrl.create({
+      component: ReactionsComponent,
+      componentProps: {postId: postId, userId: this.userId, type: this.postType},
+      event: event});
+    console.log("react")
+    await reactions.present();
+  }
+
+  like(event: Event){
+    window.alert("like");
+  }
+
+  likeIt(){
+    window.alert("like");
   }
 
   isModalOpen = false;
