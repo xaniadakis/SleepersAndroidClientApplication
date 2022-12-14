@@ -15,8 +15,9 @@ import {ModalController, PopoverController} from "@ionic/angular";
 import {ModalService} from "../../service/modal.service";
 import {Subscription} from "rxjs";
 import {SharedService} from "../../service/shared.service";
-import {ReactionsComponent} from "../reactions/reactions.component";
+import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {ReactionEnum} from "../../dto/get-post-response";
+import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 
 @Component({
   selector: 'app-tab1',
@@ -109,6 +110,15 @@ export class Tab1Page {
       componentProps: {postId: postId, userId: this.userId, postType: this.postType},
       event: event});
     console.log("react")
+    await reactions.present();
+  }
+
+  async showReactors(event: Event, postId: bigint){
+    let reactions = await this.popoverCtrl.create({
+      component: ShowReactionsComponent,
+      componentProps: {postId: postId, userId: this.userId, postType: this.postType},
+      event: event});
+    console.log("reactors")
     await reactions.present();
   }
 

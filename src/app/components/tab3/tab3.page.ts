@@ -13,9 +13,10 @@ import {PostService} from "../../service/post.service";
 import {NgForm} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {SharedService} from "../../service/shared.service";
-import {ReactionsComponent} from "../reactions/reactions.component";
+import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {ReactionEnum} from "../../dto/get-post-response";
 import {ReactResponse} from "../../dto/create-post-response";
+import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 
 @Component({
   selector: 'app-tab3',
@@ -86,6 +87,15 @@ export class Tab3Page {
       componentProps: {postId: postId, userId: this.userId, postType: this.postType},
       event: event});
     console.log("react")
+    await reactions.present();
+  }
+
+  async showReactors(event: Event, postId: bigint){
+    let reactions = await this.popoverCtrl.create({
+      component: ShowReactionsComponent,
+      componentProps: {postId: postId, userId: this.userId, postType: this.postType},
+      event: event});
+    console.log("reactors")
     await reactions.present();
   }
 

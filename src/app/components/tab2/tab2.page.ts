@@ -10,10 +10,11 @@ import {PostService} from "../../service/post.service";
 import {Subscription} from "rxjs";
 import {SharedService} from "../../service/shared.service";
 // import {PopoverController} from "ionic-angular";
-import {ReactionsComponent} from "../reactions/reactions.component";
+import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {PopoverController} from "@ionic/angular";
 import {ReactionEnum} from "../../dto/get-post-response";
 import {ReactResponse} from "../../dto/create-post-response";
+import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 
 @Component({
   selector: 'app-tab2',
@@ -84,6 +85,15 @@ export class Tab2Page {
       componentProps: {postId: postId, userId: this.userId, postType: this.postType},
       event: event});
     console.log("react")
+    await reactions.present();
+  }
+
+  async showReactors(event: Event, postId: bigint){
+    let reactions = await this.popoverCtrl.create({
+      component: ShowReactionsComponent,
+      componentProps: {postId: postId, userId: this.userId, postType: this.postType},
+      event: event});
+    console.log("reactors")
     await reactions.present();
   }
 

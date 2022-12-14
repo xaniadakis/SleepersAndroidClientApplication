@@ -1,4 +1,4 @@
-import {ToastController} from "@ionic/angular";
+import {ToastButton, ToastController} from "@ionic/angular";
 import {Injectable} from "@angular/core";
 
 @Injectable()
@@ -21,8 +21,19 @@ export class ToastService {
     const toast = await this.toastController.create({
       message: message,
       duration: duration,
-      position: position
+      position: position,
     });
     await toast.present();
   }
+
+  async presentToastWithButtons(position: 'top' | 'middle' | 'bottom', message: string, duration: number, buttons: ToastButton[]) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: duration,
+      position: position,
+      buttons: buttons
+    });
+    await toast.present();
+  }
+
 }

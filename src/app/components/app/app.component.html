@@ -33,35 +33,26 @@
           <ion-row>
             &nbsp;
           </ion-row>
-          <ion-row>
+          <ion-row class="info-row">
             <ion-card class="card info-card">
-              <ion-grid>
-                <ion-row>
-                  <ion-col>
-                    <ion-item lines="none" color="white" (click)="onLogout()">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
-                           preserveAspectRatio="xMidYMid meet"
-                           viewBox="0 0 512 512">
-                        <path fill="red"
-                              d="M160 240h160V96a16 16 0 0 0-16-16H64a16 16 0 0 0-16 16v320a16 16 0 0 0 16 16h240a16 16 0 0 0 16-16V272H160Zm299.31 4.69L368 153.37L345.37 176l64 64H320v32h89.37l-64 64L368 358.63l91.31-91.32a16 16 0 0 0 0-22.62Z"/>
-                      </svg>
-                      <ion-label class="ion-text-left">
-                        &nbsp;&nbsp;Sign Out
-                      </ion-label>
-                      <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
+              <ion-item lines="none" color="white" (click)="onLogout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+                     preserveAspectRatio="xMidYMid meet"
+                     viewBox="0 0 512 512">
+                  <path fill="red"
+                        d="M160 240h160V96a16 16 0 0 0-16-16H64a16 16 0 0 0-16 16v320a16 16 0 0 0 16 16h240a16 16 0 0 0 16-16V272H160Zm299.31 4.69L368 153.37L345.37 176l64 64H320v32h89.37l-64 64L368 358.63l91.31-91.32a16 16 0 0 0 0-22.62Z"/>
+                </svg>
+                <ion-label class="ion-text-left">
+                  &nbsp;&nbsp;Sign Out
+                </ion-label>
+                <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
+              </ion-item>
             </ion-card>
           </ion-row>
         </div>
         <ng-template #elseBlock>
           <ion-row>
             <ion-card class="card info-card">
-              <ion-grid>
-                <ion-row>
-                  <ion-col>
                     <ion-item lines="none" color="white" routerLink="/welcome">
                       <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
                            preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -72,28 +63,44 @@
                       </ion-label>
                       <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
                     </ion-item>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
             </ion-card>
           </ion-row>
         </ng-template>
-<!--        <input type="checkbox" id="switch" name="switch">-->
-<!--        <label for="switch" class="switch"></label>-->
+        <ion-row>
+          &nbsp;
+        </ion-row>
+        <ion-row>
+          <ion-card class="card info-card">
+            <ion-item lines="none" color="white" (click)="checkForUpdates()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                   viewBox="0 0 24 24">
+                <path fill="currentColor"
+                      d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1c-2.73 2.71-2.73 7.08 0 9.79s7.15 2.71 9.88 0C18.32 15.65 19 14.08 19 12.1h2c0 1.98-.88 4.55-2.64 6.29c-3.51 3.48-9.21 3.48-12.72 0c-3.5-3.47-3.53-9.11-.02-12.58s9.14-3.47 12.65 0L21 3v7.12zM12.5 8v4.25l3.5 2.08l-.72 1.21L11 13V8h1.5z"/>
+              </svg>
+              <ion-label class="ion-text-left">
+                &nbsp;&nbsp;Check for Updates
+              </ion-label>
+              <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
+            </ion-item>
+          </ion-card>
+        </ion-row>
+
+        <!--        <input type="checkbox" id="switch" name="switch">-->
+        <!--        <label for="switch" class="switch"></label>-->
       </ion-menu-toggle>
 
     </ion-content>
   </ion-menu>
-  <div class="ion-page" id="main-content" >
+  <div class="ion-page" id="main-content">
     <ion-header class="ion-no-padding ion-no-margin">
       <ion-toolbar class="ion-no-padding  ion-no-margin">
         <ion-buttons class="ion-no-padding ion-no-margin" slot="start">
           <ion-menu-toggle class="ion-no-padding ion-no-margin">
             <ion-button id="logo-button" class="ion-no-padding ion-no-margin">
               <!--              [routerLink]="['/welcome']" -->
-              <ion-img  style="margin-left: 2.5px; padding-bottom: 0; padding-top: 0; width:16vw;  height: 18vh;"
-                        fill="clear"
-                        class="logo ion-no-padding ion-no-margin"
+              <ion-img style="margin-left: 2.5px; padding-bottom: 0; padding-top: 0; width:16vw;  height: 18vh;"
+                       fill="clear"
+                       class="logo ion-no-padding ion-no-margin"
                        src="../assets/og_turtle_cropped.png" alt="logo"></ion-img>
             </ion-button>
           </ion-menu-toggle>

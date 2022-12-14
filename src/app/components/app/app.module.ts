@@ -24,11 +24,13 @@ import {ShowPostModalComponent} from "../show-post-modal/show-post-modal.compone
 import {OuterPostService} from "../../service/outer-post.service";
 import {ModalService} from "../../service/modal.service";
 import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.component";
-import {ReactionsComponent} from "../reactions/reactions.component";
+import {ReactionsComponent} from "../react-to-post/reactions.component";
+import {AppVersion} from "@awesome-cordova-plugins/app-version/ngx";
+import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
+import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import { StatusBar } from '@ionic-native/status-bar/ngx';
-
-import { AppUpdate } from '@ionic-native/app-update/ngx';
+// import { AppUpdate } from '@ionic-native/app-update/ngx';
 
 @NgModule({
   declarations: [AppComponent
@@ -41,6 +43,7 @@ import { AppUpdate } from '@ionic-native/app-update/ngx';
     , ShowPostModalComponent
     , CreatePostModalComponent
     , ReactionsComponent
+    , ShowReactionsComponent
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],
@@ -55,7 +58,9 @@ import { AppUpdate } from '@ionic-native/app-update/ngx';
   providers: [
     // StatusBar,
     // SplashScreen,
-    AppUpdate,
+    // AppUpdate,
+    AppVersion,
+    Clipboard,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     OuterPostService,
     PostService,

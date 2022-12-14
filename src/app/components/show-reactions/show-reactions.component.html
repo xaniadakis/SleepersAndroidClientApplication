@@ -1,0 +1,10 @@
+<ion-content class="ion-no-padding">
+  <tr *ngFor="let reaction of reactions" >
+    <ion-item class="ion-no-padding ion-no-margin">
+      <ion-avatar slot="start" style="margin-left: 10px;">
+        <img width="30px" height="30px" [alt]="reaction.reaction" [src]="getReactionIcon(reaction.reaction)"/>
+      </ion-avatar>
+      <ion-label>{{reaction.owner}}</ion-label>
+    </ion-item>
+  </tr>
+</ion-content>

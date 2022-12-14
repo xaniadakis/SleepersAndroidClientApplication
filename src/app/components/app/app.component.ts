@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Platform, ToastController} from "@ionic/angular";
+// import {Platform} from "@ionic/angular";
 import {Router} from "@angular/router";
 import {Http} from "@capacitor-community/http";
 import {SignOutResponse} from "../../dto/sign-out-response";
@@ -9,8 +9,14 @@ import {SharedService} from "../../service/shared.service";
 import {Subscription} from "rxjs";
 import {ModalService} from "../../service/modal.service";
 import {PostType} from "../../dto/post-type";
-import {AppUpdate} from "@ionic-native/app-update/ngx";
+// import {AppUpdate} from "@ionic-native/app-update/ngx";
 import {ToastService} from "../../service/toast.service";
+import {Platform, ToastButton} from "@ionic/angular";
+import {AppVersion} from '@awesome-cordova-plugins/app-version/ngx';
+import {gt} from "semver";
+import {SignUpResponse} from "../../dto/sign-up-response";
+import {Update} from "../../dto/update";
+import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 
 @Component({
   selector: 'app-root',
@@ -25,15 +31,17 @@ export class AppComponent {
   profilePicSrc: string | null = localStorage.getItem('profilePic');
   profilePicSrc2: string = "https://ionicframework.com/docs/img/demos/avatar.svg";
   loggedIn: boolean;
-
+  currentVersion: string;
   private sharedServiceSubscription: Subscription;
 
-  constructor(private platform: Platform,
-              private toastService: ToastService,
-              private appUpdate: AppUpdate,
-              private router: Router,
-              private sharedService: SharedService,
-              public modalService: ModalService
+  constructor(
+    private platform: Platform,
+    private toastService: ToastService,
+    private appVersion: AppVersion,
+    private router: Router,
+    private sharedService: SharedService,
+    public modalService: ModalService,
+    private clipboard: Clipboard
   ) {
     if (localStorage.getItem("userId") == null)
       this.loggedIn = false;
@@ -46,16 +54,22 @@ export class AppComponent {
 
   ngOnInit() {
     this.platform.ready().then(() => {
-      // this.statusBar.styleDefault();
-      // this.splashScreen.hide();
-
-      const updateUrl = "https://raw.githubusercontent.com/xaniadakis/sleepers-androidClient/main/sleepersUpdate.xml";
-      this.appUpdate.checkAppUpdate(updateUrl).then(update => {
-        this.toastService.presentToastWithDuration("middle", "Update Status:  " + update.msg, 5000);
-      }).catch(error => {
-        this.toastService.presentToastWithDuration("bottom", "Update Error: " + error.msg, 3000);
+      //   this.statusBar.styleDefault();
+      //   this.splashScreen.hide();
+      this.appVersion.getVersionNumber().then((res) => {
+        localStorage.setItem("appVersion", res);
+        this.currentVersion = res;
+        console.log(res);
+      }, (err) => {
+        console.log(err);
       });
-
+      //   const updateUrl = "https://raw.githubusercontent.com/xaniadakis/sleepers-androidClient/main/sleepersUpdate.xml";
+      //   this.appUpdate.checkAppUpdate(updateUrl).then(update => {
+      //     this.toastService.presentToastWithDuration("middle", "Update Status:  " + update.msg, 5000);
+      //   }).catch(error => {
+      //     this.toastService.presentToastWithDuration("bottom", "Update Error: " + error.msg, 3000);
+      //   });
+      //
     });
     this.sharedServiceSubscription = this.sharedService.onChange.subscribe({
       next: (event: boolean) => {
@@ -63,18 +77,6 @@ export class AppComponent {
         this.toggleLoggedIn(event);
       }
     })
-    // if (this.swUpdate.isEnabled) {
-    //
-    //   this.swUpdate.versionUpdates
-    //     .pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'))
-    //     .subscribe(evt => {
-    //       if (confirm("New version available. Install?")) {
-    //         // Reload the page to update to the latest version.
-    //         document.location.reload();
-    //       }
-    //     });
-    // }
-    // this.loggedIn = localStorage.getItem("userId") != null;
   }
 
   public toggleLoggedIn(value: boolean) {
@@ -197,5 +199,43 @@ export class AppComponent {
         if (GlobalConstants.DEBUG)
           this.toastService.presentToast("middle", e);
       })
+  }
+
+  checkForUpdates() {
+    // a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+    // semver.gt('1.2.3', '9.8.7') // false
+    var xhr = new XMLHttpRequest();
+    const currentVersion = this.currentVersion
+    const toastService = this.toastService
+    const clipboard = this.clipboard
+
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        const jsonResponse: Update = JSON.parse(this.responseText);
+        const updateExists: boolean = gt(jsonResponse.version, currentVersion)
+        if (updateExists) {
+          const buttons: ToastButton[] = [{
+            icon: 'clipboard',
+            text: " Copy download URL",
+            handler: () => {
+              clipboard.copy(jsonResponse.url);
+            }
+          }, {
+            text: "Who even cares..",
+            role: 'cancel'
+          }]
+          toastService.presentToastWithButtons("middle", "Version " + jsonResponse.version + " is available!", 5000, buttons)
+        } else
+          toastService.presentToastWithDuration("bottom", "No need to hurry. This app is already cool enough.", 2000)
+        console.log(this.responseText);
+      }
+    });
+
+    xhr.open("GET", "http://sleepers.ddns.net:80/update-check/");
+    xhr.setRequestHeader("Accept", "*/*");
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.withCredentials = false;
+    xhr.send();
+
   }
 }
