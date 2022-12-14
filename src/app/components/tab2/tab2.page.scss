@@ -253,8 +253,8 @@ pre {
 /////////////////////////////////////
 
 .transparent-button{
-  height: 30px;
-  width: 30px;
+  height: 28px;
+  width: 28px;
   border: transparent;
   --box-shadow: none;
   z-index: 100;
@@ -264,4 +264,16 @@ pre {
   --box-shadow: none;
   fill: transparent;
   background: transparent;
+}
+
+.loadingCenter {
+  //height: 200px;
+  position: relative;
+  //border: 3px solid green;
+  margin: 0;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }

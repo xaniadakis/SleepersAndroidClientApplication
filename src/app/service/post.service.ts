@@ -53,12 +53,13 @@ export class PostService {
     return this.http.post<CreatePostResponse>(this.commentPostUrl, comment);
   }
 
-  public saveReaction(userId: string, postId:bigint, reaction: ReactionEnum) {
-    var comment: FormData = new FormData()
-    comment.append("userId", userId)
-    comment.append("postId", postId.toString())
-    comment.append("reaction", reaction)
-    return this.http.post<CreatePostResponse>(this.commentPostUrl, comment);
+  public saveReaction(userId: string, postId:bigint, reaction: ReactionEnum, postType: PostType) {
+    var react: FormData = new FormData()
+    react.append("userId", userId)
+    react.append("postId", postId.toString())
+    react.append("reaction", reaction)
+    react.append("postType", postType)
+    return this.http.post<CreatePostResponse>(this.reactPostUrl, react);
   }
 
   public savePost(userId: string, text: string, image: File, postType: PostType) {

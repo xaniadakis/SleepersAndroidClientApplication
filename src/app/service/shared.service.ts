@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core'
 import {PostType} from "../dto/post-type";
+import {ReactionEnum} from "../dto/get-post-response";
 
 
 @Injectable()
@@ -9,6 +10,7 @@ export class SharedService {
   public onArtPost: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onStory: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onReact: EventEmitter<ReactionEnum> = new EventEmitter<ReactionEnum>();
 
   public fire(value: boolean) {
     this.onChange.emit(value);
@@ -32,4 +34,7 @@ export class SharedService {
     }
   }
 
+  public reacted(reactionEnum: ReactionEnum){
+    this.onReact.emit(reactionEnum);
+  }
 }

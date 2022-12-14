@@ -14,6 +14,8 @@ import {NgForm} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {SharedService} from "../../service/shared.service";
 import {ReactionsComponent} from "../reactions/reactions.component";
+import {ReactionEnum} from "../../dto/get-post-response";
+import {ReactResponse} from "../../dto/create-post-response";
 
 @Component({
   selector: 'app-tab3',
@@ -48,8 +50,10 @@ export class Tab3Page {
     , public postService: PostService
     , public modalService: ModalService
     , private sharedService: SharedService
-    , private popoverCtrl: PopoverController
+    ,  private popoverCtrl: PopoverController
   ) {
+    // window.addEventListener("contextmenu", (e) => { e.preventDefault(); });
+
   }
 
   ngOnInit() {
@@ -62,10 +66,24 @@ export class Tab3Page {
     })
   }
 
+  react(reaction: ReactionEnum, postId: bigint) {
+    if (this.userId == null) {
+      return;
+    }
+    this.postService.saveReaction(this.userId, postId, reaction, this.postType).subscribe(data => {
+      const response: ReactResponse = data;
+      console.log(response)
+    });
+  }
 
-  async showReactions(event: Event){
+  reload(){
+    this.ngOnInit();
+  }
+
+  async showReactions(event: Event, postId: bigint){
     let reactions = await this.popoverCtrl.create({
       component: ReactionsComponent,
+      componentProps: {postId: postId, userId: this.userId, postType: this.postType},
       event: event});
     console.log("react")
     await reactions.present();
@@ -75,11 +93,15 @@ export class Tab3Page {
     window.alert("like");
   }
 
-  likeIt(){
-    window.alert("like");
+  likeIt(postId: bigint){
+    this.react(ReactionEnum.LOVE, postId);
+    this.ngOnInit();
   }
 
+
   isModalOpen = false;
+
+  fetching: boolean = true;
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
@@ -114,9 +136,16 @@ export class Tab3Page {
   getAllPosts() {
     this.postService.findAll(this.postType).subscribe(data => {
       this.posts = data.postDtos;
-      this.posts.sort(function (a, b) {
-        return new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime();
-      });
+      // this.posts.sort(function (a, b) {
+      //   return new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime();
+      // });
+      console.log("I received all posts successfully.")
+      this.fetching = false;
+    }, error => {
+      this.fetching = false;
+      this.toastService.presentToastWithDuration("middle",
+        "You might wanna sleep on it for a sec, cause the server is probably gettin another upgrade",
+        5000)
     });
   }
 

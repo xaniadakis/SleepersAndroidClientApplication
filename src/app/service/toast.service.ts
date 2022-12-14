@@ -16,4 +16,13 @@ export class ToastService {
     });
     await toast.present();
   }
+
+  async presentToastWithDuration(position: 'top' | 'middle' | 'bottom', message: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: duration,
+      position: position
+    });
+    await toast.present();
+  }
 }
