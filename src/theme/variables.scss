@@ -86,11 +86,11 @@ ion-button {
   text-transform: none;
 }
 
-@media (prefers-color-scheme: light) {
-  /*
-   * Dark Colors
-   * -------------------------------------------
-   */
+//@media (prefers-color-scheme: light) {
+//  /*
+//   * Dark Colors
+//   * -------------------------------------------
+//   */
 
   body {
     --ion-color-primary: #428cff;
@@ -243,4 +243,4 @@ ion-button {
 
     --ion-card-background: #1e1e1e;
   }
-}
+//}

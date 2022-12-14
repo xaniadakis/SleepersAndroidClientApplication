@@ -171,4 +171,21 @@ export class Tab2Page {
       this.getAllPosts();
     });
   }
+  getReactionsDesc(num: number){
+    if(num>1)
+      return num+ " buddies have reacted";
+    if(num==0)
+      return "nobuddy has reacted yet";
+    else
+      return num+ " buddy has reacted";
+  }
+
+  getCommentsDesc(num: number){
+    if(num>1)
+      return "already " +num+ " comments";
+    if(num==0)
+      return "no comments yet";
+    else
+      return "already " +num+ " comment";
+  }
 }

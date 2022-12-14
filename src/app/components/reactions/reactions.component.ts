@@ -29,7 +29,7 @@ export class ReactionsComponent {
     this.popoverController.dismiss();
     setTimeout(() => {
       this.sharedService.posted(this.postType)
-    }, 500);
+    }, 300);
   }
 
   angryBird() {
@@ -53,7 +53,7 @@ export class ReactionsComponent {
   }
 
   love() {
-    window.alert("love");
+    // window.alert("love");
     this.dismiss(ReactionEnum.LOVE);
   }
 

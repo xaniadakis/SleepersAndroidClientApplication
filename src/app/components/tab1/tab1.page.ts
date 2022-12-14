@@ -57,6 +57,8 @@ export class Tab1Page {
   };
 
   loading: string = "/src/assets/icon/loading.webp";
+  fetching: boolean = true;
+  isModalOpen = false;
   imageSrc: string | ArrayBuffer | null;
   imageEvent: File;
   hidden: boolean = true;
@@ -118,10 +120,6 @@ export class Tab1Page {
     this.react(ReactionEnum.LOVE, postId);
     this.ngOnInit();
   }
-
-  fetching: boolean = true;
-
-  isModalOpen = false;
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
@@ -194,5 +192,23 @@ export class Tab1Page {
       form.reset();
     });
     this.getAllPosts();
+  }
+
+  getReactionsDesc(num: number){
+    if(num>1)
+      return num+ " buddies have reacted";
+    if(num==0)
+      return "nobuddy has reacted yet";
+    else
+      return num+ " buddy has reacted";
+  }
+
+  getCommentsDesc(num: number){
+    if(num>1)
+      return "already " +num+ " comments";
+    if(num==0)
+      return "no comments yet";
+    else
+      return "already " +num+ " comment";
   }
 }

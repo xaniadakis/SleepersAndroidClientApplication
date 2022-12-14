@@ -30,7 +30,7 @@
                 <div class="ion-float-start">
                   <ion-chip id="post-owner-avatar">
                     <ion-avatar>
-                      <img alt="avatar" src="{{imageApi+post.ownerProfilePic}}"/>
+                      <img alt="avatar" src="{{(imageApi+post.ownerProfilePic)}}"/>
                     </ion-avatar>
                     <ion-label><b>{{post.owner}}</b></ion-label>
                   </ion-chip>
@@ -72,8 +72,8 @@
                   </svg>
 
                 </ion-button>
-                <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">&nbsp;&nbsp;&nbsp;&nbsp;<b>{{post.reactionsSize}}
-                  buddies have reacted</b>
+                <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">
+                  &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getReactionsDesc(post.reactionsSize)}}</b>
                 </div>
               </ion-col>
               <ion-col>
@@ -88,12 +88,10 @@
                     </g>
                   </svg>
                 </ion-button>
-                <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">&nbsp;&nbsp;&nbsp;&nbsp;<b>already {{post.commentsSize}} comments</b>
+                <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">
+                  &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getCommentsDesc(post.commentsSize)}}</b>
                 </div>
               </ion-col>
-              <!--              <ion-col center text-center>-->
-              <!--                <ion-note> 11h ago </ion-note>-->
-              <!--              </ion-col>-->
             </ion-row>
 
           </ion-card>

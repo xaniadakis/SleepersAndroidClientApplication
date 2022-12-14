@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ToastController} from "@ionic/angular";
+import {Platform, ToastController} from "@ionic/angular";
 import {Router} from "@angular/router";
 import {Http} from "@capacitor-community/http";
 import {SignOutResponse} from "../../dto/sign-out-response";
@@ -7,9 +7,9 @@ import {GlobalConstants} from "../../util/global-constants";
 import {ProfilePicChangeResponse} from "../../dto/profile-pic-change-response";
 import {SharedService} from "../../service/shared.service";
 import {Subscription} from "rxjs";
-import {SwUpdate} from "@angular/service-worker";
 import {ModalService} from "../../service/modal.service";
 import {PostType} from "../../dto/post-type";
+import {AppUpdate} from "@ionic-native/app-update/ngx";
 
 async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
   const toast = await toastController.create({
@@ -35,7 +35,9 @@ export class AppComponent {
 
   private sharedServiceSubscription: Subscription;
 
-  constructor(private toastController: ToastController,
+  constructor(private platform: Platform,
+              private toastController: ToastController,
+              private appUpdate: AppUpdate,
               private router: Router,
               private sharedService: SharedService,
               public modalService: ModalService
@@ -50,6 +52,18 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.platform.ready().then(() => {
+      // this.statusBar.styleDefault();
+      // this.splashScreen.hide();
+
+      const updateUrl = GlobalConstants.APIURL+"/checkForUpdates/";
+      this.appUpdate.checkAppUpdate(updateUrl).then(update => {
+        alert("Update Status:  " + update.msg);
+      }).catch(error => {
+        alert("Error: " + error.msg);
+      });
+
+    });
     this.sharedServiceSubscription = this.sharedService.onChange.subscribe({
       next: (event: boolean) => {
         console.log(`Received message #${event}`);

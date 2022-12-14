@@ -19,7 +19,7 @@ dependencies {
     implementation project(':capacitor-preferences')
     implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-status-bar')
-
+    implementation "com.android.support:support-v4:24.1.1+"
 }
 
 

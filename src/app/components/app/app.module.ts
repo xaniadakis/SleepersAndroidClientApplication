@@ -25,6 +25,10 @@ import {OuterPostService} from "../../service/outer-post.service";
 import {ModalService} from "../../service/modal.service";
 import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.component";
 import {ReactionsComponent} from "../reactions/reactions.component";
+// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+// import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+import { AppUpdate } from '@ionic-native/app-update/ngx';
 
 @NgModule({
   declarations: [AppComponent
@@ -48,7 +52,11 @@ import {ReactionsComponent} from "../reactions/reactions.component";
     HammerModule
     // ScrollingModule,
   ],
-  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+  providers: [
+    // StatusBar,
+    // SplashScreen,
+    AppUpdate,
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     OuterPostService,
     PostService,
     ModalService,
