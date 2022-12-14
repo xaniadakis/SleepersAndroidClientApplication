@@ -14,8 +14,8 @@
             <!--          <ion-card id="profilePic"></ion-card>-->
             <div class="container">
               <div class="outer">
-                <img id="avatarado" alt="picado"
-                     src="{{profilePicSrc}}"/>
+                <img id="avatarado" alt="{{profilePicSrc}}"
+                     src="{{imageApi+profilePicSrc}}"/>
                 <div class="inner">
                   <ion-input class="inputfile" type="file" name="pic" accept="image/*"
                              (input)="onFileChanged($event)"></ion-input>

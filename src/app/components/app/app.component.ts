@@ -10,15 +10,7 @@ import {Subscription} from "rxjs";
 import {ModalService} from "../../service/modal.service";
 import {PostType} from "../../dto/post-type";
 import {AppUpdate} from "@ionic-native/app-update/ngx";
-
-async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
-  const toast = await toastController.create({
-    message: message,
-    duration: 1000
-  });
-  await toast.present();
-}
-
+import {ToastService} from "../../service/toast.service";
 
 @Component({
   selector: 'app-root',
@@ -29,14 +21,15 @@ export class AppComponent {
   menuType: string = 'reveal';
   darkMode = false;
   profilePic: Blob;
-  profilePicSrc: string = GlobalConstants.APIURL + "/file/image?filename=" + localStorage.getItem('profilePic');
+  imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
+  profilePicSrc: string | null = localStorage.getItem('profilePic');
   profilePicSrc2: string = "https://ionicframework.com/docs/img/demos/avatar.svg";
   loggedIn: boolean;
 
   private sharedServiceSubscription: Subscription;
 
   constructor(private platform: Platform,
-              private toastController: ToastController,
+              private toastService: ToastService,
               private appUpdate: AppUpdate,
               private router: Router,
               private sharedService: SharedService,
@@ -56,11 +49,11 @@ export class AppComponent {
       // this.statusBar.styleDefault();
       // this.splashScreen.hide();
 
-      const updateUrl = GlobalConstants.APIURL+"/checkForUpdates/";
+      const updateUrl = "https://raw.githubusercontent.com/xaniadakis/sleepers-androidClient/main/sleepersUpdate.xml";
       this.appUpdate.checkAppUpdate(updateUrl).then(update => {
-        alert("Update Status:  " + update.msg);
+        this.toastService.presentToastWithDuration("middle", "Update Status:  " + update.msg, 5000);
       }).catch(error => {
-        alert("Error: " + error.msg);
+        this.toastService.presentToastWithDuration("bottom", "Update Error: " + error.msg, 3000);
       });
 
     });
@@ -106,12 +99,12 @@ export class AppComponent {
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     var myRouter = this.router;
-    var myToastController = this.toastController;
+    var toastService = this.toastService;
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         console.log(JSON.stringify(JSON.parse(this.responseText)));
         if (GlobalConstants.DEBUG)
-          presentToast(myToastController, "top", JSON.stringify(JSON.parse(this.responseText)));
+          toastService.presentToast("top", JSON.stringify(JSON.parse(this.responseText)));
 
         if (xhr.status == 200) {
           const jsonResponse: ProfilePicChangeResponse = JSON.parse(this.responseText);
@@ -128,7 +121,7 @@ export class AppComponent {
     xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhr.withCredentials = false;
     if (GlobalConstants.DEBUG)
-      presentToast(myToastController, "middle", "Sending request to " + GlobalConstants.APIURL + "/user/changeProfilePic" + requestParams);
+      this.toastService.presentToast("middle", "Sending request to " + GlobalConstants.APIURL + "/user/changeProfilePic" + requestParams);
     xhr.send(formData);
   }
 
@@ -147,7 +140,7 @@ export class AppComponent {
   private xhrLogOutRequest() {
     var xhr = new XMLHttpRequest();
     var myRouter = this.router;
-    var myToastController = this.toastController;
+    var toastService = this.toastService;
 
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
@@ -160,11 +153,11 @@ export class AppComponent {
           localStorage.clear();
           myRouter.navigateByUrl('/welcome');
           if (GlobalConstants.DEBUG)
-            presentToast(myToastController, "middle", "You are logged out!");
+            toastService.presentToast("middle", "You are logged out!");
         } else
           console.log(xhr.status + xhr.responseText);
         if (GlobalConstants.DEBUG)
-          presentToast(myToastController, "middle", "Logging out!");
+          toastService.presentToast("middle", "Logging out!");
       }
     });
 
@@ -183,7 +176,7 @@ export class AppComponent {
       }
     };
     var myRouter = this.router;
-    var myToastController = this.toastController;
+    var toastService = this.toastService;
     Http.request({...options, method: 'GET'})
       .then(async response => {
         if (response.status === 200) {
@@ -196,13 +189,13 @@ export class AppComponent {
           localStorage.clear();
           this.toggleLoggedIn(false);
           myRouter.navigateByUrl('/welcome');
-          presentToast(myToastController, "middle", "You are logged out!");
+          this.toastService.presentToast("middle", "You are logged out!");
         }
       })
       .catch(e => {
         console.log(e)
         if (GlobalConstants.DEBUG)
-          presentToast(myToastController, "middle", e);
+          this.toastService.presentToast("middle", e);
       })
   }
 }
