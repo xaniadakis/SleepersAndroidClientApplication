@@ -33,8 +33,8 @@ export class ShowReactionsComponent {
   private getPostCommentsAndLikes() {
     if (this.userId == null)
       return
-    this.postService.findAllCommentsAndLikes(this.userId, this.postId, this.postType).subscribe(data => {
-      this.reactions = data.commentsAndLikesDto.likes;
+    this.postService.findAllReactions(this.postId, this.postType).subscribe(data => {
+      this.reactions = data.postReactionsDto.reactions;
       console.log(this.reactions);
     });
   }

@@ -10,10 +10,13 @@ import {  throwError } from 'rxjs';
 export class AuthorizationInterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    console.log("Intercepting request");
+    console.log("Intercepting "+req.method+" request");
     const jwt = localStorage.getItem('token');
-
-    req = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + jwt) });
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,
+    // Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+    req = req.clone({ headers: req.headers.set('authorization', 'Bearer ' + jwt), method: req.method, withCredentials: false});
     // req = req.clone({ headers: req.headers.set('Content-Type', 'application/json') });
     // req = req.clone({ headers: req.headers.set('Accept', 'application/json') });
     console.log("AuthorizationInterceptorService sent the jwt: ",jwt);

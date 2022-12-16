@@ -58,14 +58,13 @@ export class Tab1Page {
   };
 
   loading: string = "/src/assets/icon/loading.webp";
-  fetching: boolean = true;
-  isModalOpen = false;
   imageSrc: string | ArrayBuffer | null;
-  imageEvent: File;
   hidden: boolean = true;
-  private message: string;
-
+  imageUploaded: File;
   private sharedServiceSubscription: Subscription;
+  isModalOpen = false;
+  fetching: boolean = true;
+  youtubeEmbedApi: string = "https://www.youtube.com/embed/";
 
   constructor(
     private router: Router
@@ -94,7 +93,7 @@ export class Tab1Page {
     if (this.userId == null) {
       return;
     }
-    this.postService.saveReaction(this.userId, postId, reaction, this.postType).subscribe(data => {
+    this.postService.saveReaction(postId, reaction, this.postType).subscribe(data => {
       const response: ReactResponse = data;
       console.log(response)
     });
@@ -131,6 +130,7 @@ export class Tab1Page {
     this.ngOnInit();
   }
 
+
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
@@ -148,7 +148,7 @@ export class Tab1Page {
 
   onFileChanged(event: any): void {
     const file = event.target.files[0];
-    this.imageEvent = event.target.files[0];
+    this.imageUploaded = event.target.files[0];
     this.postForm.image = file;
     const reader = new FileReader();
     reader.onload = e => this.imageSrc = reader.result;
@@ -178,31 +178,17 @@ export class Tab1Page {
     this.fetching = false;
   }
 
-  deletePost(postId: bigint) {
-    if (this.userId == null) {
+  deletePost(postId:bigint) {
+    if(this.userId==null) {
       // this.router.navigateByUrl("/welcome");
       return
     }
-    this.postService.deletePost(this.userId, postId, this.postType).subscribe(data => {
-      console.log(data)
+    this.postService.deletePost(postId, this.postType).subscribe(data => {
+      console.log(data);
+      this.getAllPosts();
     });
-    this.getAllPosts();
   }
 
-  createPost(form: NgForm, image: any) {
-    const text = form.controls["text"].value;
-    if ((this.userId == null) || (text == null || text == '' && image == '')) {
-      this.toastService.presentToast("top", "Bro this was an empty post, imma pretend this never happened.");
-      // this.router.navigateByUrl("/welcome");
-      return;
-    }
-    this.postService.savePost(this.userId, text, this.imageEvent, this.postType).subscribe(data => {
-      const response: CreatePostResponse = data;
-      // alert(response);
-      form.reset();
-    });
-    this.getAllPosts();
-  }
 
   getReactionsDesc(num: number){
     if(num>1)

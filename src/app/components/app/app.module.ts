@@ -28,6 +28,9 @@ import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {AppVersion} from "@awesome-cordova-plugins/app-version/ngx";
 import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
+import {SafePipe} from "../safe-pipe/safe.pipe";
+import {NgxImageCompressService} from "ngx-image-compress";
+import {ImageCompressService} from "../../service/image-compress.service";
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import { StatusBar } from '@ionic-native/status-bar/ngx';
 // import { AppUpdate } from '@ionic-native/app-update/ngx';
@@ -44,6 +47,7 @@ import {ShowReactionsComponent} from "../show-reactions/show-reactions.component
     , CreatePostModalComponent
     , ReactionsComponent
     , ShowReactionsComponent
+    , SafePipe
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],
@@ -74,6 +78,8 @@ import {ShowReactionsComponent} from "../show-reactions/show-reactions.component
     },
     GuardService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptorService, multi: true},
+    NgxImageCompressService,
+    ImageCompressService
     // CdkVirtualScrollViewport,
     // LogUpdateService,
     // CheckForUpdateService

@@ -61,6 +61,7 @@
     <!--    </ion-item>-->
   </div>
   <ng-template #showContentBlock>
+
     <tr *ngFor="let post of posts">
       <ion-item-sliding>
         <ion-item lines="none" class="ion-no-padding" (dblclick)="likeIt(post.id)">
@@ -87,6 +88,13 @@
               <img id="post-image" alt="ey where my pic at yo" src="{{ (imageApi+post.image) || (loading) }}"
                    loading="lazy"/>
             </div>
+            <div *ngIf="notEmpty(post.youtubeVideoId)">
+              <iframe style="width: 100vw; height: 30vh;" [src]="(youtubeEmbedApi+post.youtubeVideoId) | safe"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen>
+              </iframe>
+            </div>
             <div *ngIf="notEmpty(post.text)">
               <ion-card-content style="margin-top: -4.5px;">
                 <!--        <ion-card-title> {{post.title}}</ion-card-title>-->
@@ -106,7 +114,8 @@
                             (click)="showReactions($event, post.id);"
                             (press)="showReactors($event, post.id);"
                             icon-left>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
                        viewBox="0 0 24 24">
                     <path fill="#DA0037"
                           d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z"/>
@@ -121,7 +130,8 @@
                 <ion-button class="transparent-button ion-no-padding ion-no-margin "
                             icon-left
                             (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
                        viewBox="0 0 24 24">
                     <g transform="translate(24 0) scale(-1 1)">
                       <path fill="white"
@@ -144,7 +154,7 @@
         <div *ngIf="equals(post.owner)">
           <ion-item-options id="outer">
             <button id="edit-post-button rowado" expand="block"
-                    (click)="modalService.openModal(post.image, post.text, this.postType)"
+                    (click)="modalService.openModal(post.id, post.image, post.text, this.postType)"
                     style="background-color: darkslategray">
               &nbsp;&nbsp;&nbsp;
               <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"

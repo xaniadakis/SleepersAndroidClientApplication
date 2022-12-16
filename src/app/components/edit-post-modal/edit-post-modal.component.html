@@ -5,80 +5,92 @@
     </ion-buttons>
     <ion-title>Edit Post</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="confirm()">Confirm</ion-button>
+      <ion-button (click)="confirm(form)">Confirm</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <form #form="ngForm" (ngSubmit)="onModify(form)" #f="ngForm" novalidate>
 
-  <ion-item lines="none" class="ion-no-padding">
-    <ion-card class="ion-no-padding">
-      <ion-row style="background-color: #121212;" class="ion-justify-content-center">
+  <form #form="ngForm" (ngSubmit)="onModify(form)" #f="ngForm">
+
+    <ion-card id="postado-form">
+      <!--    image display   -->
+      <ion-row style="background-color: #121212;" class="ion-justify-content-center" *ngIf="imgResult">
         <div class="container">
-          <!--          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-image"-->
-          <!--               [src]="imageApi+image || 'http://placehold.it/180'" alt="your image"/>-->
-
-          <div class="container">
-            <img style="height: 50vh;
-             width: 50vw; margin-bottom: 2px; border-radius: 10px" id="display-image"
-                 [src]="imageSrc || 'http://placehold.it/180'" alt="your image"/>
-            <label for="file-upload" class="fas fa-download">
-              <i class="fa fa-cloud-upload"></i>
-              <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
-                   viewBox="0 0 24 24">
-                <path fill="white"
-                      d="M6 17h12l-3.75-5l-3 4L9 13Zm-2 4q-.825 0-1.412-.587Q2 19.825 2 19V7q0-.825.588-1.412Q3.175 5 4 5h3.15L9 3h6l1.85 2H20q.825 0 1.413.588Q22 6.175 22 7v12q0 .825-.587 1.413Q20.825 21 20 21Zm16-2V7h-4.05l-1.825-2h-4.25L8.05 7H4v12Zm-8-7Z"/>
-              </svg>
-            </label>
-            <input id="file-upload" type="file" accept="image/*" (input)="onFileChanged($event)"/>
-
-            <!--            <ion-button type="file" accept="image/*" style="width: max-content;" class="fas fa-download" (input)="onFileChanged($event)">-->
-<!--              <svg style="padding-bottom: 5px; border: 1px white;" xmlns="http://www.w3.org/2000/svg" width="3em"-->
-<!--                   height="3em"-->
-<!--                   preserveAspectRatio="xMidYMid meet"-->
-<!--                   viewBox="0 0 24 24">-->
-<!--                <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">-->
-<!--                  <path d="M15 8h.01M12 20H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5"/>-->
-<!--                  <path d="m4 15l4-4c.928-.893 2.072-.893 3 0l4 4"/>-->
-<!--                  <path d="m14 14l1-1c.617-.593 1.328-.793 2.009-.598M19 22v-6m3 3l-3-3l-3 3"/>-->
-<!--                </g>-->
-<!--              </svg>-->
-<!--            </ion-button>-->
-          </div>
-
-          <!--          <ion-button class="fas fa-download" (input)="onFileChanged($event)">-->
-          <!--            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet"-->
-          <!--                 viewBox="0 0 20 20">-->
-          <!--              <path fill="currentColor" fill-rule="evenodd"-->
-          <!--                    d="M11.5 3a4.499 4.499 0 0 1 4.492 4.77H16l-.001 1.227a4 4 0 0 1 3.996 3.799l.005.2a4 4 0 0 1-3.8 3.992l-.2.005h-.001L16 17h-5.001v-3.923h2.464L10 9.003l-3.454 4.075H9L8.999 17H4a4.01 4.01 0 0 1-4-4.005a4 4 0 0 1 3.198-3.918a3 3 0 0 1 4.313-3.664A4.498 4.498 0 0 1 11.5 3Z"/>-->
-          <!--            </svg>-->
-          <!--          </ion-button>-->
+          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-image"
+               [src]="imgResult" alt="your image"/>
+          <ion-button class="fas fa-download" (click)="unloadImage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                 viewBox="0 0 24 24">
+              <path fill="#DA0037"
+                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2zm4.207 12.793l-1.414 1.414L12 13.414l-2.793 2.793l-1.414-1.414L10.586 12L7.793 9.207l1.414-1.414L12 10.586l2.793-2.793l1.414 1.414L13.414 12l2.793 2.793z"/>
+            </svg>
+          </ion-button>
         </div>
       </ion-row>
-
-
-      <ion-card-content style="box-shadow: inset -2px -2px 3.5px rgba(100, 100, 100, 0.5),
-                                  inset 1.5px 1.5px 3px rgba(10, 10, 10, 0.7);"
-                        class="inline ion-no-padding">
-        <ion-textarea [autoGrow]="true"
-                      style="padding-left: 6px;"
-                      class="ion-float-left" placeholder="{{text}}"
-                      name="text" [(ngModel)]="text" ngControl="text"
-                      value="{{text}}">
-          <!--                    (input)="(presentToast('bottom','Feature aint ready yet bro, cant post some wisdom, gotta wait'))"-->
-        </ion-textarea>
-        <ion-label style="padding-top: 10px; margin-top: 10px; margin-inside: 5px;">
-          &nbsp;&nbsp;
-          <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: -0.125em;" width="2em" height="2em"
-               preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-            <path fill="currentColor"
-                  d="M5 19h1.4l8.625-8.625l-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2l1.4-1.4q.575-.575 1.413-.575q.837 0 1.412.575l1.4 1.4q.575.575.6 1.388q.025.812-.55 1.387ZM4 21q-.425 0-.712-.288Q3 20.425 3 20v-2.825q0-.2.075-.387q.075-.188.225-.338l10.3-10.3l4.25 4.25l-10.3 10.3q-.15.15-.337.225q-.188.075-.388.075ZM14.325 9.675l-.7-.7l1.4 1.4Z"/>
-          </svg>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </ion-label>
-      </ion-card-content>
+      <!--    yt video display   -->
+      <ion-row style="background-color: #121212;" class="ion-justify-content-center" *ngIf="youtubeThumbnail">
+        <div class="container">
+          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-image"
+               [src]="youtubeThumbnail" alt="your image"/>
+          <ion-button class="fas fa-download" (click)="unloadYoutubeVideo()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                 viewBox="0 0 24 24">
+              <path fill="#DA0037"
+                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2zm4.207 12.793l-1.414 1.414L12 13.414l-2.793 2.793l-1.414-1.414L10.586 12L7.793 9.207l1.414-1.414L12 10.586l2.793-2.793l1.414 1.414L13.414 12l2.793 2.793z"/>
+            </svg>
+          </ion-button>
+        </div>
+      </ion-row>
+<!--      <img [src]="imgResult" *ngIf="imgResult"/>-->
     </ion-card>
-  </ion-item>
+    <!--    <ion-row class="inline">-->
+
+    <!--    edit text area    -->
+    <ion-card-content style="box-shadow: inset -2px -2px 3.5px rgba(100, 100, 100, 0.5),
+                                  inset 1.5px 1.5px 3px rgba(10, 10, 10, 0.7);"
+                      class="inline ion-no-padding">
+      <ion-textarea [autoGrow]="true"
+                    style="padding-left: 6px;"
+                    class="ion-float-left" placeholder="{{text}}"
+                    name="text" [(ngModel)]="text" ngControl="text"
+                    value="{{text}}">
+        <!--                    (input)="(presentToast('bottom','Feature aint ready yet bro, cant post some wisdom, gotta wait'))"-->
+      </ion-textarea>
+      <ion-label style="padding-top: 10px; margin-top: 10px; margin-inside: 5px;">
+        &nbsp;&nbsp;
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: -0.125em;" width="2em" height="2em"
+             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+          <path fill="currentColor"
+                d="M5 19h1.4l8.625-8.625l-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2l1.4-1.4q.575-.575 1.413-.575q.837 0 1.412.575l1.4 1.4q.575.575.6 1.388q.025.812-.55 1.387ZM4 21q-.425 0-.712-.288Q3 20.425 3 20v-2.825q0-.2.075-.387q.075-.188.225-.338l10.3-10.3l4.25 4.25l-10.3 10.3q-.15.15-.337.225q-.188.075-.388.075ZM14.325 9.675l-.7-.7l1.4 1.4Z"/>
+        </svg>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </ion-label>
+    </ion-card-content>
+
+<!--    IMAGE UPLOAD  -->
+<!--    <button (click)="compressFile()">Upload and compress Image</button>-->
+    <label (click)="compressFile()" class="custom-file-upload">
+      <i class="fa fa-cloud-upload"></i>
+      <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
+           viewBox="0 0 24 24">
+        <path fill="white"
+              d="M6 17h12l-3.75-5l-3 4L9 13Zm-2 4q-.825 0-1.412-.587Q2 19.825 2 19V7q0-.825.588-1.412Q3.175 5 4 5h3.15L9 3h6l1.85 2H20q.825 0 1.413.588Q22 6.175 22 7v12q0 .825-.587 1.413Q20.825 21 20 21Zm16-2V7h-4.05l-1.825-2h-4.25L8.05 7H4v12Zm-8-7Z"/>
+      </svg>
+    </label>
+<!--    <input id="file-upload" type="file" accept="image/*" (input)="onFileChanged($event,'image')"/>-->
+
+<!--   YOUTUBE VID UPLOAD -->
+    <label class="custom-file-upload" (click)="presentAlert()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="2.2em" preserveAspectRatio="xMidYMid meet"
+           viewBox="0 0 16 16">
+        <path fill="#da0037"
+              d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104l.022.26l.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105l-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006l-.087-.004l-.171-.007l-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103l.003-.052l.008-.104l.022-.26l.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007l.172-.006l.086-.003l.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/>
+      </svg>
+    </label>
+    <!--    </ion-row>-->
   </form>
+
+
+
 </ion-content>

@@ -2,9 +2,8 @@ import {Component, Input} from '@angular/core';
 
 import {ModalController} from '@ionic/angular';
 import {GlobalConstants} from "../../util/global-constants";
-import {Subject} from 'rxjs';
 import {ToastService} from "../../service/toast.service";
-import {CommentsAndLikesDto, SimpleCommentDto, SimpleReactionDto} from "../../dto/get-post-response";
+import {SimpleCommentDto, SimpleReactionDto} from "../../dto/get-post-response";
 import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
 import {PostType} from "../../dto/post-type";
@@ -36,19 +35,18 @@ export class ShowPostModalComponent {
 
   constructor(private modalCtrl: ModalController
     , private toastService: ToastService
-  , private postService: PostService) {
+    , private postService: PostService) {
   }
 
   ngOnInit() {
-    this.getPostCommentsAndLikes();
+    this.getPostComments();
   }
 
-  private getPostCommentsAndLikes() {
-    if (this.userId==null)
+  private getPostComments() {
+    if (this.userId == null)
       return
-    this.postService.findAllCommentsAndLikes(this.userId, this.id, this.type).subscribe(data => {
-      this.likes = data.commentsAndLikesDto.likes;
-      this.comments = data.commentsAndLikesDto.comments;
+    this.postService.findAllComments(this.id, this.type).subscribe(data => {
+      this.comments = data.postCommentsDto.comments;
 
       console.log(this.comments);
       this.comments.sort(function (a, b) {
@@ -61,7 +59,7 @@ export class ShowPostModalComponent {
     if (this.userId == null) {
       return;
     }
-    this.postService.saveComment(this.userId, this.id, form.controls["commentText"].value, this.type).subscribe(data => {
+    this.postService.saveComment(this.id, form.controls["commentText"].value, this.type).subscribe(data => {
       const response: CreateCommentResponse = data;
       // alert(response)
       form.reset()

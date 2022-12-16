@@ -1,8 +1,8 @@
-<ion-content class="ion-no-padding">
-  <tr *ngFor="let reaction of reactions" >
+<ion-content class="ion-no-padding ion-no-margin">
+  <tr *ngFor="let reaction of reactions" class="ion-no-padding ion-no-margin">
     <ion-item class="ion-no-padding ion-no-margin">
       <ion-avatar slot="start" style="margin-left: 10px;">
-        <img width="30px" height="30px" [alt]="reaction.reaction" [src]="getReactionIcon(reaction.reaction)"/>
+        <img width="25px" height="25px" [alt]="reaction.reaction" [src]="getReactionIcon(reaction.reaction)"/>
       </ion-avatar>
       <ion-label>{{reaction.owner}}</ion-label>
     </ion-item>

@@ -61,7 +61,7 @@ export class ReactionsComponent {
     if (this.userId == null) {
       return;
     }
-    this.postService.saveReaction(this.userId, this.postId, reaction, this.postType).subscribe(data => {
+    this.postService.saveReaction(this.postId, reaction, this.postType).subscribe(data => {
       const response: ReactResponse = data;
       console.log(response)
     });

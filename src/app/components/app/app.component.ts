@@ -14,7 +14,6 @@ import {ToastService} from "../../service/toast.service";
 import {Platform, ToastButton} from "@ionic/angular";
 import {AppVersion} from '@awesome-cordova-plugins/app-version/ngx';
 import {gt} from "semver";
-import {SignUpResponse} from "../../dto/sign-up-response";
 import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 

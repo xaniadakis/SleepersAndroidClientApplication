@@ -4,6 +4,7 @@ export class UiPostDto {
   title: string;
   text: string;
   image: string;
+  youtubeVideoId: string;
   owner: string;
   ownerProfilePic: string;
   reactionsSize: number;

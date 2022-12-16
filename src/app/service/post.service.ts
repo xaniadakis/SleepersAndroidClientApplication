@@ -4,15 +4,17 @@ import {GetAllPostsResponse} from '../dto/get-all-posts-response';
 import {Observable} from 'rxjs';
 import {CreatePostResponse} from "../dto/create-post-response";
 import {GlobalConstants} from "../util/global-constants";
-import {GetPostResponse, ReactionEnum} from "../dto/get-post-response";
+import {GetCommentsResponse, GetReactionsResponse, ReactionEnum} from "../dto/get-post-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {PostType} from "../dto/post-type";
+import {DataUrl} from "ngx-image-compress";
 
 @Injectable()
 export class PostService {
 
   private getAllPostsUrl: string;
-  private getPostCommentsAndLikesUrl: string;
+  private getPostCommentsUrl: string;
+  private getPostReactionsUrl: string;
   private savePostUrl: string;
   private modifyPostUrl: string;
   private deletePostUrl: string;
@@ -27,7 +29,8 @@ export class PostService {
     this.deletePostUrl = GlobalConstants.APIURL + '/post/';
     this.commentPostUrl = GlobalConstants.APIURL + '/post/comment/';
     this.reactPostUrl = GlobalConstants.APIURL + '/post/react/';
-    this.getPostCommentsAndLikesUrl = GlobalConstants.APIURL + '/post/commentsAndLikes/';
+    this.getPostCommentsUrl = GlobalConstants.APIURL + '/post/comments/';
+    this.getPostReactionsUrl = GlobalConstants.APIURL + '/post/reactions/';
     this.getImageUrl = GlobalConstants.APIURL + "/file/image?filename=";
   }
 
@@ -35,54 +38,60 @@ export class PostService {
     return this.http.get<GetAllPostsResponse>(this.getAllPostsUrl +"?postType=" + postType);
   }
 
-  public findAllCommentsAndLikes(userId: string, postId: bigint, postType: string): Observable<GetPostResponse> {
-    const reqParams = "?userId=" + userId + "&postId=" + postId.toString()+ "&postType=" + postType;
-    return this.http.get<GetPostResponse>(this.getPostCommentsAndLikesUrl + reqParams);
+  public findAllComments(postId: bigint, postType: string): Observable<GetCommentsResponse> {
+    const reqParams = "?postId=" + postId.toString()+ "&postType=" + postType;
+    return this.http.get<GetCommentsResponse>(this.getPostCommentsUrl + reqParams);
+  }
+
+  public findAllReactions(postId: bigint, postType: string): Observable<GetReactionsResponse> {
+    const reqParams = "?postId=" + postId.toString()+ "&postType=" + postType;
+    return this.http.get<GetReactionsResponse>(this.getPostReactionsUrl + reqParams);
   }
 
   public findImage(image: string): Observable<File> {
     return this.http.get<File>(this.getImageUrl + image);
   }
 
-  public saveComment(userId: string, postId:bigint, text: string, postType: PostType) {
+  public saveComment(postId:bigint, text: string, postType: PostType) {
     var comment: FormData = new FormData()
-    comment.append("userId", userId)
     comment.append("postId", postId.toString())
     comment.append("text", text)
     comment.append("postType", postType)
     return this.http.post<CreatePostResponse>(this.commentPostUrl, comment);
   }
 
-  public saveReaction(userId: string, postId:bigint, reaction: ReactionEnum, postType: PostType) {
+  public saveReaction(postId:bigint, reaction: ReactionEnum, postType: PostType) {
     var react: FormData = new FormData()
-    react.append("userId", userId)
     react.append("postId", postId.toString())
     react.append("reaction", reaction)
     react.append("postType", postType)
     return this.http.post<CreatePostResponse>(this.reactPostUrl, react);
   }
 
-  public savePost(userId: string, text: string, image: File, postType: PostType) {
+  public savePost(text: string | null, image: File, youtubeVideoId: string | null, postType: PostType) {
     var savePost: FormData = new FormData()
-    savePost.append("userId", userId)
-    savePost.append("text", text)
+    if(text!=null)
+      savePost.append("text", text)
     savePost.append("postType", postType)
     savePost.append("image", image)
+    if(youtubeVideoId!=null)
+      savePost.append("youtubeVideoId", youtubeVideoId)
     return this.http.post<CreatePostResponse>(this.getAllPostsUrl, savePost);
   }
 
-  public modifyPost(userId: string, postId:bigint, text: string, image:any, postType: PostType) {
+  public modifyPost(postId:bigint, text: string, image: File, youtubeVideoId: string | null, postType: PostType) {
     var modifyPost: FormData = new FormData()
-    modifyPost.append("userId", userId)
     modifyPost.append("postId", postId.toString())
     modifyPost.append("text", text)
     modifyPost.append("postType", postType)
     modifyPost.append("image", image)
-    return this.http.post<ModifyPostResponse>(this.modifyPostUrl, modifyPost);
+    if(youtubeVideoId!=null)
+      modifyPost.append("youtubeVideoId", youtubeVideoId)
+    return this.http.put<ModifyPostResponse>(this.modifyPostUrl, modifyPost);
   }
 
-  public deletePost(userId: string, postId:bigint, postType: PostType) {
-    const reqParams = "?userId=" + userId + "&postId=" + postId.toString()+ "&postType=" + postType;
+  public deletePost(postId:bigint, postType: PostType) {
+    const reqParams = "?postId=" + postId.toString()+ "&postType=" + postType;
     return this.http.delete<ModifyPostResponse>(this.deletePostUrl+reqParams);
   }
 

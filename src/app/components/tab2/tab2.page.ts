@@ -9,12 +9,12 @@ import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
 import {Subscription} from "rxjs";
 import {SharedService} from "../../service/shared.service";
-// import {PopoverController} from "ionic-angular";
 import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {PopoverController} from "@ionic/angular";
 import {ReactionEnum} from "../../dto/get-post-response";
 import {ReactResponse} from "../../dto/create-post-response";
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
+import {SafeResourceUrl, SafeValue} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-tab2',
@@ -29,6 +29,7 @@ export class Tab2Page {
   posts: UiPostDto[];
   userId: string | null = localStorage.getItem("userId");
   username: string | null = localStorage.getItem("name");
+  youtubeEmbedApi: string = "https://www.youtube.com/embed/";
 
   postForm = {
     title: '',
@@ -41,6 +42,8 @@ export class Tab2Page {
   hidden: boolean = true;
   imageUploaded: File;
   private sharedServiceSubscription: Subscription;
+  isModalOpen = false;
+  fetching: boolean = true;
 
   constructor(
     private router: Router
@@ -56,6 +59,8 @@ export class Tab2Page {
   }
 
   ngOnInit() {
+    // const info = getVideoId('https://www.youtube.com/watch?v=GfGT_4z9YTc');
+    // this.videoId = "https://www.youtube.com/embed/"+info.id;
     this.getAllPosts();
     this.sharedServiceSubscription = this.sharedService.onCarPost.subscribe({
       next: (event: boolean) => {
@@ -69,7 +74,7 @@ export class Tab2Page {
     if (this.userId == null) {
       return;
     }
-    this.postService.saveReaction(this.userId, postId, reaction, this.postType).subscribe(data => {
+    this.postService.saveReaction(postId, reaction, this.postType).subscribe(data => {
       const response: ReactResponse = data;
       console.log(response)
     });
@@ -106,8 +111,6 @@ export class Tab2Page {
     this.ngOnInit();
   }
 
-  isModalOpen = false;
-  fetching: boolean = true;
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
@@ -161,26 +164,13 @@ export class Tab2Page {
       // this.router.navigateByUrl("/welcome");
       return
     }
-    this.postService.deletePost(this.userId, postId, this.postType).subscribe(data => {
+    this.postService.deletePost(postId, this.postType).subscribe(data => {
       console.log(data);
       this.getAllPosts();
     });
   }
 
-  createPost(form: NgForm)  {
-    const text = form.controls["text"].value;
-    if((this.userId==null)||(text==null||text=='' && this.postForm.image == '')) {
-      this.toastService.presentToast("top", "Bro this was an empty post, imma pretend this never happened.");
-      return;
-    }
-    this.postService.savePost(this.userId, text, this.imageUploaded, this.postType).subscribe(data => {
-      // const response: CreateCommentResponse = data;
-      form.reset();
-      this.hidden = true;
-      this.imageSrc = null;
-      this.getAllPosts();
-    });
-  }
+
   getReactionsDesc(num: number){
     if(num>1)
       return num+ " buddies have reacted";

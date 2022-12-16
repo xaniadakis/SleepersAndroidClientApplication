@@ -16,6 +16,7 @@ export class ModalService {
   async openCreatePostModal() {
     const modal = await this.modalCtrl.create({
       component: CreatePostModalComponent,
+      componentProps: {postType: PostType[localStorage.getItem("postType") as keyof typeof PostType]},
       // componentProps: ,
       // showBackdrop: false,
       initialBreakpoint: 1,
@@ -31,10 +32,10 @@ export class ModalService {
     const {data, role} = await modal.onWillDismiss();
   }
 
-  async openModal(postImage: string, postText: string, postType: PostType) {
+  async openModal(postId: bigint, postImage: string, postText: string, postType: PostType) {
     const modal = await this.modalCtrl.create({
       component: EditPostModalComponent,
-      componentProps: {image: postImage, text: postText, type: postType},
+      componentProps: {id: postId, image: postImage, text: postText, type: postType},
       // showBackdrop: false,
       initialBreakpoint: 1,
       backdropBreakpoint: 1,

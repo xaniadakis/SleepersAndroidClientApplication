@@ -1,11 +1,19 @@
-export class GetPostResponse {
-  commentsAndLikesDto: CommentsAndLikesDto;
+export class GetReactionsResponse {
+  postReactionsDto: PostReactionsDto;
   message: string;
 }
 
-export class CommentsAndLikesDto {
+export class PostReactionsDto {
+  reactions: SimpleReactionDto[];
+}
+
+export class GetCommentsResponse {
+  postCommentsDto: PostCommentsDto;
+  message: string;
+}
+
+export class PostCommentsDto {
   comments: SimpleCommentDto[];
-  likes: SimpleReactionDto[];
 }
 
 export class SimpleCommentDto {

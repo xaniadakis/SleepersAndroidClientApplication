@@ -46,6 +46,13 @@
               <img id="post-image" alt="ey where my pic at yo" src="{{ (imageApi+post.image) || (loading) }}"
                    loading="lazy"/>
             </div>
+            <div *ngIf="notEmpty(post.youtubeVideoId)">
+              <iframe style="width: 100vw; height: 30vh;" [src]="(youtubeEmbedApi+post.youtubeVideoId) | safe"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen>
+              </iframe>
+            </div>
             <div *ngIf="notEmpty(post.text)">
               <ion-card-content style="margin-top: -4.5px;">
                 <!--        <ion-card-title> {{post.title}}</ion-card-title>-->
@@ -100,7 +107,7 @@
         <div *ngIf="equals(post.owner)">
           <ion-item-options id="outer">
             <button id="edit-post-button rowado" expand="block"
-                    (click)="modalService.openModal(post.image, post.text, this.postType)"
+                    (click)="modalService.openModal(post.id, post.image, post.text, this.postType)"
                     style="background-color: darkslategray">
               &nbsp;&nbsp;&nbsp;
               <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
