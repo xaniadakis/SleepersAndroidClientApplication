@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
   };
 
   ngOnInit() {
-    console.log('Initializing HomePage');
+    console.log('Initializing ProfilePage');
   }
 
 }

@@ -6,6 +6,7 @@ import {ReactionEnum} from "../dto/get-post-response";
 @Injectable()
 export class SharedService {
   public onChange: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onProfileTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onCarPost: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onArtPost: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onStory: EventEmitter<Boolean> = new EventEmitter<Boolean>();
@@ -14,6 +15,10 @@ export class SharedService {
 
   public fire(value: boolean) {
     this.onChange.emit(value);
+  }
+
+  public hidePostButtonForALilWhile(value: boolean) {
+    this.onProfileTab.emit(value);
   }
 
   public posted(postType: PostType){

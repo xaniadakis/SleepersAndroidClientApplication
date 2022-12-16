@@ -93,17 +93,18 @@ export class EditPostModalComponent {
   }
 
 
-  async compressFile() {
-    const loading = await this.loadingCtrl.create({
-      spinner: 'bubbles',
-      message: 'Optimizing this lil picture',
-      duration: 5000,
-      cssClass: 'custom-loading',
-    });
+  compressFile() {
 
-    loading.present();
     this.ngxImageCompressService.uploadFile()
-      .then(({image, fileName, orientation}) => {
+      .then(async ({image, fileName, orientation}) => {
+          const loading = await this.loadingCtrl.create({
+            spinner: 'bubbles',
+            message: 'Optimizing this lil picture',
+            duration: 10000,
+            cssClass: 'custom-loading',
+          });
+
+          await loading.present();
           // .then(({image, orientation}) => {
 
           // this.imgResultBeforeCompression = image;
@@ -132,20 +133,20 @@ export class EditPostModalComponent {
             this.imgResult = image;
             console.log("aint compressadoing this one..")
             this.imageUploaded = this.dataURItoBlob(image, fileName);
-            loading.dismiss()
+            await loading.dismiss()
           }
         }
       );
   }
 
-  dataURItoBlob(dataURI: string, fileName:string) {
+  dataURItoBlob(dataURI: string, fileName: string) {
     var binary = atob(dataURI.split(',')[1]);
     var array = [];
     for (var i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
-    let type = 'image/'+fileName.split('.').pop();
-    console.log("type: "+type);
+    let type = 'image/' + fileName.split('.').pop();
+    console.log("type: " + type);
     return new File([new Uint8Array(array)], fileName, {
       type: type
     });

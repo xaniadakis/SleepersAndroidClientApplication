@@ -8,6 +8,8 @@ import {GetCommentsResponse, GetReactionsResponse, ReactionEnum} from "../dto/ge
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {PostType} from "../dto/post-type";
 import {DataUrl} from "ngx-image-compress";
+import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
+import {SignOutResponse} from "../dto/sign-out-response";
 
 @Injectable()
 export class PostService {
@@ -21,6 +23,9 @@ export class PostService {
   private commentPostUrl: string;
   private reactPostUrl: string;
   private getImageUrl: string;
+  private changeProfilePicUrl: string;
+  private logoutUrl: string;
+
 
   constructor(private http: HttpClient) {
     this.getAllPostsUrl = GlobalConstants.APIURL + '/post/';
@@ -32,6 +37,9 @@ export class PostService {
     this.getPostCommentsUrl = GlobalConstants.APIURL + '/post/comments/';
     this.getPostReactionsUrl = GlobalConstants.APIURL + '/post/reactions/';
     this.getImageUrl = GlobalConstants.APIURL + "/file/image?filename=";
+    this.changeProfilePicUrl = GlobalConstants.APIURL + "/user/changeProfilePic";
+    this.logoutUrl = GlobalConstants.APIURL + "user/logout";
+
   }
 
   public findAll(postType: PostType): Observable<GetAllPostsResponse> {
@@ -93,6 +101,16 @@ export class PostService {
   public deletePost(postId:bigint, postType: PostType) {
     const reqParams = "?postId=" + postId.toString()+ "&postType=" + postType;
     return this.http.delete<ModifyPostResponse>(this.deletePostUrl+reqParams);
+  }
+
+  public changeProfilePic(image: File) {
+    var formData: FormData = new FormData()
+    formData.append("profilePic", image)
+    return this.http.post<ProfilePicChangeResponse>(this.changeProfilePicUrl, formData);
+  }
+
+  public logOut() {
+    return this.http.get<SignOutResponse>(this.logoutUrl);
   }
 
 }

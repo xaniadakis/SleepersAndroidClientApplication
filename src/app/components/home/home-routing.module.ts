@@ -6,6 +6,7 @@ import {TabsPage} from "../tabs/tabs.page";
 import {Tab1Page} from "../tab1/tab1.page";
 import {Tab2Page} from "../tab2/tab2.page";
 import {Tab3Page} from "../tab3/tab3.page";
+import {ProfilePage} from "../profile/profile.page";
 
 const routes: Routes = [
   {
@@ -28,7 +29,11 @@ const routes: Routes = [
           component: Tab3Page,
         }
       ]
+    },{
+      path: 'profile',
+      component: ProfilePage
     }
+
     ]
   }
 ];

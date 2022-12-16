@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 // import {Platform} from "@ionic/angular";
 import {Router} from "@angular/router";
-import {Http} from "@capacitor-community/http";
 import {SignOutResponse} from "../../dto/sign-out-response";
 import {GlobalConstants} from "../../util/global-constants";
 import {ProfilePicChangeResponse} from "../../dto/profile-pic-change-response";
@@ -16,6 +15,7 @@ import {AppVersion} from '@awesome-cordova-plugins/app-version/ngx';
 import {gt} from "semver";
 import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
+import {PostService} from "../../service/post.service";
 
 @Component({
   selector: 'app-root',
@@ -25,13 +25,14 @@ import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 export class AppComponent {
   menuType: string = 'reveal';
   darkMode = false;
-  profilePic: Blob;
+  profilePic: File;
   imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
   profilePicSrc: string | null = localStorage.getItem('profilePic');
   profilePicSrc2: string = "https://ionicframework.com/docs/img/demos/avatar.svg";
   loggedIn: boolean;
   currentVersion: string;
   private sharedServiceSubscription: Subscription;
+  onProfileTab: boolean;
 
   constructor(
     private platform: Platform,
@@ -40,7 +41,8 @@ export class AppComponent {
     private router: Router,
     private sharedService: SharedService,
     public modalService: ModalService,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private postService: PostService
   ) {
     if (localStorage.getItem("userId") == null)
       this.loggedIn = false;
@@ -76,6 +78,12 @@ export class AppComponent {
         this.toggleLoggedIn(event);
       }
     })
+    this.sharedServiceSubscription = this.sharedService.onProfileTab.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message #${event}`);
+        this.onProfileTab = event
+      }
+    })
   }
 
   public toggleLoggedIn(value: boolean) {
@@ -94,36 +102,42 @@ export class AppComponent {
     this.profilePic = event.target.files[0];
     console.log(event);
 
-    var requestParams: string = "?userId=" + localStorage.getItem("userId");
-    var formData: FormData = new FormData()
-    formData.append("profilePic", this.profilePic)
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-    var myRouter = this.router;
-    var toastService = this.toastService;
-    xhr.addEventListener("readystatechange", function () {
-      if (this.readyState === 4) {
-        console.log(JSON.stringify(JSON.parse(this.responseText)));
-        if (GlobalConstants.DEBUG)
-          toastService.presentToast("top", JSON.stringify(JSON.parse(this.responseText)));
-
-        if (xhr.status == 200) {
-          const jsonResponse: ProfilePicChangeResponse = JSON.parse(this.responseText);
-          console.log(jsonResponse)
-          localStorage.setItem('profilePic', jsonResponse.profilePic);
-          myRouter.navigateByUrl("/home/tabs/tab2");
-        } else
-          alert(xhr.status + xhr.responseText)
-      }
+    this.postService.changeProfilePic(this.profilePic).subscribe(data => {
+      const jsonResponse: ProfilePicChangeResponse = data;
+      console.log(jsonResponse)
+      localStorage.setItem('profilePic', jsonResponse.profilePic);
     });
-
-    xhr.open("POST", GlobalConstants.APIURL + "/user/changeProfilePic" + requestParams);
-    xhr.setRequestHeader("Accept", "*/*");
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.withCredentials = false;
-    if (GlobalConstants.DEBUG)
-      this.toastService.presentToast("middle", "Sending request to " + GlobalConstants.APIURL + "/user/changeProfilePic" + requestParams);
-    xhr.send(formData);
+    //
+    // var requestParams: string = "?userId=" + localStorage.getItem("userId");
+    // var formData: FormData = new FormData()
+    // formData.append("profilePic", this.profilePic)
+    // var xhr = new XMLHttpRequest();
+    // xhr.withCredentials = true;
+    // var myRouter = this.router;
+    // var toastService = this.toastService;
+    // xhr.addEventListener("readystatechange", function () {
+    //   if (this.readyState === 4) {
+    //     console.log(JSON.stringify(JSON.parse(this.responseText)));
+    //     if (GlobalConstants.DEBUG)
+    //       toastService.presentToast("top", JSON.stringify(JSON.parse(this.responseText)));
+    //
+    //     if (xhr.status == 200) {
+    //       const jsonResponse: ProfilePicChangeResponse = JSON.parse(this.responseText);
+    //       console.log(jsonResponse)
+    //       localStorage.setItem('profilePic', jsonResponse.profilePic);
+    //       myRouter.navigateByUrl("/home/tabs/tab2");
+    //     } else
+    //       alert(xhr.status + xhr.responseText)
+    //   }
+    // });
+    //
+    // xhr.open("POST", GlobalConstants.APIURL + "/user/changeProfilePic" + requestParams);
+    // xhr.setRequestHeader("Accept", "*/*");
+    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    // xhr.withCredentials = false;
+    // if (GlobalConstants.DEBUG)
+    //   this.toastService.presentToast("middle", "Sending request to " + GlobalConstants.APIURL + "/user/changeProfilePic" + requestParams);
+    // xhr.send(formData);
   }
 
   onLogout() {
@@ -169,35 +183,44 @@ export class AppComponent {
   }
 
   private capacitorHttpLogOutRequest() {
-    const options = {
-      url: GlobalConstants.APIURL + "/user/logout?userId=" + localStorage.getItem('userId'),
-      headers: {
-        "Accept": "*/*",
-        "Access-Control-Allow-Origin": "*"
-      }
-    };
-    var myRouter = this.router;
-    var toastService = this.toastService;
-    Http.request({...options, method: 'GET'})
-      .then(async response => {
-        if (response.status === 200) {
-          const jsonResponse: SignOutResponse = await response.data;
-          // console.log(data)
-          // const jsonResponse: SignUpResponse = JSON.parse(data);
-          console.log(jsonResponse)
-          localStorage.removeItem('token');
-          localStorage.removeItem("profilePic");
-          localStorage.clear();
-          this.toggleLoggedIn(false);
-          myRouter.navigateByUrl('/welcome');
-          this.toastService.presentToast("middle", "You are logged out!");
-        }
-      })
-      .catch(e => {
-        console.log(e)
-        if (GlobalConstants.DEBUG)
-          this.toastService.presentToast("middle", e);
-      })
+    this.postService.logOut().subscribe(data => {
+      console.log(data)
+      localStorage.removeItem('token');
+      localStorage.removeItem("profilePic");
+      localStorage.clear();
+      this.toggleLoggedIn(false);
+      this.router.navigateByUrl('/welcome');
+      this.toastService.presentToast("middle", "You are logged out!");
+    });
+    // const options = {
+    //   url: GlobalConstants.APIURL + "/user/logout?userId=" + localStorage.getItem('userId'),
+    //   headers: {
+    //     "Accept": "*/*",
+    //     "Access-Control-Allow-Origin": "*"
+    //   }
+    // };
+    // var myRouter = this.router;
+    // var toastService = this.toastService;
+    // Http.request({...options, method: 'GET'})
+    //   .then(async response => {
+    //     if (response.status === 200) {
+    //       const jsonResponse: SignOutResponse = await response.data;
+    //       // console.log(data)
+    //       // const jsonResponse: SignUpResponse = JSON.parse(data);
+    //       console.log(jsonResponse)
+    //       localStorage.removeItem('token');
+    //       localStorage.removeItem("profilePic");
+    //       localStorage.clear();
+    //       this.toggleLoggedIn(false);
+    //       myRouter.navigateByUrl('/welcome');
+    //       this.toastService.presentToast("middle", "You are logged out!");
+    //     }
+    //   })
+    //   .catch(e => {
+    //     console.log(e)
+    //     if (GlobalConstants.DEBUG)
+    //       this.toastService.presentToast("middle", e);
+    //   })
   }
 
   checkForUpdates() {

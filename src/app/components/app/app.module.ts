@@ -31,6 +31,7 @@ import {ShowReactionsComponent} from "../show-reactions/show-reactions.component
 import {SafePipe} from "../safe-pipe/safe.pipe";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {ImageCompressService} from "../../service/image-compress.service";
+import {ProfilePage} from "../profile/profile.page";
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import { StatusBar } from '@ionic-native/status-bar/ngx';
 // import { AppUpdate } from '@ionic-native/app-update/ngx';
@@ -47,6 +48,7 @@ import {ImageCompressService} from "../../service/image-compress.service";
     , CreatePostModalComponent
     , ReactionsComponent
     , ShowReactionsComponent
+    , ProfilePage
     , SafePipe
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage

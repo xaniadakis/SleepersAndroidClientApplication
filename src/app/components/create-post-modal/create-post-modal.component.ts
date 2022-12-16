@@ -40,7 +40,7 @@ export class CreatePostModalComponent {
   hidden: boolean = true;
   youtubeVideoId: string | null = null;
   imageUploaded: File;
-  imgResult:  string | null;
+  imgResult: string | null;
   youtubeThumbnail: string | null;
 
   constructor(private modalCtrl: ModalController
@@ -71,7 +71,7 @@ export class CreatePostModalComponent {
           text: 'OK',
           handler: data => {
             this.youtubeVideoId = getVideoId(data.url).id;
-            this.youtubeThumbnail = "http://img.youtube.com/vi/"+this.youtubeVideoId+"/0.jpg"
+            this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
             this.imgResult = null;
             if (this.youtubeVideoId == null)
               window.alert("Gimme a valid link lil mate")
@@ -156,18 +156,18 @@ export class CreatePostModalComponent {
   }
 
 
-  async compressFile() {
-    const loading = await this.loadingCtrl.create({
-      spinner: 'bubbles',
-      message: 'Optimizing this lil picture',
-      duration: 5000,
-      cssClass: 'custom-loading',
-    });
+  compressFile() {
 
-    loading.present();
     this.ngxImageCompressService.uploadFile()
-      .then(({image, fileName, orientation}) => {
-          // .then(({image, orientation}) => {
+      .then(async ({image, fileName, orientation}) => {
+          const loading = await this.loadingCtrl.create({
+            spinner: 'bubbles',
+            message: 'Optimizing this lil picture',
+            duration: 10000,
+            cssClass: 'custom-loading',
+          });
+
+          await loading.present();
 
           // this.imgResultBeforeCompression = image;
           let oldSize = this.ngxImageCompressService.byteCount(image) / 1000000;
@@ -201,14 +201,14 @@ export class CreatePostModalComponent {
       );
   }
 
-  dataURItoBlob(dataURI: string, fileName:string) {
+  dataURItoBlob(dataURI: string, fileName: string) {
     var binary = atob(dataURI.split(',')[1]);
     var array = [];
     for (var i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
-    let type = 'image/'+fileName.split('.').pop();
-    console.log("type: "+type);
+    let type = 'image/' + fileName.split('.').pop();
+    console.log("type: " + type);
     return new File([new Uint8Array(array)], fileName, {
       type: type
     });

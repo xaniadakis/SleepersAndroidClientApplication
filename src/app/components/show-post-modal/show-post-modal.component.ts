@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 
-import {ModalController} from '@ionic/angular';
+import {ModalController, Platform} from '@ionic/angular';
 import {GlobalConstants} from "../../util/global-constants";
 import {ToastService} from "../../service/toast.service";
 import {SimpleCommentDto, SimpleReactionDto} from "../../dto/get-post-response";
@@ -35,7 +35,11 @@ export class ShowPostModalComponent {
 
   constructor(private modalCtrl: ModalController
     , private toastService: ToastService
-    , private postService: PostService) {
+    , private postService: PostService
+  , private platform: Platform) {
+      this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
+        return this.modalCtrl.dismiss(null, 'cancel');
+      })
   }
 
   ngOnInit() {

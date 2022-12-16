@@ -1,0 +1,69 @@
+.background-image {
+  --background: url(/src/assets/sky.jpg) no-repeat top center/cover fixed, #fff;
+  //--background: url(/src/assets/sky.jpg) 0 0/100% 100% no-repeat !important;
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  ion-button {
+    margin-top: 1em;
+    margin-bottom: 1em
+  }
+}
+
+ion-toolbar {
+  --background: transparent;
+}
+
+ion-chip {
+  --background: #DA0037;
+  --color: #fff;
+}
+
+.card {
+  margin: 0 auto;
+
+  .header {
+    height: 200px; // 20vh;
+
+    .avatar {
+      width: 160px; //40vw
+      height: 160px;
+      position: relative;
+      margin: 0 auto;
+
+      img {
+        display: block;
+        border-radius: 30%;
+        position: absolute;
+        bottom: calc(-1*(80px + 4px)); // -42px;
+        border: 4px solid #DA0037;
+        background-color: #fff;
+      }
+    }
+  }
+}
+
+.card-body {
+  background-color: #ffffff;
+  padding: 5px;
+  height: calc(100vh - (200px + 56px));
+  overflow: hidden;
+
+  .user-meta {
+    padding-top: 40px;
+
+    .playername {
+      font-size: 24px;
+      font-weight: 600;
+      color: #303940;
+    }
+
+    .country {
+      font-size: 90%;
+      color: #949ea6;
+      text-transform: uppercase;
+      margin: 0 auto;
+    }
+  }
+}
