@@ -178,45 +178,48 @@
         </div>
       </ion-item-sliding>
     </tr>
-    <ion-card>
-      <ion-card-header>
-        <ion-card-subtitle type="dark">
-          <div class="ion-float-start">Γιάννακης Γκαζοφονιάς</div>
-          <div class="ion-float-end">20:30</div>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <img alt="ey where my pic at yo" src="./assets/car.webp"/>
-      <ion-card-content>
-        These boiz be killin it for real yo
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-header>
-        <ion-card-subtitle type="dark">
-          <div class="ion-float-start">τσάκοςΜη</div>
-          <div class="ion-float-end">16:06</div>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <img alt="ey where my pic at yo" src="./assets/car2.webp"/>
-      <ion-card-content>
-        old school be back bro, is i right
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-header>
-        <ion-card-subtitle type="dark">
-          <div class="ion-float-start">Αλέκος Αμαξάκιας</div>
-          <div class="ion-float-end">16:06</div>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <iframe width="370" height="300" src="https://www.youtube.com/embed/6NImgmZKLfo"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-      <ion-card-content>
-        Ey yo this is a good shot my man, take a look yo
-      </ion-card-content>
-    </ion-card>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" >
+      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles" ></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+<!--    <ion-card>-->
+<!--      <ion-card-header>-->
+<!--        <ion-card-subtitle type="dark">-->
+<!--          <div class="ion-float-start">Γιάννακης Γκαζοφονιάς</div>-->
+<!--          <div class="ion-float-end">20:30</div>-->
+<!--        </ion-card-subtitle>-->
+<!--      </ion-card-header>-->
+<!--      <img alt="ey where my pic at yo" src="./assets/car.webp"/>-->
+<!--      <ion-card-content>-->
+<!--        These boiz be killin it for real yo-->
+<!--      </ion-card-content>-->
+<!--    </ion-card>-->
+<!--    <ion-card>-->
+<!--      <ion-card-header>-->
+<!--        <ion-card-subtitle type="dark">-->
+<!--          <div class="ion-float-start">τσάκοςΜη</div>-->
+<!--          <div class="ion-float-end">16:06</div>-->
+<!--        </ion-card-subtitle>-->
+<!--      </ion-card-header>-->
+<!--      <img alt="ey where my pic at yo" src="./assets/car2.webp"/>-->
+<!--      <ion-card-content>-->
+<!--        old school be back bro, is i right-->
+<!--      </ion-card-content>-->
+<!--    </ion-card>-->
+<!--    <ion-card>-->
+<!--      <ion-card-header>-->
+<!--        <ion-card-subtitle type="dark">-->
+<!--          <div class="ion-float-start">Αλέκος Αμαξάκιας</div>-->
+<!--          <div class="ion-float-end">16:06</div>-->
+<!--        </ion-card-subtitle>-->
+<!--      </ion-card-header>-->
+<!--      <iframe width="370" height="300" src="https://www.youtube.com/embed/6NImgmZKLfo"-->
+<!--              frameborder="0"-->
+<!--              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--              allowfullscreen></iframe>-->
+<!--      <ion-card-content>-->
+<!--        Ey yo this is a good shot my man, take a look yo-->
+<!--      </ion-card-content>-->
+<!--    </ion-card>-->
   </ng-template>
 
 

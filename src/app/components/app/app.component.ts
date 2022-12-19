@@ -16,6 +16,7 @@ import {gt} from "semver";
 import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {PostService} from "../../service/post.service";
+import {UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-root',
@@ -42,7 +43,7 @@ export class AppComponent {
     private sharedService: SharedService,
     public modalService: ModalService,
     private clipboard: Clipboard,
-    private postService: PostService
+    private userService: UserService
   ) {
     if (localStorage.getItem("userId") == null)
       this.loggedIn = false;
@@ -102,7 +103,7 @@ export class AppComponent {
     this.profilePic = event.target.files[0];
     console.log(event);
 
-    this.postService.changeProfilePic(this.profilePic).subscribe(data => {
+    this.userService.changeProfilePic(this.profilePic).subscribe(data => {
       const jsonResponse: ProfilePicChangeResponse = data;
       console.log(jsonResponse)
       localStorage.setItem('profilePic', jsonResponse.profilePic);
@@ -183,7 +184,7 @@ export class AppComponent {
   }
 
   private capacitorHttpLogOutRequest() {
-    this.postService.logOut().subscribe(data => {
+    this.userService.logOut().subscribe(data => {
       console.log(data)
       localStorage.removeItem('token');
       localStorage.removeItem("profilePic");

@@ -23,9 +23,6 @@ export class PostService {
   private commentPostUrl: string;
   private reactPostUrl: string;
   private getImageUrl: string;
-  private changeProfilePicUrl: string;
-  private logoutUrl: string;
-
 
   constructor(private http: HttpClient) {
     this.getAllPostsUrl = GlobalConstants.APIURL + '/post/';
@@ -37,13 +34,10 @@ export class PostService {
     this.getPostCommentsUrl = GlobalConstants.APIURL + '/post/comments/';
     this.getPostReactionsUrl = GlobalConstants.APIURL + '/post/reactions/';
     this.getImageUrl = GlobalConstants.APIURL + "/file/image?filename=";
-    this.changeProfilePicUrl = GlobalConstants.APIURL + "/user/changeProfilePic";
-    this.logoutUrl = GlobalConstants.APIURL + "user/logout";
-
   }
 
-  public findAll(postType: PostType): Observable<GetAllPostsResponse> {
-    return this.http.get<GetAllPostsResponse>(this.getAllPostsUrl +"?postType=" + postType);
+  public findAll(postType: PostType, pageNumber: number, pageLimit: number): Observable<GetAllPostsResponse> {
+    return this.http.get<GetAllPostsResponse>(this.getAllPostsUrl +"?postType=" + postType+"&pageNumber="+pageNumber+"&pageLimit="+pageLimit);
   }
 
   public findAllComments(postId: bigint, postType: string): Observable<GetCommentsResponse> {
@@ -101,16 +95,6 @@ export class PostService {
   public deletePost(postId:bigint, postType: PostType) {
     const reqParams = "?postId=" + postId.toString()+ "&postType=" + postType;
     return this.http.delete<ModifyPostResponse>(this.deletePostUrl+reqParams);
-  }
-
-  public changeProfilePic(image: File) {
-    var formData: FormData = new FormData()
-    formData.append("profilePic", image)
-    return this.http.post<ProfilePicChangeResponse>(this.changeProfilePicUrl, formData);
-  }
-
-  public logOut() {
-    return this.http.get<SignOutResponse>(this.logoutUrl);
   }
 
 }

@@ -47,7 +47,7 @@ export class Tab1Page {
   postType: PostType = PostType.ART;
   imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
   profilePic: string = GlobalConstants.APIURL + "/file/image?filename=" + localStorage.getItem('profilePic');
-  posts: UiPostDto[];
+  posts: UiPostDto[] = [];
   userId: string | null = localStorage.getItem("userId");
   username: string | null = localStorage.getItem("name");
 
@@ -66,6 +66,9 @@ export class Tab1Page {
   fetching: boolean = true;
   youtubeEmbedApi: string = "https://www.youtube.com/embed/";
 
+  pageNumber = 0;
+  pageLimit = 2;
+
   constructor(
     private router: Router
     , private activatedRoute: ActivatedRoute
@@ -80,11 +83,16 @@ export class Tab1Page {
   }
 
   ngOnInit() {
-    this.getAllPosts();
+    // const info = getVideoId('https://www.youtube.com/watch?v=GfGT_4z9YTc');
+    // this.videoId = "https://www.youtube.com/embed/"+info.id;
+    this.pageNumber=0;
+    this.getAllPosts(this.pageNumber, this.pageLimit);
     this.sharedServiceSubscription = this.sharedService.onArtPost.subscribe({
       next: (event: boolean) => {
+        this.pageNumber=0;
+        this.posts = [];
         console.log(`Received message #${event}`);
-        this.getAllPosts();
+        this.getAllPosts(this.pageNumber, this.pageLimit);
       }
     })
   }
@@ -130,7 +138,6 @@ export class Tab1Page {
     this.ngOnInit();
   }
 
-
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
@@ -162,9 +169,13 @@ export class Tab1Page {
     this.postForm.image = '';
   }
 
-  getAllPosts() {
-    this.postService.findAll(this.postType).subscribe(data => {
-      this.posts = data.postDtos;
+  getAllPosts(pageNumber: number, pageLimit: number) {
+    this.postService.findAll(this.postType, pageNumber, pageLimit).subscribe(data => {
+      console.log(data.postDtos)
+      for (let i = 0; i < data.postDtos.length; i++) {
+        this.posts.push(data.postDtos[i]);
+      }
+      // this.posts = data.postDtos;
       // this.posts.sort(function (a, b) {
       //   return new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime();
       // });
@@ -185,7 +196,7 @@ export class Tab1Page {
     }
     this.postService.deletePost(postId, this.postType).subscribe(data => {
       console.log(data);
-      this.getAllPosts();
+      this.ngOnInit();
     });
   }
 
@@ -206,5 +217,12 @@ export class Tab1Page {
       return "no comments yet";
     else
       return "already " +num+ " comment";
+  }
+
+  doInfinite(event: any) {
+    this.pageNumber += 1;
+    console.log("Shall fetch postados dor page: "+this.pageNumber);
+    this.getAllPosts(this.pageNumber, this.pageLimit);
+    event.target.complete();
   }
 }

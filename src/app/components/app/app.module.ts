@@ -32,6 +32,7 @@ import {SafePipe} from "../safe-pipe/safe.pipe";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {ImageCompressService} from "../../service/image-compress.service";
 import {ProfilePage} from "../profile/profile.page";
+import {UserService} from "../../service/user.service";
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import { StatusBar } from '@ionic-native/status-bar/ngx';
 // import { AppUpdate } from '@ionic-native/app-update/ngx';
@@ -81,7 +82,8 @@ import {ProfilePage} from "../profile/profile.page";
     GuardService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptorService, multi: true},
     NgxImageCompressService,
-    ImageCompressService
+    ImageCompressService,
+    UserService
     // CdkVirtualScrollViewport,
     // LogUpdateService,
     // CheckForUpdateService

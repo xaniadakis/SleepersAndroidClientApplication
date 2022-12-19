@@ -2,28 +2,132 @@
   <div class="card">
     <div class="header">
       <div class="avatar">
-        <img [src]="imageApi + profilePicado" alt="">
+        <img class="profilepic" [src]="(imageApi + profilePicado)" alt="">
+        <label (click)="compressFile()" class="custom-file-upload">
+          <i class="fa fa-cloud-upload"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" preserveAspectRatio="xMidYMid meet"
+               viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2">
+              <path stroke-dasharray="2 4" stroke-dashoffset="6"
+                    d="M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3">
+                <animate attributeName="stroke-dashoffset" dur="0.6s" repeatCount="indefinite" values="6;0"/>
+              </path>
+              <path stroke-dasharray="30" stroke-dashoffset="30"
+                    d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21">
+                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.1s" dur="0.3s" values="30;0"/>
+              </path>
+              <path stroke-dasharray="10" stroke-dashoffset="10" d="M12 16v-7.5">
+                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="10;0"/>
+              </path>
+              <path stroke-dasharray="6" stroke-dashoffset="6" d="M12 8.5l3.5 3.5M12 8.5l-3.5 3.5">
+                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" values="6;0"/>
+              </path>
+            </g>
+          </svg>
+        </label>
       </div>
+
     </div>
     <div class="card-body">
       <div class="user-meta ion-text-center">
         <h3 class="playername">{{name}}</h3>
       </div>
+      <form #form="ngForm" (ngSubmit)="onEdit(form)" #f="ngForm">
+        <ion-list class="white ion-no-padding">
+          <ion-item class="white">
+            <ion-label class="white" position="stacked">nickname</ion-label>
+            <ion-input [clearInput]="true" placeholder="change your nickname" [value]="nicknameValue"
+                       name="nickname" class="form-control" [(ngModel)]="editUser.nickname" #nickname="ngModel" minlength="4"></ion-input>
+            <ion-button slot="end" style="background: #3a7be0; height: 30px;  border-radius: 15%"  (click)="checkIfUserExists(nickname.value)">check if anybody else owns this nickname&nbsp;
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.19em" height="1em" preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 1664 1408">
+                <path fill="white"
+                      d="M1408 802v318q0 119-84.5 203.5T1120 1408H288q-119 0-203.5-84.5T0 1120V288Q0 169 84.5 84.5T288 0h832q63 0 117 25q15 7 18 23q3 17-9 29l-49 49q-10 10-23 10q-3 0-9-2q-23-6-45-6H288q-66 0-113 47t-47 113v832q0 66 47 113t113 47h832q66 0 113-47t47-113V866q0-13 9-22l64-64q10-10 23-10q6 0 12 3q20 8 20 29zm231-489l-814 814q-24 24-57 24t-57-24L281 697q-24-24-24-57t24-57l110-110q24-24 57-24t57 24l263 263l647-647q24-24 57-24t57 24l110 110q24 24 24 57t-24 57z"/>
+              </svg>
+            </ion-button>
+            <div *ngIf="checkedUsername && (!validUsername || shortUsername) as value else userNameValidBlock" class="invalid-feedback">
+              <div *ngIf="shortUsername else ownedUsername">nickname be too short</div>
+              <ng-template #ownedUsername>
+                <div *ngIf="!validUsername">nickname is already owned</div>
+              </ng-template>
+            </div>
+            <ng-template #userNameValidBlock>
+              <div *ngIf="validUsername" style="color: #2dd36f; font-size: smaller">nickname be valid</div>
+            </ng-template>
+          </ion-item>
 
-<!--      <ion-button expand="full" color="primary">http://rogerfederer.com</ion-button>-->
-<!--      <ion-button expand="full" color="secondary">@RogerFederer on Twitter</ion-button>-->
-<!--      <ion-button expand="full" color="secondary">View profile at ATP</ion-button>-->
+          <ion-item class="white">
+            <ion-label class="white" position="stacked">email address</ion-label>
+            <ion-input [clearInput]="true" placeholder="change your email address" [value]="emailAddressValue"
+                       type="text" name="email" class="form-control" [(ngModel)]="editUser.email" #email="ngModel"
+                       [ngClass]="{ 'is-invalid': email.invalid }"></ion-input>
+            <ion-button slot="end" style="background: #3a7be0; height: 30px;  border-radius: 15%"  (click)="checkIfUserExistsWithMail(nickname.value)">check if anybody else owns this email address&nbsp;
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.19em" height="1em" preserveAspectRatio="xMidYMid meet"
+                   viewBox="0 0 1664 1408">
+                <path fill="white"
+                      d="M1408 802v318q0 119-84.5 203.5T1120 1408H288q-119 0-203.5-84.5T0 1120V288Q0 169 84.5 84.5T288 0h832q63 0 117 25q15 7 18 23q3 17-9 29l-49 49q-10 10-23 10q-3 0-9-2q-23-6-45-6H288q-66 0-113 47t-47 113v832q0 66 47 113t113 47h832q66 0 113-47t47-113V866q0-13 9-22l64-64q10-10 23-10q6 0 12 3q20 8 20 29zm231-489l-814 814q-24 24-57 24t-57-24L281 697q-24-24-24-57t24-57l110-110q24-24 57-24t57 24l263 263l647-647q24-24 57-24t57 24l110 110q24 24 24 57t-24 57z"/>
+              </svg>
+            </ion-button>
+            <div *ngIf="checkedMailAddress && (!validMailAddress  || shortMailAddress) as value else mailAddressValidBlock" class="invalid-feedback">
+              <div *ngIf="(email.errors?.email || shortMailAddress) else ownedMailAddress">email must be a valid email address</div>
+              <ng-template #ownedMailAddress>
+                <div *ngIf="!validMailAddress">mail is already owned</div>
+              </ng-template>
+            </div>
+            <ng-template #mailAddressValidBlock>
+              <div *ngIf="validMailAddress" style="color: #2dd36f; font-size: smaller">mail be valid</div>
+            </ng-template>
+          </ion-item>
 
+          <ion-item class="white">
+            <ion-label class="white" position="stacked">full name</ion-label>
+            <ion-input [clearInput]="true" placeholder="type your first and last name"
+                       [value]="fullNameValue"></ion-input>
+          </ion-item>
+
+
+          <ion-item class="white">
+            <ion-label class="white" position="stacked">password</ion-label>
+            <ion-input clearOnEdit="true" type="password" placeholder="change your password"></ion-input>
+          </ion-item>
+
+          <ion-row style="color: white; background: white">&nbsp;</ion-row>
+          <ion-row style="color: white; background: white">&nbsp;</ion-row>
+
+          <ion-item class="white">
+            <ion-label class="white" position="stacked">my quote</ion-label>
+            <ion-input [clearInput]="true" placeholder="type a quote that you like nowadays"
+                       [value]="myQuoteValue"></ion-input>
+          </ion-item>
+          <ion-item class="white">
+            <ion-label class="white" position="stacked">my occupation</ion-label>
+            <ion-input [clearInput]="true" placeholder="type your occupation"
+                       [value]="myOccupationValue"></ion-input>
+          </ion-item>
+          <ion-item class="white">
+            <ion-label class="white" position="stacked">my hobby</ion-label>
+            <ion-input [clearInput]="true" placeholder="let the buddies know what is of interest to youse"
+                       [value]="myHobbyValue"></ion-input>
+          </ion-item>
+        </ion-list>
+      </form>
+      <!--      <ion-button expand="full" color="primary">http://rogerfederer.com</ion-button>-->
+      <!--      <ion-button expand="full" color="secondary">@RogerFederer on Twitter</ion-button>-->
+      <!--      <ion-button expand="full" color="secondary">View profile at ATP</ion-button>-->
     </div>
   </div>
+
 </ion-content>
 
-<ion-footer style="color: #383a3e" translucent no-border>
-  <ion-button color="light" class="ion-no-padding " style="padding-left: 3px; padding-right: 3px;" (click)="goBack()">
-    &nbsp;&nbsp;<svg slot="start" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
-         viewBox="0 0 24 24">
-      <path fill="white"
-            d="M15.125 21.1L6.7 12.7q-.15-.15-.212-.325q-.063-.175-.063-.375t.063-.375q.062-.175.212-.325l8.425-8.425q.35-.35.875-.35t.9.375q.375.375.375.875t-.375.875L9.55 12l7.35 7.35q.35.35.35.862q0 .513-.375.888t-.875.375q-.5 0-.875-.375Z"/>
-    </svg>Back&nbsp;&nbsp;
+<ion-footer class="my-footer" translucent no-border>
+  <ion-button color="light" class="ion-no-padding" style=" margin: 10px; margin-top: 7px; padding: 0px"
+              (click)="goBack()">
+    &nbsp;&nbsp;<svg slot="start" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+                     preserveAspectRatio="xMidYMid meet"
+                     viewBox="0 0 24 24">
+    <path fill="white"
+          d="M15.125 21.1L6.7 12.7q-.15-.15-.212-.325q-.063-.175-.063-.375t.063-.375q.062-.175.212-.325l8.425-8.425q.35-.35.875-.35t.9.375q.375.375.375.875t-.375.875L9.55 12l7.35 7.35q.35.35.35.862q0 .513-.375.888t-.875.375q-.5 0-.875-.375Z"/>
+  </svg>
+    Back&nbsp;&nbsp;
   </ion-button>
 </ion-footer>
