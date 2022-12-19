@@ -3,75 +3,94 @@
   <ion-menu [type]="menuType" contentId="main-content">
     <ion-header>
       <ion-toolbar id="menu">
-        <ion-title style="color: black">Sleepers</ion-title>
+        <ion-title style="color: black; font-size: small; font-weight: bold" slot="start">ｓｌｅｅｐｙｈｅａｄｓ</ion-title>
+        <ion-title style="color: black; font-size: small; font-weight: bold" slot="end">眠そうな頭</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
       <ion-menu-toggle>
         <div *ngIf="loggedIn as value; else elseBlock">
 
-          <ion-row class="info-row">
-            <!--          <ion-card id="profilePic"></ion-card>-->
-            <div class="container">
-              <div class="outer">
-                <img id="avatarado" alt="{{profilePicSrc}}"
-                     src="{{imageApi+profilePicSrc}}"/>
-                <div class="inner">
-                  <ion-input class="inputfile" type="file" name="pic" accept="image/*"
-                             (input)="onFileChanged($event)"></ion-input>
-                  <!--                <input class="inputfile" type="file" name="pic" accept="image/*" (input)="onFileChanged($event)">-->
-                  <label>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
-                      <path
-                        d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path>
-                    </svg>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </ion-row>
-          <ion-row>
-            &nbsp;
-          </ion-row>
+          <!--          <ion-row class="info-row">-->
+          <!--            &lt;!&ndash;          <ion-card id="profilePic"></ion-card>&ndash;&gt;-->
+          <!--            <div class="container">-->
+          <!--              <div class="outer">-->
+          <!--                <img id="avatarado" alt="{{profilePicSrc}}"-->
+          <!--                     src="{{imageApi+profilePicSrc}}"/>-->
+          <!--                <div class="inner">-->
+          <!--                  <ion-input class="inputfile" type="file" name="pic" accept="image/*"-->
+          <!--                             (input)="onFileChanged($event)"></ion-input>-->
+          <!--                  &lt;!&ndash;                <input class="inputfile" type="file" name="pic" accept="image/*" (input)="onFileChanged($event)">&ndash;&gt;-->
+          <!--                  <label>-->
+          <!--                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">-->
+          <!--                      <path-->
+          <!--                        d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path>-->
+          <!--                    </svg>-->
+          <!--                  </label>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </ion-row>-->
+          <!--          <ion-row>-->
+          <!--            &nbsp;-->
+          <!--          </ion-row>-->
 
           <ion-row class="info-row">
             <ion-card class="card info-card">
-              <ion-item lines="none" color="white" [routerLink]="['/home/profile']" routerLinkActive="active">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="2em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 48 48">
-                  <g fill="currentColor">
-                    <path fill-rule="evenodd"
-                          d="M24 42c9.941 0 18-8.059 18-18S33.941 6 24 6S6 14.059 6 24s8.059 18 18 18Zm0 2c11.046 0 20-8.954 20-20S35.046 4 24 4S4 12.954 4 24s8.954 20 20 20Z"
-                          clip-rule="evenodd"/>
-                    <path
-                      d="M12 35.63c0-1.033.772-1.906 1.8-2.02c7.715-.854 12.72-.777 20.418.019a1.99 1.99 0 0 1 1.108 3.472c-9.085 7.919-14.277 7.81-22.686.008c-.41-.38-.64-.92-.64-1.478Z"/>
-                    <path fill-rule="evenodd"
-                          d="M34.115 34.623c-7.637-.79-12.57-.864-20.206-.019A1.028 1.028 0 0 0 13 35.631c0 .286.119.557.32.745c4.168 3.866 7.326 5.613 10.413 5.624c3.098.011 6.426-1.722 10.936-5.652a.99.99 0 0 0-.554-1.724ZM13.69 32.616c7.796-.863 12.874-.785 20.632.018a2.99 2.99 0 0 1 1.662 5.221c-4.575 3.988-8.385 6.16-12.257 6.145c-3.883-.014-7.525-2.223-11.766-6.158A3.018 3.018 0 0 1 11 35.63a3.028 3.028 0 0 1 2.69-3.015Z"
-                          clip-rule="evenodd"/>
-                    <path d="M32 20a8 8 0 1 1-16 0a8 8 0 0 1 16 0Z"/>
-                    <path fill-rule="evenodd"
-                          d="M24 26a6 6 0 1 0 0-12a6 6 0 0 0 0 12Zm0 2a8 8 0 1 0 0-16a8 8 0 0 0 0 16Z"
-                          clip-rule="evenodd"/>
-                  </g>
-                </svg>
-                <ion-label class="ion-text-left">
-                  &nbsp;&nbsp;Go to your profile
-                </ion-label>
-                <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
-              </ion-item>
+              <div *ngIf="loggedIn && !onProfileTab as value else goToPosts">
+                <ion-item lines="none" color="#2471A3" style="color: #2471A3" [routerLink]="['/home/profile']"
+                          routerLinkActive="active">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 48 48">
+                    <g fill="#2471A3">
+                      <path fill-rule="evenodd"
+                            d="M24 42c9.941 0 18-8.059 18-18S33.941 6 24 6S6 14.059 6 24s8.059 18 18 18Zm0 2c11.046 0 20-8.954 20-20S35.046 4 24 4S4 12.954 4 24s8.954 20 20 20Z"
+                            clip-rule="evenodd"/>
+                      <path
+                        d="M12 35.63c0-1.033.772-1.906 1.8-2.02c7.715-.854 12.72-.777 20.418.019a1.99 1.99 0 0 1 1.108 3.472c-9.085 7.919-14.277 7.81-22.686.008c-.41-.38-.64-.92-.64-1.478Z"/>
+                      <path fill-rule="evenodd"
+                            d="M34.115 34.623c-7.637-.79-12.57-.864-20.206-.019A1.028 1.028 0 0 0 13 35.631c0 .286.119.557.32.745c4.168 3.866 7.326 5.613 10.413 5.624c3.098.011 6.426-1.722 10.936-5.652a.99.99 0 0 0-.554-1.724ZM13.69 32.616c7.796-.863 12.874-.785 20.632.018a2.99 2.99 0 0 1 1.662 5.221c-4.575 3.988-8.385 6.16-12.257 6.145c-3.883-.014-7.525-2.223-11.766-6.158A3.018 3.018 0 0 1 11 35.63a3.028 3.028 0 0 1 2.69-3.015Z"
+                            clip-rule="evenodd"/>
+                      <path d="M32 20a8 8 0 1 1-16 0a8 8 0 0 1 16 0Z"/>
+                      <path fill-rule="evenodd"
+                            d="M24 26a6 6 0 1 0 0-12a6 6 0 0 0 0 12Zm0 2a8 8 0 1 0 0-16a8 8 0 0 0 0 16Z"
+                            clip-rule="evenodd"/>
+                    </g>
+                  </svg>
+                  <ion-label class="ion-text-left">
+                    &nbsp;&nbsp;Go to your profile
+                  </ion-label>
+                  <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
+                </ion-item>
+              </div>
+              <ng-template #goToPosts>
+                <ion-item lines="none" color="#2471A3" style="color: #2471A3" (click)="goFromProfileToTimeline()"
+                          routerLinkActive="active">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 24 24">
+                    <path fill="#2471A3"
+                          d="M15.25 13c.967 0 1.75.784 1.75 1.75v4.504a1.75 1.75 0 0 1-1.75 1.75H3.75A1.75 1.75 0 0 1 2 19.254V14.75c0-.966.784-1.75 1.75-1.75h11.5Zm5.751 1.896v5.354a.75.75 0 0 1-1.494.102l-.007-.102v-5.343a3.003 3.003 0 0 0 1.501-.011Zm-.75-4.804a1.908 1.908 0 1 1 0 3.816a1.908 1.908 0 0 1 0-3.816Zm-5.005-7.095c.967 0 1.75.784 1.75 1.75V9.25a1.75 1.75 0 0 1-1.75 1.75h-11.5a1.75 1.75 0 0 1-1.75-1.75V4.747a1.75 1.75 0 0 1 1.607-1.744l.143-.006h11.5ZM20.251 3a.75.75 0 0 1 .743.649l.007.101v5.346a3.004 3.004 0 0 0-1.5-.01V3.75a.75.75 0 0 1 .75-.75Z"/>
+                  </svg>
+                  <ion-label class="ion-text-left">
+                    &nbsp;&nbsp;Go to the timeline
+                  </ion-label>
+                  <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
+                </ion-item>
+
+              </ng-template>
             </ion-card>
           </ion-row>
           <ion-row class="info-row">
             <ion-card class="card info-card">
-              <ion-item lines="none" color="white" (click)="onLogout()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+              <ion-item lines="none" color="#DA0037" style="color: #DA0037" (click)="onLogout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2em"
                      preserveAspectRatio="xMidYMid meet"
                      viewBox="0 0 512 512">
                   <path fill="#DA0037"
                         d="M160 240h160V96a16 16 0 0 0-16-16H64a16 16 0 0 0-16 16v320a16 16 0 0 0 16 16h240a16 16 0 0 0 16-16V272H160Zm299.31 4.69L368 153.37L345.37 176l64 64H320v32h89.37l-64 64L368 358.63l91.31-91.32a16 16 0 0 0 0-22.62Z"/>
                 </svg>
                 <ion-label class="ion-text-left">
-                  &nbsp;&nbsp;Sign Out
+                  &nbsp;Sign Out
                 </ion-label>
                 <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
               </ion-item>
@@ -81,13 +100,13 @@
         <ng-template #elseBlock>
           <ion-row>
             <ion-card class="card info-card">
-              <ion-item lines="none" color="white" routerLink="/welcome">
+              <ion-item lines="none" color="#2471A3" style="color: #2471A3" routerLink="/welcome">
                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
                      preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7Z"/>
+                  <path fill="#2471A3" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7Z"/>
                 </svg>
                 <ion-label class="ion-text-left">
-                  &nbsp;&nbsp;Welcome
+                  &nbsp;&nbsp;&nbsp;Welcome
                 </ion-label>
                 <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
               </ion-item>
@@ -99,14 +118,14 @@
         </ion-row>
         <ion-row>
           <ion-card class="card info-card">
-            <ion-item lines="none" color="white" (click)="checkForUpdates()">
+            <ion-item lines="none" color="#2471A3" style="color: #2471A3" (click)="checkForUpdates()">
               <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
                    viewBox="0 0 24 24">
-                <path fill="currentColor"
+                <path fill="#2471A3"
                       d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1c-2.73 2.71-2.73 7.08 0 9.79s7.15 2.71 9.88 0C18.32 15.65 19 14.08 19 12.1h2c0 1.98-.88 4.55-2.64 6.29c-3.51 3.48-9.21 3.48-12.72 0c-3.5-3.47-3.53-9.11-.02-12.58s9.14-3.47 12.65 0L21 3v7.12zM12.5 8v4.25l3.5 2.08l-.72 1.21L11 13V8h1.5z"/>
               </svg>
               <ion-label class="ion-text-left">
-                &nbsp;&nbsp;Check for Updates
+                &nbsp;&nbsp;&nbsp;Check for Updates
               </ion-label>
               <!--                    <ion-toggle [(ngModel)]="darkMode" id="themeToggle" slot="end" (ionChange)="toggleThemeMode()"></ion-toggle>-->
             </ion-item>
@@ -137,7 +156,7 @@
           <div *ngIf="loggedIn && !onProfileTab as value;">
             <div ontouchstart="">
               <div id="postbutton" (click)="modalService.openCreatePostModal()">
-                <a>Post</a>
+                <a style="color: #1e1e00;">Post</a>
               </div>
             </div>
           </div>

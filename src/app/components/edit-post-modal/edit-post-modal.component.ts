@@ -177,10 +177,11 @@ export class EditPostModalComponent {
           text: 'OK',
           handler: data => {
             this.youtubeVideoId = getVideoId(data.url).id;
-            this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
             this.imgResult = null;
             if (this.youtubeVideoId == null)
-              window.alert("Gimme a valid link lil mate")
+              this.toastService.presentToast("middle","Gimme a valid link lil mate");
+            else
+              this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
           }
         }
       ],

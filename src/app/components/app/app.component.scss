@@ -300,10 +300,10 @@ ion-row{
   padding:10px 28px;
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  text-shadow: 0px 0.5px 0px #000;
-  filter: dropshadow(color=#000, offx=0px, offy=1px);
+  text-shadow: 0px 0.5px 0px gray;
+  filter: dropshadow(color=gray, offx=0px, offy=1px);
 
-  -webkit-box-shadow:inset 0 0.5px 0 #FFE5C4, 0 5px 0 #6d001c;
+  -webkit-box-shadow:inset 0 0.5px 0 #FFE5C4, 0 5px 0 #cc;
   -moz-box-shadow:inset 0 0.5px 0 #FFE5C4, 0 5px 0 #6d001c;
   box-shadow:inset 0 0.5px 0 #FFE5C4, 0 5px 0 #6d001c;
 

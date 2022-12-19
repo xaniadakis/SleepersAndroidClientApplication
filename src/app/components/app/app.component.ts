@@ -261,4 +261,9 @@ export class AppComponent {
     xhr.send();
 
   }
+
+  goFromProfileToTimeline() {
+    this.onProfileTab = false;
+    this.router.navigateByUrl('/home/tabs/tab3');
+  }
 }

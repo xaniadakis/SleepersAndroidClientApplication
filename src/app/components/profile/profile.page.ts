@@ -26,10 +26,10 @@ export class ProfilePage implements OnInit {
   nicknameValue: string | null = localStorage.getItem('name');
   emailAddressValue: string | null = localStorage.getItem('email');
 
-  fullNameValue: string | null = "";
-  myQuoteValue: string | null = "";
-  myOccupationValue: string | null = "";
-  myHobbyValue: string | null = "";
+  fullNameValue: string | null = "full name";
+  myQuoteValue: string | null = "carpe diem";
+  myOccupationValue: string | null = "chiller";
+  myHobbyValue: string | null = "serial chiller";
 
   editUser = {
     email: this.emailAddressValue,
@@ -49,6 +49,8 @@ export class ProfilePage implements OnInit {
   validUsername: boolean | null = null;
   validMailAddress: boolean | null = null;
   shortMailAddress: boolean | null = false;
+  editMode: boolean = false;
+  toSubmit: boolean = false;
 
   constructor(private sharedService: SharedService,
               private router: Router,
@@ -182,5 +184,17 @@ export class ProfilePage implements OnInit {
       this.shortMailAddress = true;
       this.checkedMailAddress = true;
     }
+  }
+
+  notEmpty(string: string | null) {
+    if (string == null || string.trim().length === 0)
+      return false;
+    else
+      return true;
+  }
+
+  setEditMode(editMode: boolean) {
+    this.editMode = editMode
+    this.toSubmit = editMode
   }
 }
