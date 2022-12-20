@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "837198173326",
+    "project_id": "sleepyheads-70234",
+    "storage_bucket": "sleepyheads-70234.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837198173326:android:55ea91980ffa702a9ee5df",
+        "android_client_info": {
+          "package_name": "com.glf.sleepers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837198173326-hnqj20l6h1ds5ae8ig56eg8dc8pue5jo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd-bO2Khm71W7ZVhlSQ4wQSaO3sJWF5jQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "837198173326-hnqj20l6h1ds5ae8ig56eg8dc8pue5jo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

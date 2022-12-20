@@ -11,11 +11,13 @@ export class UserService {
   private logoutUrl: string;
   private checkIfUserExistsUrl: string;
   private checkIfUserExistsUrlWithMail: string;
+  private sendFcmTokenUrl: string;
 
 
   constructor(private http: HttpClient) {
     this.changeProfilePicUrl = GlobalConstants.APIURL + "/user/changeProfilePic";
     this.logoutUrl = GlobalConstants.APIURL + "/user/logout";
+    this.sendFcmTokenUrl = GlobalConstants.APIURL + "/user/push";
     this.checkIfUserExistsUrl = GlobalConstants.APIURL + "/user/existsUser";
     this.checkIfUserExistsUrlWithMail = GlobalConstants.APIURL + "/user/existsUserWithMail";
   }
@@ -24,6 +26,12 @@ export class UserService {
     var formData: FormData = new FormData()
     formData.append("profilePic", image)
     return this.http.post<ProfilePicChangeResponse>(this.changeProfilePicUrl, formData);
+  }
+
+  public sendFcmToken(token: string) {
+    var formData: FormData = new FormData()
+    formData.append("string", token)
+    return this.http.post<String>(this.sendFcmTokenUrl, formData);
   }
 
   public logOut() {

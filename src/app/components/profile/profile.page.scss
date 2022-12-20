@@ -1,5 +1,5 @@
 .background-image {
-  --background: url(/src/assets/sky.jpg) no-repeat top center/cover fixed, #fff;
+  --background: url("/assets/sky.jpg") no-repeat top center/cover fixed, #fff;
   //--background: url(/src/assets/sky.jpg) 0 0/100% 100% no-repeat !important;
   position: relative;
   height: 100%;
@@ -24,23 +24,28 @@ ion-chip {
   margin: 0 auto;
 
   .header {
-    height: 200px; // 20vh;
+    margin-top: -10px;
+    padding-top: 0;
+    height: 250px; // 20vh;
+    background: url("/assets/fog.jpg");
 
     .avatar {
       width: 160px; //40vw
       height: 160px;
       //margin: 0;
+      //margin-top: 300px;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 10px;
+      //margin-top: 10px;
       position: relative;
 
       img {
+        //margin-top: 10px;
         left: 0;
         right: 0;
         align-self: center;
         height: 100%;
-        width: auto;
+        width: 100%;
         display: block;
         border-radius: 30%;
         position: absolute;
@@ -55,7 +60,7 @@ ion-chip {
 }
 
 .card-body {
-  margin-top: -20px;
+  margin-top: -60px;
   background-color: #ffffff;
   padding: 5px;
   height: calc(100vh - (200px - 57px + 56px));

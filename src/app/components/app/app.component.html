@@ -152,14 +152,21 @@
             </ion-button>
           </ion-menu-toggle>
         </ion-buttons>
-        <ion-buttons slot="end">
-          <div *ngIf="loggedIn && !onProfileTab as value;">
+        <ion-buttons *ngIf="loggedIn" slot="end">
+          <div *ngIf="!onProfileTab else showEditProfileButton;">
             <div ontouchstart="">
               <div id="postbutton" (click)="modalService.openCreatePostModal()">
                 <a style="color: #1e1e00;">Post</a>
               </div>
             </div>
           </div>
+          <ng-template #showEditProfileButton>
+            <div ontouchstart="">
+              <div id="editbutton" (click)="editProfile()">
+                <a style="color: #1e1e00;">Edit</a>
+              </div>
+            </div>
+          </ng-template>
         </ion-buttons>
 
         <!--        <ion-fab horizontal="end" vertical="center">-->

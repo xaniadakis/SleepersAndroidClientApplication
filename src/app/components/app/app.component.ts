@@ -17,6 +17,7 @@ import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {PostService} from "../../service/post.service";
 import {UserService} from "../../service/user.service";
+import {PushNotificationsService} from "../../service/push-notifications.service";
 
 @Component({
   selector: 'app-root',
@@ -43,7 +44,8 @@ export class AppComponent {
     private sharedService: SharedService,
     public modalService: ModalService,
     private clipboard: Clipboard,
-    private userService: UserService
+    private userService: UserService,
+    private pushNotificationsService: PushNotificationsService
   ) {
     if (localStorage.getItem("userId") == null)
       this.loggedIn = false;
@@ -52,6 +54,7 @@ export class AppComponent {
       localStorage.setItem("postType", PostType.STORY)
       router.navigateByUrl("/home/tabs/tab3")
     }
+    this.pushNotificationsService.initPush();
   }
 
   ngOnInit() {
@@ -265,5 +268,9 @@ export class AppComponent {
   goFromProfileToTimeline() {
     this.onProfileTab = false;
     this.router.navigateByUrl('/home/tabs/tab3');
+  }
+
+  editProfile() {
+    this.sharedService.immaEditProfile(true);
   }
 }

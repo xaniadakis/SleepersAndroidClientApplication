@@ -336,3 +336,63 @@ ion-row{
   border-radius: 2.5px;
 }
 
+////////////////////////////////////////
+#editbutton{
+  position:relative;
+  display:inline-block;
+  //margin:20px;
+  margin: 5px;
+  margin-bottom: 10px;
+
+  //padding-bottom: 5px;
+}
+
+#editbutton a{
+  color:white;
+  font-family:Helvetica, sans-serif;
+  font-weight:bold;
+  font-size:18px;
+  text-align: center;
+  text-decoration:none;
+  background-color: #2471A3;
+  display:block;
+  position:relative;
+  padding:10px 28px;
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-shadow: 0px 0.5px 0px gray;
+  filter: dropshadow(color=gray, offx=0px, offy=1px);
+
+  -webkit-box-shadow:inset 0 0.5px 0 #FFE5C4, 0 5px 0 #123952;
+  -moz-box-shadow:inset 0 0.5px 0 #FFE5C4, 0 5px 0 #123952;
+  box-shadow:inset 0 0.5px 0 #FFE5C4, 0 5px 0 #123952;
+
+  -webkit-border-radius: 2.5px;
+  -moz-border-radius: 2.5px;
+  border-radius: 2.5px;
+}
+
+#editbutton a:active{
+  top:5px;
+  background-color:#2471A3;
+
+  -webkit-box-shadow:inset 0 0.5px 0 #FFE5C4, inset 0 -1.5px 0 #123952;
+  -moz-box-shadow:inset 0 0.5px 0 #FFE5C4, inset 0 -1.5pxpx 0 #123952;
+  box-shadow:inset 0 0.5px 0 #FFE5C4, inset 0 -1.5px 0 #123952;
+}
+
+#editbutton:after{
+  content:"";
+  height:100%;
+  width:100%;
+  padding:2px;
+  position: absolute;
+  bottom:-7.5px;
+  left:-2px;
+  z-index:-1;
+  background-color:#2B1800;
+  -webkit-border-radius: 2.5px;
+  -moz-border-radius: 2.5px;
+  border-radius: 2.5px;
+}
+

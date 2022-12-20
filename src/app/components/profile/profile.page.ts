@@ -58,7 +58,7 @@ export class ProfilePage implements OnInit {
               private ngxImageCompressService: NgxImageCompressService,
               private toastService: ToastService,
               private loadingCtrl: LoadingController,
-              private userService: UserService
+              private userService: UserService,
   ) {
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
       this.sharedService.hidePostButtonForALilWhile(false);
@@ -67,6 +67,12 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
+    this.sharedService.editProfile.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message #${event}`);
+        this.setEditMode(event);
+      }
+    })
     this.sharedService.hidePostButtonForALilWhile(true);
     this.nicknameValue = localStorage.getItem("name");
     this.emailAddressValue = localStorage.getItem('email');
