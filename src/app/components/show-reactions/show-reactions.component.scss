@@ -9,14 +9,14 @@ app-reactions {
 }
 
 
-//// App iOS Variables
-//// --------------------------------------------------
-//// iOS only Sass variables can go here
-//$popover-ios-width: 95%;
-//// App Material Design Variables
-//// --------------------------------------------------
-//// Material Design only Sass variables can go here
-//$popover-md-width: 95%;
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+$popover-ios-width: 95%;
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+$popover-md-width: 95%;
 
 .popover-wrapper .popover-content {
   box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.25);

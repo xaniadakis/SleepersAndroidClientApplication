@@ -6,6 +6,7 @@ export class UiPostDto {
   image: string;
   youtubeVideoId: string;
   owner: string;
+  ownerId: bigint;
   ownerProfilePic: string;
   reactionsSize: number;
   commentsSize: number;

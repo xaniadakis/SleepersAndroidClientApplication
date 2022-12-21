@@ -30,11 +30,13 @@ export class AppComponent {
   profilePic: File;
   imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
   profilePicSrc: string | null = localStorage.getItem('profilePic');
+
   profilePicSrc2: string = "https://ionicframework.com/docs/img/demos/avatar.svg";
   loggedIn: boolean;
   currentVersion: string;
   private sharedServiceSubscription: Subscription;
   onProfileTab: boolean;
+  onFriendosProfileTab: boolean;
 
   constructor(
     private platform: Platform,
@@ -86,6 +88,12 @@ export class AppComponent {
       next: (event: boolean) => {
         console.log(`Received message #${event}`);
         this.onProfileTab = event
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onAFriendsProfileTab.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message #${event}`);
+        this.onFriendosProfileTab = event
       }
     })
   }
@@ -267,6 +275,7 @@ export class AppComponent {
 
   goFromProfileToTimeline() {
     this.onProfileTab = false;
+    this.sharedService.hideEditButtonForALilWhile(false);
     this.router.navigateByUrl('/home/tabs/tab3');
   }
 

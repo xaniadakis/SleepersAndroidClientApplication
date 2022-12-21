@@ -49,7 +49,7 @@ const routes: Routes = [
           canActivate: [GuardService],
         }]
     }, {
-      path: 'profile',
+      path: 'profile/:userId',
       component: ProfilePage,
       canActivate: [GuardService]
     }]

@@ -3,6 +3,11 @@ import {HttpClient} from '@angular/common/http';
 import {GlobalConstants} from "../util/global-constants";
 import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
 import {SignOutResponse} from "../dto/sign-out-response";
+import {GetUserDetailsResponse} from "../dto/get-user-details-response";
+import {PostType} from "../dto/post-type";
+import {ModifyPostResponse} from "../dto/modify-post-response";
+import {Observable} from "rxjs";
+import {GetAllPostsResponse} from "../dto/get-all-posts-response";
 
 @Injectable()
 export class UserService {
@@ -12,14 +17,18 @@ export class UserService {
   private checkIfUserExistsUrl: string;
   private checkIfUserExistsUrlWithMail: string;
   private sendFcmTokenUrl: string;
+  private getUserDetailsUrl: string;
+  private modifyUserDetailsUrl: string;
 
 
   constructor(private http: HttpClient) {
     this.changeProfilePicUrl = GlobalConstants.APIURL + "/user/changeProfilePic";
     this.logoutUrl = GlobalConstants.APIURL + "/user/logout";
     this.sendFcmTokenUrl = GlobalConstants.APIURL + "/user/push";
-    this.checkIfUserExistsUrl = GlobalConstants.APIURL + "/user/existsUser";
-    this.checkIfUserExistsUrlWithMail = GlobalConstants.APIURL + "/user/existsUserWithMail";
+    this.checkIfUserExistsUrl = GlobalConstants.APIURL + "/user/existsUsername";
+    this.checkIfUserExistsUrlWithMail = GlobalConstants.APIURL + "/user/existsMail";
+    this.getUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
+    this.modifyUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
   }
 
   public changeProfilePic(image: File) {
@@ -44,5 +53,29 @@ export class UserService {
 
   checkIfUserExistsWithMail(mail: any) {
     return this.http.get<boolean>(this.checkIfUserExistsUrlWithMail + "?mail=" + mail);
+  }
+
+  retrieveUserDetails(userId: bigint): Observable<GetUserDetailsResponse> {
+    return this.http.get<GetUserDetailsResponse>(this.getUserDetailsUrl + "?userId=" + userId);
+  }
+
+  modifyUserDetails(email: string,
+                    nickname: string,
+                    fullName: string,
+                    myQuote: string,
+                    myOccupation: string,
+                    myHobby: string,
+                    newPassword: string,
+                    oldPassword: string) {
+    var modifyUser: FormData = new FormData()
+    modifyUser.append("email", email)
+    modifyUser.append("username", nickname)
+    modifyUser.append("fullName", fullName)
+    modifyUser.append("myQuote", myQuote)
+    modifyUser.append("myOccupation", myOccupation)
+    modifyUser.append("myHobby", myHobby)
+    modifyUser.append("newPassword", newPassword)
+    modifyUser.append("oldPassword", oldPassword)
+    return this.http.put<ModifyPostResponse>(this.modifyUserDetailsUrl, modifyUser);
   }
 }

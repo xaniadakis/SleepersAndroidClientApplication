@@ -6,7 +6,7 @@ import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HomePage} from "../home/home.page";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {ToastService} from "../../service/toast.service";
@@ -59,7 +59,7 @@ import {UserService} from "../../service/user.service";
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    HammerModule
+    HammerModule, ReactiveFormsModule,
     // ScrollingModule,
   ],
   providers: [
@@ -83,7 +83,8 @@ import {UserService} from "../../service/user.service";
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptorService, multi: true},
     NgxImageCompressService,
     ImageCompressService,
-    UserService
+    UserService,
+    FormBuilder
     // CdkVirtualScrollViewport,
     // LogUpdateService,
     // CheckForUpdateService

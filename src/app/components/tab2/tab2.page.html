@@ -62,7 +62,7 @@
   </div>
   <ng-template #showContentBlock>
 
-    <tr *ngFor="let post of posts">
+    <ion-list *ngFor="let post of posts" no-tap-scroll=“true”>
       <ion-item-sliding>
         <ion-item lines="none" class="ion-no-padding" (dblclick)="likeIt(post.id)">
           <ion-card class="ion-no-padding">
@@ -70,9 +70,9 @@
             <ion-card-header>
               <ion-card-subtitle type="dark">
                 <div class="ion-float-start">
-                  <ion-chip id="post-owner-avatar">
+                  <ion-chip id="post-owner-avatar" [routerLink]="['/home/profile', post.ownerId]">
                     <ion-avatar>
-                      <img alt="avatar" src="{{imageApi+post.ownerProfilePic}}"/>
+                      <img alt="avatar" src="{{(imageApi+post.ownerProfilePic)}}"/>
                     </ion-avatar>
                     <ion-label><b>{{post.owner}}</b></ion-label>
                   </ion-chip>
@@ -84,11 +84,13 @@
                 </div>
               </ion-card-subtitle>
             </ion-card-header>
-            <div *ngIf="notEmpty(post.image)">
+            <div *ngIf="notEmpty(post.image)"
+                 (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
               <img id="post-image" alt="ey where my pic at yo" src="{{ (imageApi+post.image) || (loading) }}"
                    loading="lazy"/>
             </div>
-            <div *ngIf="notEmpty(post.youtubeVideoId)">
+            <div *ngIf="notEmpty(post.youtubeVideoId)"
+                 (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
               <iframe style="width: 100vw; height: 30vh;" [src]="(youtubeEmbedApi+post.youtubeVideoId) | safe"
                       frameborder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -108,11 +110,9 @@
             </div>
             <!--          </ion-row>-->
             <ion-row style="margin-top: -10px; padding-bottom: 3px;">
-              <ion-col>
-
+              <ion-col (click)="showReactions($event, post.id);"
+                       (press)="showReactors($event, post.id);">
                 <ion-button class="transparent-button ion-no-padding ion-no-margin "
-                            (click)="showReactions($event, post.id);"
-                            (press)="showReactors($event, post.id);"
                             icon-left>
                   <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
                        preserveAspectRatio="xMidYMid meet"
@@ -126,10 +126,10 @@
                   &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getReactionsDesc(post.reactionsSize)}}</b>
                 </div>
               </ion-col>
-              <ion-col>
+              <ion-col (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
                 <ion-button class="transparent-button ion-no-padding ion-no-margin "
                             icon-left
-                            (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
                        preserveAspectRatio="xMidYMid meet"
                        viewBox="0 0 24 24">
@@ -143,9 +143,6 @@
                   &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getCommentsDesc(post.commentsSize)}}</b>
                 </div>
               </ion-col>
-              <!--              <ion-col center text-center>-->
-              <!--                <ion-note> 11h ago </ion-note>-->
-              <!--              </ion-col>-->
             </ion-row>
 
           </ion-card>
@@ -177,7 +174,7 @@
           </ion-item-options>
         </div>
       </ion-item-sliding>
-    </tr>
+    </ion-list>
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
       <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>

@@ -379,3 +379,17 @@ ion-input.input-width {
   animation: fadeIn 1s ease-in infinite alternate;
 
 }
+
+.loadingCenter {
+  //height: 200px;
+  position: relative;
+  //border: 3px solid green;
+  color: #1e1e1e;
+  //background: #1e1e1e;
+  margin: 0;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}

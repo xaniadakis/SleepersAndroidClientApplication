@@ -7,6 +7,7 @@ import {ReactionEnum} from "../dto/get-post-response";
 export class SharedService {
   public onChange: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onProfileTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onAFriendsProfileTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public editProfile: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onCarPost: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onArtPost: EventEmitter<Boolean> = new EventEmitter<Boolean>();
@@ -20,6 +21,10 @@ export class SharedService {
 
   public hidePostButtonForALilWhile(value: boolean) {
     this.onProfileTab.emit(value);
+  }
+
+  public hideEditButtonForALilWhile(value: boolean) {
+    this.onAFriendsProfileTab.emit(value);
   }
 
   public immaEditProfile(value: boolean) {

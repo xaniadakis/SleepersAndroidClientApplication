@@ -1,4 +1,6 @@
 <ion-content fullscreen="true" slot="fixed">
+  <div *ngIf="!fetching else showSpinner">
+
   <div class="card ion-no-padding ion-no-margin">
     <div class="header ion-no-padding ion-no-margin">
       <!--      <div>-->
@@ -8,8 +10,8 @@
       <!--      </div>-->
 
       <div class="avatar">
-        <img class="profilepic" [src]="(imageApi + profilePicado)" alt="">
-        <label (click)="compressFile()" class="custom-file-upload">
+        <img class="profilepic" [src]="(imageApi + userDetails.profilePic)" alt="">
+        <label *ngIf="!hiddenEditButton" (click)="compressFile()" class="custom-file-upload">
           <i class="fa fa-cloud-upload"></i>
           <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" preserveAspectRatio="xMidYMid meet"
                viewBox="0 0 24 24">
@@ -35,222 +37,308 @@
 
     </div>
     <div class="card-body">
-      <div class="user-meta ion-text-center">
-        <h3 *ngIf="!editMode" class="playername">{{name}}</h3>
-      </div>
-      <div *ngIf="editMode else showOffMode" style="margin-top: 60px">
+        <div class="user-meta ion-text-center">
+          <h3 *ngIf="!editMode" class="playername">{{userDetails.username}}</h3>
+        </div>
+        <div *ngIf="editMode else showOffMode" style="margin-top: 60px">
 
-        <form #form="ngForm" (ngSubmit)="onEdit(form)" #f="ngForm">
-          <ion-list class="white ion-no-padding">
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <ion-img style="width: 2.5em; height: 2.5em;"
-                         fill="clear"
-                         src="../assets/turtlelogo.jpg" alt="logo"></ion-img>
-              </ion-avatar>
-              <ion-label class="white" position="stacked">nickname</ion-label>
-              <ion-input [clearInput]="true" placeholder="change your nickname" [value]="nicknameValue"
-                         name="nickname" class="form-control" [(ngModel)]="editUser.nickname" #nickname="ngModel"
-                         minlength="4"></ion-input>
-              <ion-avatar slot="end" (click)="checkIfUserExists(nickname.value)" style="cursor: pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 24 24">
-                  <path fill="#2AAA8A"
-                        d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4ZM12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4Q8.65 4 6.325 6.325Q4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/>
-                </svg>
-              </ion-avatar>
-              <div *ngIf="checkedUsername && (!validUsername || shortUsername) as value else userNameValidBlock"
-                   class="invalid-feedback">
-                <div *ngIf="shortUsername else ownedUsername">nickname be too short</div>
-                <ng-template #ownedUsername>
-                  <div *ngIf="!validUsername">nickname is already owned</div>
+          <form [formGroup]="editUser" (ngSubmit)="onEdit(editUser)">
+            <ion-list class="white ion-no-padding">
+              <ion-item fill="outline" color="light" class="white" lines="none">
+                <ion-avatar slot="start">
+                  <ion-img style="width: 2.5em; height: 2.5em;"
+                           fill="clear"
+                           src="../assets/turtlelogo.jpg" alt="logo"></ion-img>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">nickname</ion-label>
+                <ion-input [clearInput]="true" placeholder="change your nickname" [value]="userDetails.username"
+                           name="nickname" class="form-control" formControlName="nickname"
+                           [minlength]="usernameMinlength" maxlength="9"
+                           (ionChange)="checkIfUserExists($event)"></ion-input>
+
+                <ion-avatar *ngIf="validUsername && startedCheckingUsernameValidity else invalidUsernameBlock"
+                            slot="end">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 24 24">
+                    <path fill="#2AAA8A"
+                          d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4ZM12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4Q8.65 4 6.325 6.325Q4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/>
+                  </svg>
+                </ion-avatar>
+                <ng-template #invalidUsernameBlock>
+                  <ion-avatar *ngIf="startedCheckingUsernameValidity" slot="end">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                         preserveAspectRatio="xMidYMid meet"
+                         viewBox="0 0 256 256">
+                      <circle cx="128" cy="128" r="96" fill="#DA0037" opacity=".2"/>
+                      <path fill="#DA0037"
+                            d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24Zm0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88Z"/>
+                      <path fill="#DA0037"
+                            d="M165.7 90.3a8.1 8.1 0 0 0-11.4 0L128 116.7l-26.3-26.4a8.1 8.1 0 0 0-11.4 11.4l26.4 26.3l-26.4 26.3a8.1 8.1 0 0 0 0 11.4a8.2 8.2 0 0 0 11.4 0l26.3-26.4l26.3 26.4a8.2 8.2 0 0 0 11.4 0a8.1 8.1 0 0 0 0-11.4L139.3 128l26.4-26.3a8.1 8.1 0 0 0 0-11.4Z"/>
+                    </svg>
+                  </ion-avatar>
                 </ng-template>
-              </div>
-              <ng-template #userNameValidBlock>
-                <div *ngIf="validUsername" style="color: #2dd36f; font-size: smaller">nickname be valid</div>
-              </ng-template>
-            </ion-item>
 
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 24 24">
-                  <path fill="currentColor"
-                        d="M12 22q-2.05 0-3.875-.788q-1.825-.787-3.187-2.15q-1.363-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.887q.787-1.813 2.15-3.175Q6.3 3.575 8.125 2.787Q9.95 2 12 2q2.075 0 3.887.787q1.813.788 3.175 2.151q1.363 1.362 2.15 3.175Q22 9.925 22 12v1.45q0 1.475-1.012 2.512Q19.975 17 18.5 17q-.9 0-1.675-.4t-1.275-1.05q-.675.675-1.587 1.063Q13.05 17 12 17q-2.075 0-3.537-1.463Q7 14.075 7 12t1.463-3.538Q9.925 7 12 7t3.538 1.462Q17 9.925 17 12v1.45q0 .725.45 1.137q.45.413 1.05.413q.6 0 1.05-.413q.45-.412.45-1.137V12q0-3.275-2.363-5.638Q15.275 4 12 4Q8.725 4 6.362 6.362Q4 8.725 4 12t2.362 5.637Q8.725 20 12 20h4q.425 0 .712.288q.288.287.288.712t-.288.712Q16.425 22 16 22Zm0-7q1.25 0 2.125-.875T15 12q0-1.25-.875-2.125T12 9q-1.25 0-2.125.875T9 12q0 1.25.875 2.125T12 15Z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label class="white" position="stacked">email address</ion-label>
-              <ion-input [clearInput]="true" placeholder="change your email address" [value]="emailAddressValue"
-                         type="text" name="email" class="form-control" [(ngModel)]="editUser.email" #email="ngModel"
-                         [ngClass]="{ 'is-invalid': email.invalid }"></ion-input>
-              <ion-avatar slot="end" (click)="checkIfUserExistsWithMail(email.value)" style="cursor: pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 24 24">
-                  <path fill="#2AAA8A"
-                        d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4ZM12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4Q8.65 4 6.325 6.325Q4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/>
-                </svg>
-              </ion-avatar>
-              <div
-                *ngIf="checkedMailAddress && (!validMailAddress  || shortMailAddress) as value else mailAddressValidBlock"
-                class="invalid-feedback">
-                <div *ngIf="(email.errors?.email || shortMailAddress) else ownedMailAddress">email must be a valid email
-                  address
+                <div *ngIf="!checkingUsernameValidity">
+                  <div *ngIf="checkedUsername && (!validUsername || shortUsername) else userNameValidBlock"
+                       class="invalid-feedback">
+                    <div *ngIf="shortUsername else ownedUsername">nickname be too short</div>
+                    <ng-template #ownedUsername>
+                      <div *ngIf="!validUsername">nickname is already owned</div>
+                    </ng-template>
+                  </div>
+                  <ng-template #userNameValidBlock>
+                    <div *ngIf="validUsername" style="color: #2dd36f; font-size: smaller">nickname be valid</div>
+                  </ng-template>
                 </div>
-                <ng-template #ownedMailAddress>
-                  <div *ngIf="!validMailAddress">mail is already owned</div>
+              </ion-item>
+
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                          d="M12 22q-2.05 0-3.875-.788q-1.825-.787-3.187-2.15q-1.363-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.887q.787-1.813 2.15-3.175Q6.3 3.575 8.125 2.787Q9.95 2 12 2q2.075 0 3.887.787q1.813.788 3.175 2.151q1.363 1.362 2.15 3.175Q22 9.925 22 12v1.45q0 1.475-1.012 2.512Q19.975 17 18.5 17q-.9 0-1.675-.4t-1.275-1.05q-.675.675-1.587 1.063Q13.05 17 12 17q-2.075 0-3.537-1.463Q7 14.075 7 12t1.463-3.538Q9.925 7 12 7t3.538 1.462Q17 9.925 17 12v1.45q0 .725.45 1.137q.45.413 1.05.413q.6 0 1.05-.413q.45-.412.45-1.137V12q0-3.275-2.363-5.638Q15.275 4 12 4Q8.725 4 6.362 6.362Q4 8.725 4 12t2.362 5.637Q8.725 20 12 20h4q.425 0 .712.288q.288.287.288.712t-.288.712Q16.425 22 16 22Zm0-7q1.25 0 2.125-.875T15 12q0-1.25-.875-2.125T12 9q-1.25 0-2.125.875T9 12q0 1.25.875 2.125T12 15Z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">email address</ion-label>
+                <ion-input [clearInput]="true" placeholder="change your email address" [value]="userDetails.email"
+                           type="email" name="email" class="form-control" formControlName="email"
+                           (ionChange)="checkIfUserExistsWithMail($event)"
+                ></ion-input>
+
+                <ion-avatar *ngIf="validMailAddress && startedCheckingMailValidity else invalidMailBlock" slot="end">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 24 24">
+                    <path fill="#2AAA8A"
+                          d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4ZM12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4Q8.65 4 6.325 6.325Q4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/>
+                  </svg>
+                </ion-avatar>
+                <ng-template #invalidMailBlock>
+                  <ion-avatar *ngIf="startedCheckingMailValidity" slot="end">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                         preserveAspectRatio="xMidYMid meet"
+                         viewBox="0 0 256 256">
+                      <circle cx="128" cy="128" r="96" fill="#DA0037" opacity=".2"/>
+                      <path fill="#DA0037"
+                            d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24Zm0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88Z"/>
+                      <path fill="#DA0037"
+                            d="M165.7 90.3a8.1 8.1 0 0 0-11.4 0L128 116.7l-26.3-26.4a8.1 8.1 0 0 0-11.4 11.4l26.4 26.3l-26.4 26.3a8.1 8.1 0 0 0 0 11.4a8.2 8.2 0 0 0 11.4 0l26.3-26.4l26.3 26.4a8.2 8.2 0 0 0 11.4 0a8.1 8.1 0 0 0 0-11.4L139.3 128l26.4-26.3a8.1 8.1 0 0 0 0-11.4Z"/>
+                    </svg>
+                  </ion-avatar>
                 </ng-template>
-              </div>
-              <ng-template #mailAddressValidBlock>
-                <div *ngIf="validMailAddress" style="color: #2dd36f; font-size: smaller">mail be valid</div>
-              </ng-template>
-            </ion-item>
 
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 26 26">
-                  <path fill="currentColor"
-                        d="M16.563 15.9c-.159-.052-1.164-.505-.536-2.414h-.009c1.637-1.686 2.888-4.399 2.888-7.07c0-4.107-2.731-6.26-5.905-6.26c-3.176 0-5.892 2.152-5.892 6.26c0 2.682 1.244 5.406 2.891 7.088c.642 1.684-.506 2.309-.746 2.397c-3.324 1.202-7.224 3.393-7.224 5.556v.811c0 2.947 5.714 3.617 11.002 3.617c5.296 0 10.938-.67 10.938-3.617v-.811c0-2.228-3.919-4.402-7.407-5.557z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label class="white" position="stacked">full name</ion-label>
-              <ion-input [clearInput]="true" placeholder="type your first and last name"
-                         [value]="fullNameValue"></ion-input>
-            </ion-item>
+                <!--              <div *ngIf="!checkingMailValidity">-->
+                <!--                <div-->
+                <!--                  *ngIf="checkedMailAddress && (!validMailAddress  || shortMailAddress) as value else mailAddressValidBlock"-->
+                <!--                  class="invalid-feedback">-->
+                <!--                  <div *ngIf="(email.errors?.email || shortMailAddress) else ownedMailAddress">email must be a valid email address-->
+                <!--                  </div>-->
+                <!--                  <ng-template #ownedMailAddress>-->
+                <!--                    <div *ngIf="!validMailAddress">mail is already owned</div>-->
+                <!--                  </ng-template>-->
+                <!--                </div>-->
+                <!--                <ng-template #mailAddressValidBlock>-->
+                <!--                  <div *ngIf="validMailAddress" style="color: #2dd36f; font-size: smaller">mail be valid</div>-->
+                <!--                </ng-template>-->
+                <!--              </div>-->
+                <div *ngIf="!checkingMailValidity">
+                  <div *ngIf="checkedMailAddress && (!validMailAddress || shortMailAddress) else mailValidBlock"
+                       class="invalid-feedback">
+                    <div *ngIf="(shortMailAddress) else ownedMailAddress">email must be a valid
+                      email address
+                    </div>
+                    <ng-template #ownedMailAddress>
+                      <div *ngIf="!validMailAddress">mail is already owned</div>
+                    </ng-template>
+                  </div>
+                  <ng-template #mailValidBlock>
+                    <div *ngIf="validMailAddress" style="color: #2dd36f; font-size: smaller">mail be valid</div>
+                  </ng-template>
+                </div>
+              </ion-item>
+
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 26 26">
+                    <path fill="currentColor"
+                          d="M16.563 15.9c-.159-.052-1.164-.505-.536-2.414h-.009c1.637-1.686 2.888-4.399 2.888-7.07c0-4.107-2.731-6.26-5.905-6.26c-3.176 0-5.892 2.152-5.892 6.26c0 2.682 1.244 5.406 2.891 7.088c.642 1.684-.506 2.309-.746 2.397c-3.324 1.202-7.224 3.393-7.224 5.556v.811c0 2.947 5.714 3.617 11.002 3.617c5.296 0 10.938-.67 10.938-3.617v-.811c0-2.228-3.919-4.402-7.407-5.557z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">full name</ion-label>
+                <ion-input [clearInput]="true" placeholder="type your first and last name"
+                           type="text" name="fullName" class="form-control"
+                           [value]="userDetails.fullName" formControlName="fullName"></ion-input>
+              </ion-item>
 
 
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 24 24">
-                  <path fill="currentColor"
-                        d="M18 8h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h2V7a6 6 0 1 1 12 0v1zm-2 0V7a4 4 0 1 0-8 0v1h8zm-5 6v2h2v-2h-2zm-4 0v2h2v-2H7zm8 0v2h2v-2h-2z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label class="white" position="stacked">password</ion-label>
-              <ion-input clearOnEdit="true" type="password" placeholder="change your password"></ion-input>
-            </ion-item>
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                          d="M18 8h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h2V7a6 6 0 1 1 12 0v1zm-2 0V7a4 4 0 1 0-8 0v1h8zm-5 6v2h2v-2h-2zm-4 0v2h2v-2H7zm8 0v2h2v-2h-2z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">new password</ion-label>
+                <ion-input clearOnEdit="true" type="password" placeholder="change your password"
+                           (ionChange)="gimmeOldPasswordToo($event)" formControlName="newPassword"></ion-input>
+              </ion-item>
+              <ion-item *ngIf="showOldPasswordDiv" class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                          d="M22 18v4h-4v-3h-3v-3h-3l-2.26-2.26c-.55.17-1.13.26-1.74.26a6 6 0 0 1-6-6a6 6 0 0 1 6-6a6 6 0 0 1 6 6c0 .61-.09 1.19-.26 1.74L22 18M7 5a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2Z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">old password</ion-label>
+                <ion-input clearOnEdit="true" type="password" placeholder="gimme your old password"
+                           formControlName="oldPassword"></ion-input>
+              </ion-item>
 
-            <ion-row style="color: white; background: white">&nbsp;</ion-row>
-            <ion-row style="color: white; background: white">&nbsp;</ion-row>
+              <ion-row style="color: white; background: white">&nbsp;</ion-row>
+              <ion-row style="color: white; background: white">&nbsp;</ion-row>
 
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 16 16">
-                  <path fill="currentColor"
-                        d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234c-.2.032-.352-.176-.273-.362c.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM7.194 6.766a1.688 1.688 0 0 0-.227-.272a1.467 1.467 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666c.343 0 .662-.095.931-.26c-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01c1.334-1.329 1.37-2.758.941-3.706a2.461 2.461 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01c1.334-1.329 1.37-2.758.942-3.706a2.466 2.466 0 0 0-.228-.4a1.686 1.686 0 0 0-.227-.273a1.466 1.466 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667c0 .92.777 1.666 1.734 1.666c.343 0 .662-.095.931-.26z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label class="white" position="stacked">my quote</ion-label>
-              <ion-input [clearInput]="true" placeholder="type a quote that you like nowadays"
-                         [value]="myQuoteValue"></ion-input>
-            </ion-item>
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 20 20">
-                  <path fill="currentColor"
-                        d="M8.55 3.06c1.01.34-1.95 2.01-.1 3.13c1.04.63 3.31-2.22 4.45-2.86c.97-.54 2.67-.65 3.53 1.23c1.09 2.38.14 8.57-3.79 11.06c-3.97 2.5-8.97 1.23-10.7-2.66c-2.01-4.53 3.12-11.09 6.61-9.9zm1.21 6.45c.73 1.64 4.7-.5 3.79-2.8c-.59-1.49-4.48 1.25-3.79 2.8z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label class="white" position="stacked">my hobby</ion-label>
-              <ion-input [clearInput]="true" placeholder="let the buddies know what is of interest to youse"
-                         [value]="myHobbyValue"></ion-input>
-            </ion-item>
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.3em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 1792 1536">
-                  <path fill="currentColor"
-                        d="M640 256h512V128H640v128zm-352 0v1280h-64q-92 0-158-66T0 1312V480q0-92 66-158t158-66h64zm1120 0v1280H384V256h128V96q0-40 28-68t68-28h576q40 0 68 28t28 68v160h128zm384 224v832q0 92-66 158t-158 66h-64V256h64q92 0 158 66t66 158z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label class="white" position="stacked">my occupation</ion-label>
-              <ion-input [clearInput]="true" placeholder="type your occupation"
-                         [value]="myOccupationValue"></ion-input>
-            </ion-item>
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 16 16">
+                    <path fill="currentColor"
+                          d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234c-.2.032-.352-.176-.273-.362c.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM7.194 6.766a1.688 1.688 0 0 0-.227-.272a1.467 1.467 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666c.343 0 .662-.095.931-.26c-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01c1.334-1.329 1.37-2.758.941-3.706a2.461 2.461 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01c1.334-1.329 1.37-2.758.942-3.706a2.466 2.466 0 0 0-.228-.4a1.686 1.686 0 0 0-.227-.273a1.466 1.466 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667c0 .92.777 1.666 1.734 1.666c.343 0 .662-.095.931-.26z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">my quote</ion-label>
+                <ion-input [clearInput]="true" placeholder="type a quote that you like nowadays"
+                           [value]="userDetails.myQuote" type="text" name="myQuote"
+                           class="form-control" formControlName="myQuote"></ion-input>
+              </ion-item>
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 20 20">
+                    <path fill="currentColor"
+                          d="M8.55 3.06c1.01.34-1.95 2.01-.1 3.13c1.04.63 3.31-2.22 4.45-2.86c.97-.54 2.67-.65 3.53 1.23c1.09 2.38.14 8.57-3.79 11.06c-3.97 2.5-8.97 1.23-10.7-2.66c-2.01-4.53 3.12-11.09 6.61-9.9zm1.21 6.45c.73 1.64 4.7-.5 3.79-2.8c-.59-1.49-4.48 1.25-3.79 2.8z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">my hobby</ion-label>
+                <ion-input multiple="true" [clearInput]="true"
+                           placeholder="let the buddies know what is of interest to youse"
+                           [value]="userDetails.myHobby" type="text" name="myHobby"
+                           class="form-control" formControlName="myHobby"></ion-input>
+              </ion-item>
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.3em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 1792 1536">
+                    <path fill="currentColor"
+                          d="M640 256h512V128H640v128zm-352 0v1280h-64q-92 0-158-66T0 1312V480q0-92 66-158t158-66h64zm1120 0v1280H384V256h128V96q0-40 28-68t68-28h576q40 0 68 28t28 68v160h128zm384 224v832q0 92-66 158t-158 66h-64V256h64q92 0 158 66t66 158z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label class="white" position="stacked">my occupation</ion-label>
+                <ion-input [clearInput]="true" placeholder="type your occupation"
+                           [value]="userDetails.myOccupation" type="text" name="myOccupation"
+                           class="form-control" formControlName="myOccupation"></ion-input>
+              </ion-item>
+            </ion-list>
+          </form>
+        </div>
+
+        <ng-template #showOffMode>
+          <ion-list class="white ion-no-padding">
+
+            <div *ngIf="notEmpty(userDetails.email)">
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                          d="M12 22q-2.05 0-3.875-.788q-1.825-.787-3.187-2.15q-1.363-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.887q.787-1.813 2.15-3.175Q6.3 3.575 8.125 2.787Q9.95 2 12 2q2.075 0 3.887.787q1.813.788 3.175 2.151q1.363 1.362 2.15 3.175Q22 9.925 22 12v1.45q0 1.475-1.012 2.512Q19.975 17 18.5 17q-.9 0-1.675-.4t-1.275-1.05q-.675.675-1.587 1.063Q13.05 17 12 17q-2.075 0-3.537-1.463Q7 14.075 7 12t1.463-3.538Q9.925 7 12 7t3.538 1.462Q17 9.925 17 12v1.45q0 .725.45 1.137q.45.413 1.05.413q.6 0 1.05-.413q.45-.412.45-1.137V12q0-3.275-2.363-5.638Q15.275 4 12 4Q8.725 4 6.362 6.362Q4 8.725 4 12t2.362 5.637Q8.725 20 12 20h4q.425 0 .712.288q.288.287.288.712t-.288.712Q16.425 22 16 22Zm0-7q1.25 0 2.125-.875T15 12q0-1.25-.875-2.125T12 9q-1.25 0-2.125.875T9 12q0 1.25.875 2.125T12 15Z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label>
+                  {{userDetails.email}}
+                </ion-label>
+              </ion-item>
+            </div>
+            <div *ngIf="notEmpty(userDetails.fullName)">
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 26 26">
+                    <path fill="currentColor"
+                          d="M16.563 15.9c-.159-.052-1.164-.505-.536-2.414h-.009c1.637-1.686 2.888-4.399 2.888-7.07c0-4.107-2.731-6.26-5.905-6.26c-3.176 0-5.892 2.152-5.892 6.26c0 2.682 1.244 5.406 2.891 7.088c.642 1.684-.506 2.309-.746 2.397c-3.324 1.202-7.224 3.393-7.224 5.556v.811c0 2.947 5.714 3.617 11.002 3.617c5.296 0 10.938-.67 10.938-3.617v-.811c0-2.228-3.919-4.402-7.407-5.557z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label>
+                  {{userDetails.fullName}}
+                </ion-label>
+              </ion-item>
+            </div>
+            <div *ngIf="notEmpty(userDetails.myQuote)">
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 16 16">
+                    <path fill="currentColor"
+                          d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234c-.2.032-.352-.176-.273-.362c.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM7.194 6.766a1.688 1.688 0 0 0-.227-.272a1.467 1.467 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666c.343 0 .662-.095.931-.26c-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01c1.334-1.329 1.37-2.758.941-3.706a2.461 2.461 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01c1.334-1.329 1.37-2.758.942-3.706a2.466 2.466 0 0 0-.228-.4a1.686 1.686 0 0 0-.227-.273a1.466 1.466 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667c0 .92.777 1.666 1.734 1.666c.343 0 .662-.095.931-.26z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label>
+                  {{userDetails.myQuote}}
+                </ion-label>
+              </ion-item>
+            </div>
+            <div *ngIf="notEmpty(userDetails.myHobby)">
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 20 20">
+                    <path fill="currentColor"
+                          d="M8.55 3.06c1.01.34-1.95 2.01-.1 3.13c1.04.63 3.31-2.22 4.45-2.86c.97-.54 2.67-.65 3.53 1.23c1.09 2.38.14 8.57-3.79 11.06c-3.97 2.5-8.97 1.23-10.7-2.66c-2.01-4.53 3.12-11.09 6.61-9.9zm1.21 6.45c.73 1.64 4.7-.5 3.79-2.8c-.59-1.49-4.48 1.25-3.79 2.8z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label>
+                  {{userDetails.myHobby}}
+                </ion-label>
+              </ion-item>
+            </div>
+            <div *ngIf="notEmpty(userDetails.myOccupation)">
+              <ion-item class="white" lines="none">
+                <ion-avatar slot="start">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.8em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 1792 1536">
+                    <path fill="currentColor"
+                          d="M640 256h512V128H640v128zm-352 0v1280h-64q-92 0-158-66T0 1312V480q0-92 66-158t158-66h64zm1120 0v1280H384V256h128V96q0-40 28-68t68-28h576q40 0 68 28t28 68v160h128zm384 224v832q0 92-66 158t-158 66h-64V256h64q92 0 158 66t66 158z"/>
+                  </svg>
+                </ion-avatar>
+                <ion-label>
+                  {{userDetails.myOccupation}}
+                </ion-label>
+              </ion-item>
+            </div>
           </ion-list>
-        </form>
-      </div>
-      <ng-template #showOffMode>
-        <ion-list class="white ion-no-padding">
-
-          <div *ngIf="notEmpty(emailAddressValue)">
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 24 24">
-                  <path fill="currentColor"
-                        d="M12 22q-2.05 0-3.875-.788q-1.825-.787-3.187-2.15q-1.363-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.887q.787-1.813 2.15-3.175Q6.3 3.575 8.125 2.787Q9.95 2 12 2q2.075 0 3.887.787q1.813.788 3.175 2.151q1.363 1.362 2.15 3.175Q22 9.925 22 12v1.45q0 1.475-1.012 2.512Q19.975 17 18.5 17q-.9 0-1.675-.4t-1.275-1.05q-.675.675-1.587 1.063Q13.05 17 12 17q-2.075 0-3.537-1.463Q7 14.075 7 12t1.463-3.538Q9.925 7 12 7t3.538 1.462Q17 9.925 17 12v1.45q0 .725.45 1.137q.45.413 1.05.413q.6 0 1.05-.413q.45-.412.45-1.137V12q0-3.275-2.363-5.638Q15.275 4 12 4Q8.725 4 6.362 6.362Q4 8.725 4 12t2.362 5.637Q8.725 20 12 20h4q.425 0 .712.288q.288.287.288.712t-.288.712Q16.425 22 16 22Zm0-7q1.25 0 2.125-.875T15 12q0-1.25-.875-2.125T12 9q-1.25 0-2.125.875T9 12q0 1.25.875 2.125T12 15Z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label>
-                {{emailAddressValue}}
-              </ion-label>
-            </ion-item>
-          </div>
-          <div *ngIf="notEmpty(fullNameValue)">
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 26 26">
-                  <path fill="currentColor"
-                        d="M16.563 15.9c-.159-.052-1.164-.505-.536-2.414h-.009c1.637-1.686 2.888-4.399 2.888-7.07c0-4.107-2.731-6.26-5.905-6.26c-3.176 0-5.892 2.152-5.892 6.26c0 2.682 1.244 5.406 2.891 7.088c.642 1.684-.506 2.309-.746 2.397c-3.324 1.202-7.224 3.393-7.224 5.556v.811c0 2.947 5.714 3.617 11.002 3.617c5.296 0 10.938-.67 10.938-3.617v-.811c0-2.228-3.919-4.402-7.407-5.557z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label>
-                {{fullNameValue}}
-              </ion-label>
-            </ion-item>
-          </div>
-          <div *ngIf="notEmpty(myQuoteValue)">
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 16 16">
-                  <path fill="currentColor"
-                        d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234c-.2.032-.352-.176-.273-.362c.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM7.194 6.766a1.688 1.688 0 0 0-.227-.272a1.467 1.467 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666c.343 0 .662-.095.931-.26c-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01c1.334-1.329 1.37-2.758.941-3.706a2.461 2.461 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01c1.334-1.329 1.37-2.758.942-3.706a2.466 2.466 0 0 0-.228-.4a1.686 1.686 0 0 0-.227-.273a1.466 1.466 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667c0 .92.777 1.666 1.734 1.666c.343 0 .662-.095.931-.26z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label>
-                {{myQuoteValue}}
-              </ion-label>
-            </ion-item>
-          </div>
-          <div *ngIf="notEmpty(myHobbyValue)">
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 20 20">
-                  <path fill="currentColor"
-                        d="M8.55 3.06c1.01.34-1.95 2.01-.1 3.13c1.04.63 3.31-2.22 4.45-2.86c.97-.54 2.67-.65 3.53 1.23c1.09 2.38.14 8.57-3.79 11.06c-3.97 2.5-8.97 1.23-10.7-2.66c-2.01-4.53 3.12-11.09 6.61-9.9zm1.21 6.45c.73 1.64 4.7-.5 3.79-2.8c-.59-1.49-4.48 1.25-3.79 2.8z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label>
-                {{myHobbyValue}}
-              </ion-label>
-            </ion-item>
-          </div>
-          <div *ngIf="notEmpty(myOccupationValue)">
-            <ion-item class="white" lines="none">
-              <ion-avatar slot="start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.8em" height="2.5em" preserveAspectRatio="xMidYMid meet"
-                     viewBox="0 0 1792 1536">
-                  <path fill="currentColor"
-                        d="M640 256h512V128H640v128zm-352 0v1280h-64q-92 0-158-66T0 1312V480q0-92 66-158t158-66h64zm1120 0v1280H384V256h128V96q0-40 28-68t68-28h576q40 0 68 28t28 68v160h128zm384 224v832q0 92-66 158t-158 66h-64V256h64q92 0 158 66t66 158z"/>
-                </svg>
-              </ion-avatar>
-              <ion-label>
-                {{myOccupationValue}}
-              </ion-label>
-            </ion-item>
-          </div>
-        </ion-list>
-      </ng-template>
+        </ng-template>
 
     </div>
   </div>
+  </div>
+  <ng-template #showSpinner>
+    <ion-spinner class="loadingCenter" style="transform: scale(5); " name="bubbles"></ion-spinner>
+  </ng-template>
 
 </ion-content>
 
@@ -260,7 +348,7 @@
     <div slot="start" id="cancelbutton" (click)="setEditMode(false)">
       <a style="color: #1e1e00;">cancel</a>
     </div>
-    <div slot="end" id="submitbutton" (click)="setEditMode(false)">
+    <div slot="end" id="submitbutton" (click)="onEdit(editUser)">
       <a style="color: #1e1e00;">submit</a>
     </div>
   </div>

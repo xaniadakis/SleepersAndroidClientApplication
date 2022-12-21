@@ -1,7 +1,7 @@
 <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
 <ion-app>
   <ion-menu [type]="menuType" contentId="main-content">
-    <ion-header>
+    <ion-header >
       <ion-toolbar id="menu">
         <ion-title style="color: black; font-size: small; font-weight: bold" slot="start">ｓｌｅｅｐｅｒｓ</ion-title>
         <ion-title style="color: black; font-size: small; font-weight: bold" slot="end">眠そうな頭</ion-title>
@@ -38,7 +38,7 @@
           <ion-row class="info-row">
             <ion-card class="card info-card">
               <div *ngIf="loggedIn && !onProfileTab as value else goToPosts">
-                <ion-item lines="none" color="#2471A3" style="color: #2471A3" [routerLink]="['/home/profile']"
+                <ion-item lines="none" color="#2471A3" style="color: #2471A3" [routerLink]="['/home/profile', '0']"
                           routerLinkActive="active">
                   <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
                        viewBox="0 0 48 48">
@@ -161,7 +161,7 @@
             </div>
           </div>
           <ng-template #showEditProfileButton>
-            <div ontouchstart="">
+            <div *ngIf="!onFriendosProfileTab" ontouchstart="">
               <div id="editbutton" (click)="editProfile()">
                 <a style="color: #1e1e00;">Edit</a>
               </div>
