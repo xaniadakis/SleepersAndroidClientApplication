@@ -1,5 +1,5 @@
 import {ActionPerformed, PushNotifications, PushNotificationSchema, Token} from "@capacitor/push-notifications";
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Capacitor} from '@capacitor/core';
 import {ToastService} from "./toast.service";
 import {ToastButton} from "@ionic/angular";
@@ -15,9 +15,10 @@ export class PushNotificationsService {
   constructor(private toastService: ToastService,
               private clipboard: Clipboard,
               private userService: UserService
-  ) { }
+  ) {
+  }
 
-  initPush(){
+  initPush() {
     const isPushNotificationsAvailable = Capacitor.isPluginAvailable('PushNotifications');
 
     if (isPushNotificationsAvailable) {
@@ -59,7 +60,7 @@ export class PushNotificationsService {
       'pushNotificationReceived',
       (notification: PushNotificationSchema) => {
         // handle the notification payload
-        this.toastService.presentToastWithDuration("middle","" + notification.title + ": "+notification.body, 5000);
+        this.toastService.presentToastWithDuration("middle", "" + notification.title + ": " + notification.body, 5000);
 
       }
     );
@@ -67,7 +68,8 @@ export class PushNotificationsService {
     // Use the below code snippet to take the needed action when the user taps on the notification.
     PushNotifications.addListener(
       'pushNotificationActionPerformed',
-      (notification: ActionPerformed) => {
+      (actionPerformed: ActionPerformed) => {
+        actionPerformed.actionId
         // this.toastService.presentToastWithDuration("middle","notification tapped: " + notification.notification.body, 5000);
         // Take needed action on notification tap
       }

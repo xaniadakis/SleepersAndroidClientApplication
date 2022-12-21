@@ -24,7 +24,8 @@ export class TabsPage {
   constructor(
     private router: Router,
     public sharedService: SharedService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.router.events.subscribe(e => {
@@ -35,6 +36,6 @@ export class TabsPage {
 
   changedTab(postType: PostType) {
     localStorage.setItem("postType", postType)
-    console.log("just changed tab to: "+postType)
+    console.log("just changed tab to: " + postType)
   }
 }

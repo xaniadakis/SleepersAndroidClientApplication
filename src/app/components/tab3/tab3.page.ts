@@ -58,7 +58,7 @@ export class Tab3Page {
     , public postService: PostService
     , public modalService: ModalService
     , private sharedService: SharedService
-    ,  private popoverCtrl: PopoverController
+    , private popoverCtrl: PopoverController
   ) {
     // window.addEventListener("contextmenu", (e) => { e.preventDefault(); });
 
@@ -67,11 +67,11 @@ export class Tab3Page {
   ngOnInit() {
     // const info = getVideoId('https://www.youtube.com/watch?v=GfGT_4z9YTc');
     // this.videoId = "https://www.youtube.com/embed/"+info.id;
-    this.pageNumber=0;
+    this.pageNumber = 0;
     this.getAllPosts(this.pageNumber, this.pageLimit);
     this.sharedServiceSubscription = this.sharedService.onStory.subscribe({
       next: (event: boolean) => {
-        this.pageNumber=0;
+        this.pageNumber = 0;
         this.posts = [];
         console.log(`Received message #${event}`);
         this.getAllPosts(this.pageNumber, this.pageLimit);
@@ -89,33 +89,35 @@ export class Tab3Page {
     });
   }
 
-  reload(){
+  reload() {
     this.ngOnInit();
   }
 
-  async showReactions(event: Event, postId: bigint){
+  async showReactions(event: Event, postId: bigint) {
     let reactions = await this.popoverCtrl.create({
       component: ReactionsComponent,
       componentProps: {postId: postId, userId: this.userId, postType: this.postType},
-      event: event});
+      event: event
+    });
     console.log("react")
     await reactions.present();
   }
 
-  async showReactors(event: Event, postId: bigint){
+  async showReactors(event: Event, postId: bigint) {
     let reactions = await this.popoverCtrl.create({
       component: ShowReactionsComponent,
       componentProps: {postId: postId, userId: this.userId, postType: this.postType},
-      event: event});
+      event: event
+    });
     console.log("reactors")
     await reactions.present();
   }
 
-  like(event: Event){
+  like(event: Event) {
     window.alert("like");
   }
 
-  likeIt(postId: bigint){
+  likeIt(postId: bigint) {
     this.react(ReactionEnum.LOVE, postId);
     this.ngOnInit();
   }
@@ -151,8 +153,10 @@ export class Tab3Page {
     this.postForm.image = '';
   }
 
-  getAllPosts(pageNumber: number, pageLimit: number) {
-    this.postService.findAll(this.postType, pageNumber, pageLimit).subscribe(data => {
+  async getAllPosts(pageNumber: number, pageLimit: number) {
+    this.fetching = true;
+    console.log("fetching page: " + pageNumber + " with limit: " + pageLimit);
+    await this.postService.findAll(this.postType, pageNumber, pageLimit).subscribe(data => {
       console.log(data.postDtos)
       for (let i = 0; i < data.postDtos.length; i++) {
         this.posts.push(data.postDtos[i]);
@@ -171,8 +175,17 @@ export class Tab3Page {
     this.fetching = false;
   }
 
-  deletePost(postId:bigint) {
-    if(this.userId==null) {
+  async doInfinite(event: any) {
+    this.pageNumber += 1;
+    console.log("Shall fetch postados for page: " + this.pageNumber);
+    await this.getAllPosts(this.pageNumber, this.pageLimit);
+    if (!this.fetching) {
+      event.target.complete();
+    }
+  }
+
+  deletePost(postId: bigint) {
+    if (this.userId == null) {
       // this.router.navigateByUrl("/welcome");
       return
     }
@@ -183,28 +196,22 @@ export class Tab3Page {
   }
 
 
-  getReactionsDesc(num: number){
-    if(num>1)
-      return num+ " buddies have reacted";
-    if(num==0)
+  getReactionsDesc(num: number) {
+    if (num > 1)
+      return num + " buddies have reacted";
+    if (num == 0)
       return "nobuddy has reacted yet";
     else
-      return num+ " buddy has reacted";
+      return num + " buddy has reacted";
   }
 
-  getCommentsDesc(num: number){
-    if(num>1)
-      return "already " +num+ " comments";
-    if(num==0)
+  getCommentsDesc(num: number) {
+    if (num > 1)
+      return "already " + num + " comments";
+    if (num == 0)
       return "no comments yet";
     else
-      return "already " +num+ " comment";
+      return "already " + num + " comment";
   }
 
-  doInfinite(event: any) {
-    this.pageNumber += 1;
-    console.log("Shall fetch postados dor page: "+this.pageNumber);
-    this.getAllPosts(this.pageNumber, this.pageLimit);
-    event.target.complete();
-  }
 }

@@ -22,12 +22,13 @@ export class SimpleCommentDto {
   commentedAt: string;
 }
 
-export enum ReactionEnum{
-  ANGRY="ANGRY",
-  TURD="TURD",
-  RED_CARD="RED_CARD",
-  SAD="SAD",
-  LOVE="LOVE"
+export enum ReactionEnum {
+  ANGRY = "ANGRY",
+  TURD = "TURD",
+  RED_CARD = "RED_CARD",
+  SAD = "SAD",
+  LOVE = "LOVE",
+  HAHA = "HAHA"
 }
 
 export class SimpleReactionDto {

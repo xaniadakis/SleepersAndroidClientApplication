@@ -1,4 +1,3 @@
-
 /////////////////////////////////////////////////////////
 
 .container {
@@ -32,6 +31,7 @@
 .inner:hover {
   background-color: #5555ff;
 }
+
 .inputfile {
   opacity: 0;
   overflow: hidden;
@@ -40,6 +40,7 @@
   width: 50px;
   height: 50px;
 }
+
 .inputfile + label {
   font-size: 1.25rem;
   text-overflow: ellipsis;
@@ -53,12 +54,14 @@
   line-height: 50px;
   text-align: center;
 }
+
 .inputfile + label svg {
   fill: #fff;
 }
 
-.invalid-feedback{
+.invalid-feedback {
   color: #DA0037;
   font-size: small;
 }
+
 ///////////////////////////////////////////////////

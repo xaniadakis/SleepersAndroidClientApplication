@@ -27,7 +27,7 @@ export class SharedService {
   }
 
 
-  public posted(postType: PostType){
+  public posted(postType: PostType) {
     switch (postType) {
       case PostType.ART:
         this.onArtPost.emit(true);
@@ -45,7 +45,7 @@ export class SharedService {
     }
   }
 
-  public reacted(reactionEnum: ReactionEnum){
+  public reacted(reactionEnum: ReactionEnum) {
     this.onReact.emit(reactionEnum);
   }
 }

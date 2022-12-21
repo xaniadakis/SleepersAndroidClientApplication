@@ -76,7 +76,7 @@ export class ProfilePage implements OnInit {
     this.sharedService.hidePostButtonForALilWhile(true);
     this.nicknameValue = localStorage.getItem("name");
     this.emailAddressValue = localStorage.getItem('email');
-    console.log('Initializing ProfilePage: '+this.nicknameValue +", "+this.emailAddressValue);
+    console.log('Initializing ProfilePage: ' + this.nicknameValue + ", " + this.emailAddressValue);
   }
 
   goBack() {
@@ -156,17 +156,16 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  checkIfUserExists(username: string){
+  checkIfUserExists(username: string) {
     this.shortUsername = null;
     this.validUsername = null;
-    if(username.trim().length>=4) {
+    if (username.trim().length >= 4) {
       this.userService.checkIfUserExists(username).subscribe(data => {
         this.validUsername = !data;
         this.checkedUsername = true;
         console.log(this.validUsername)
       });
-    }
-    else {
+    } else {
       this.shortUsername = true;
       this.checkedUsername = true;
     }
@@ -179,14 +178,13 @@ export class ProfilePage implements OnInit {
   checkIfUserExistsWithMail(value: any) {
     this.shortMailAddress = null;
     this.validMailAddress = null;
-    if(value.trim().length>=9) {
+    if (value.trim().length >= 9) {
       this.userService.checkIfUserExistsWithMail(value).subscribe(data => {
         this.validUsername = !data;
         this.checkedMailAddress = true;
         console.log(this.validMailAddress)
       });
-    }
-    else {
+    } else {
       this.shortMailAddress = true;
       this.checkedMailAddress = true;
     }

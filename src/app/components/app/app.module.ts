@@ -26,7 +26,7 @@ import {ModalService} from "../../service/modal.service";
 import {CreatePostModalComponent} from "../create-post-modal/create-post-modal.component";
 import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {AppVersion} from "@awesome-cordova-plugins/app-version/ngx";
-import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
+import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 import {SafePipe} from "../safe-pipe/safe.pipe";
 import {NgxImageCompressService} from "ngx-image-compress";

@@ -3,6 +3,7 @@ input[type="file"] {
   margin: 0px;
   padding: 0px;
 }
+
 .custom-file-upload {
   //border: 1px solid #000;
   color: #fff7;
@@ -19,11 +20,12 @@ input[type="file"] {
   margin: 0px;
   width: 50%;
 }
+
 .custom-file-upload:hover {
   background-color: #333333;
 }
 
-.invalid-feedback{
+.invalid-feedback {
   color: #DA0037;
   font-size: small;
 }

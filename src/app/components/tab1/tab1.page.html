@@ -72,7 +72,8 @@
                             (click)="showReactions($event, post.id);"
                             (press)="showReactors($event, post.id);"
                             icon-left>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
                        viewBox="0 0 24 24">
                     <path fill="#DA0037"
                           d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z"/>
@@ -87,7 +88,8 @@
                 <ion-button class="transparent-button ion-no-padding ion-no-margin "
                             icon-left
                             (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
                        viewBox="0 0 24 24">
                     <g transform="translate(24 0) scale(-1 1)">
                       <path fill="white"
@@ -131,79 +133,78 @@
         </div>
       </ion-item-sliding>
     </tr>
-    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" >
-      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles" ></ion-infinite-scroll-content>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
-<!--    <ion-card>-->
-<!--      <ion-card-header>-->
-<!--        <ion-card-subtitle type="dark">-->
-<!--          <div class="ion-float-start">Μήτσος Μητσίδιος</div>-->
-<!--          <div class="ion-float-end">23:45</div>-->
-<!--        </ion-card-subtitle>-->
-<!--      </ion-card-header>-->
-<!--      <img alt="ey where my pic at yo" src="./assets/4.webp"/>-->
-<!--      &lt;!&ndash;    <ion-card-content>&ndash;&gt;-->
-<!--      &lt;!&ndash;    </ion-card-content>&ndash;&gt;-->
-<!--    </ion-card>-->
-<!--    <ion-card>-->
-<!--      <ion-card-header>-->
-<!--        <ion-card-subtitle type="dark">-->
-<!--          <div class="ion-float-start">Άρης Κουκουνάρης</div>-->
-<!--          <div class="ion-float-end">22:19</div>-->
-<!--        </ion-card-subtitle>-->
-<!--      </ion-card-header>-->
-<!--      <img alt="ey where my pic at yo" src="./assets/2.webp"/>-->
-<!--      <ion-card-content>-->
-<!--      <pre id="poem1">-->
-<!--What happens to a dream deferred?-->
+    <!--    <ion-card>-->
+    <!--      <ion-card-header>-->
+    <!--        <ion-card-subtitle type="dark">-->
+    <!--          <div class="ion-float-start">Μήτσος Μητσίδιος</div>-->
+    <!--          <div class="ion-float-end">23:45</div>-->
+    <!--        </ion-card-subtitle>-->
+    <!--      </ion-card-header>-->
+    <!--      <img alt="ey where my pic at yo" src="./assets/4.webp"/>-->
+    <!--      &lt;!&ndash;    <ion-card-content>&ndash;&gt;-->
+    <!--      &lt;!&ndash;    </ion-card-content>&ndash;&gt;-->
+    <!--    </ion-card>-->
+    <!--    <ion-card>-->
+    <!--      <ion-card-header>-->
+    <!--        <ion-card-subtitle type="dark">-->
+    <!--          <div class="ion-float-start">Άρης Κουκουνάρης</div>-->
+    <!--          <div class="ion-float-end">22:19</div>-->
+    <!--        </ion-card-subtitle>-->
+    <!--      </ion-card-header>-->
+    <!--      <img alt="ey where my pic at yo" src="./assets/2.webp"/>-->
+    <!--      <ion-card-content>-->
+    <!--      <pre id="poem1">-->
+    <!--What happens to a dream deferred?-->
 
-<!--Does it dry up-->
-<!--like a raisin in the sun?-->
-<!--Or fester like a sore—-->
-<!--And then run?-->
-<!--Does it stink like rotten meat?-->
-<!--Or crust and sugar over—-->
-<!--like a syrupy sweet?-->
+    <!--Does it dry up-->
+    <!--like a raisin in the sun?-->
+    <!--Or fester like a sore—-->
+    <!--And then run?-->
+    <!--Does it stink like rotten meat?-->
+    <!--Or crust and sugar over—-->
+    <!--like a syrupy sweet?-->
 
-<!--Maybe it just sags-->
-<!--like a heavy load.-->
+    <!--Maybe it just sags-->
+    <!--like a heavy load.-->
 
-<!--Or does it explode?</pre>-->
-<!--      </ion-card-content>-->
-<!--    </ion-card>-->
-<!--    <ion-card>-->
-<!--      <ion-card-header>-->
-<!--        <ion-card-subtitle type="dark">-->
-<!--          <div class="ion-float-start">Γιάννης Γιαγλίδιος</div>-->
-<!--          <div class="ion-float-end">20:30</div>-->
-<!--        </ion-card-subtitle>-->
-<!--      </ion-card-header>-->
-<!--      <img alt="ey where my pic at yo" src="./assets/3.webp"/>-->
-<!--      &lt;!&ndash;    <ion-card-content>&ndash;&gt;-->
-<!--      &lt;!&ndash;    </ion-card-content>&ndash;&gt;-->
-<!--    </ion-card>-->
-<!--    <ion-card>-->
-<!--      <ion-card-header>-->
-<!--        <ion-card-subtitle type="dark">-->
-<!--          <div class="ion-float-start">Αλέκος Αμαξάκιας</div>-->
-<!--          <div class="ion-float-end">16:06</div>-->
-<!--        </ion-card-subtitle>-->
-<!--      </ion-card-header>-->
-<!--      <img alt="ey where my pic at yo" src="./assets/1.webp"/>-->
-<!--      <ion-card-content>-->
-<!--      <pre id="poem2">-->
-<!--If you can dream—and not make dreams your master;-->
-<!--If you can think—and not make thoughts your aim;-->
-<!--If you can meet with triumph and disaster-->
-<!--And treat those two impostors just the same;-->
-<!--If you can bear to hear the truth you’ve spoken-->
-<!--Twisted by knaves to make a trap for fools,-->
-<!--Or watch the things you gave your life to broken,-->
-<!--And stoop and build ’em up with wornout tools;</pre>-->
-<!--      </ion-card-content>-->
-<!--    </ion-card>-->
+    <!--Or does it explode?</pre>-->
+    <!--      </ion-card-content>-->
+    <!--    </ion-card>-->
+    <!--    <ion-card>-->
+    <!--      <ion-card-header>-->
+    <!--        <ion-card-subtitle type="dark">-->
+    <!--          <div class="ion-float-start">Γιάννης Γιαγλίδιος</div>-->
+    <!--          <div class="ion-float-end">20:30</div>-->
+    <!--        </ion-card-subtitle>-->
+    <!--      </ion-card-header>-->
+    <!--      <img alt="ey where my pic at yo" src="./assets/3.webp"/>-->
+    <!--      &lt;!&ndash;    <ion-card-content>&ndash;&gt;-->
+    <!--      &lt;!&ndash;    </ion-card-content>&ndash;&gt;-->
+    <!--    </ion-card>-->
+    <!--    <ion-card>-->
+    <!--      <ion-card-header>-->
+    <!--        <ion-card-subtitle type="dark">-->
+    <!--          <div class="ion-float-start">Αλέκος Αμαξάκιας</div>-->
+    <!--          <div class="ion-float-end">16:06</div>-->
+    <!--        </ion-card-subtitle>-->
+    <!--      </ion-card-header>-->
+    <!--      <img alt="ey where my pic at yo" src="./assets/1.webp"/>-->
+    <!--      <ion-card-content>-->
+    <!--      <pre id="poem2">-->
+    <!--If you can dream—and not make dreams your master;-->
+    <!--If you can think—and not make thoughts your aim;-->
+    <!--If you can meet with triumph and disaster-->
+    <!--And treat those two impostors just the same;-->
+    <!--If you can bear to hear the truth you’ve spoken-->
+    <!--Twisted by knaves to make a trap for fools,-->
+    <!--Or watch the things you gave your life to broken,-->
+    <!--And stoop and build ’em up with wornout tools;</pre>-->
+    <!--      </ion-card-content>-->
+    <!--    </ion-card>-->
   </ng-template>
-
 
 
   <!--  <iframe width="1861" height="772" src="https://www.youtube.com/embed/zALuVOinquY" title="Η διαφοροποίηση αναζητήσεων των νέων - π. Αθανάσιος Μυτιληναίος" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->

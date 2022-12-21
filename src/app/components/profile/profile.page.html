@@ -1,11 +1,11 @@
 <ion-content fullscreen="true" slot="fixed">
   <div class="card ion-no-padding ion-no-margin">
     <div class="header ion-no-padding ion-no-margin">
-<!--      <div>-->
-<!--        <div id="editbutton" (click)="setEditMode(true)">-->
-<!--          <a style="color: #1e1e00;">edit</a>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <div id="editbutton" (click)="setEditMode(true)">-->
+      <!--          <a style="color: #1e1e00;">edit</a>-->
+      <!--        </div>-->
+      <!--      </div>-->
 
       <div class="avatar">
         <img class="profilepic" [src]="(imageApi + profilePicado)" alt="">
@@ -51,7 +51,7 @@
               <ion-label class="white" position="stacked">nickname</ion-label>
               <ion-input [clearInput]="true" placeholder="change your nickname" [value]="nicknameValue"
                          name="nickname" class="form-control" [(ngModel)]="editUser.nickname" #nickname="ngModel"
-                         minlength="4" ></ion-input>
+                         minlength="4"></ion-input>
               <ion-avatar slot="end" (click)="checkIfUserExists(nickname.value)" style="cursor: pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" preserveAspectRatio="xMidYMid meet"
                      viewBox="0 0 24 24">
@@ -59,16 +59,16 @@
                         d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4ZM12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4Q8.65 4 6.325 6.325Q4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/>
                 </svg>
               </ion-avatar>
-                <div *ngIf="checkedUsername && (!validUsername || shortUsername) as value else userNameValidBlock"
-                     class="invalid-feedback">
-                  <div *ngIf="shortUsername else ownedUsername">nickname be too short</div>
-                  <ng-template #ownedUsername>
-                    <div *ngIf="!validUsername">nickname is already owned</div>
-                  </ng-template>
-                </div>
-                <ng-template #userNameValidBlock>
-                  <div *ngIf="validUsername" style="color: #2dd36f; font-size: smaller">nickname be valid</div>
+              <div *ngIf="checkedUsername && (!validUsername || shortUsername) as value else userNameValidBlock"
+                   class="invalid-feedback">
+                <div *ngIf="shortUsername else ownedUsername">nickname be too short</div>
+                <ng-template #ownedUsername>
+                  <div *ngIf="!validUsername">nickname is already owned</div>
                 </ng-template>
+              </div>
+              <ng-template #userNameValidBlock>
+                <div *ngIf="validUsername" style="color: #2dd36f; font-size: smaller">nickname be valid</div>
+              </ng-template>
             </ion-item>
 
             <ion-item class="white" lines="none">

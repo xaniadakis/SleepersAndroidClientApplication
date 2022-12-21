@@ -29,7 +29,7 @@ const routes: Routes = [
           component: Tab3Page,
         }
       ]
-    },{
+    }, {
       path: 'profile',
       component: ProfilePage
     }

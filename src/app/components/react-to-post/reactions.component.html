@@ -1,8 +1,8 @@
 <ion-content class="ion-no-padding">
   <ion-grid class="ion-no-padding">
     <ion-row class="ion-no-padding">
-      <!--      love -->
-      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+      <!--      love    -->
+      <ion-col class="ion-no-padding" size="2" style="padding-left: 3px;">
         <ion-button
           class="ion-no-padding"
           (pressup)="love()"
@@ -15,8 +15,19 @@
           </svg>
         </ion-button>
       </ion-col>
-<!--      sad -->
-      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+      <!--      haha    -->
+      <ion-col class="ion-no-padding" size="2" style="padding-left: -4px; margin-left: -3px">
+        <ion-button
+          class="ion-no-padding"
+          (pressup)="haha()"
+          (click)="haha()"
+          round icon-only fill="clear">
+          <img style="width: 40px; height: 33.5px; padding-bottom: 0; border-radius: 40%" src='./assets/icons/haha.png'>
+
+        </ion-button>
+      </ion-col>
+      <!--      sad     -->
+      <ion-col class="ion-no-padding" size="2" style="padding-left: 3px; ">
         <ion-button class="ion-no-padding"
                     (pressup)="sad()"
                     (click)="sad()"
@@ -36,28 +47,28 @@
           </svg>
         </ion-button>
       </ion-col>
-<!--      red card -->
-      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+      <!--      red card  -->
+      <ion-col class="ion-no-padding" size="2" style="padding-left: -4px;">
         <ion-button
           class="ion-no-padding"
           (pressup)="redCard()"
           (click)="redCard()"
           round icon-only fill="clear">
-          <ion-img style="width: 45px; height: 45px; padding-top: 5px;" src='./assets/icons/red.png'></ion-img>
+          <ion-img style="width: 40px; height: 45px; padding-top: 5px;" src='./assets/icons/red.png'></ion-img>
         </ion-button>
       </ion-col>
       <!--      cringe -->
-<!--      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 10px;">-->
-<!--        <ion-button-->
-<!--          class="ion-no-padding"-->
-<!--          (pressup)="share()"-->
-<!--          (click)="share()"-->
-<!--          round icon-only fill="clear">-->
-<!--          <ion-img class="ion-no-padding" style="width: 35px; height: 35px; " src='./assets/icons/cringeIcon.png'></ion-img>-->
-<!--        </ion-button>-->
-<!--      </ion-col>-->
-      <!--      turd -->
-      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px;">
+      <!--      <ion-col class="ion-no-padding" size="2" style="padding-left: 10px;">-->
+      <!--        <ion-button-->
+      <!--          class="ion-no-padding"-->
+      <!--          (pressup)="share()"-->
+      <!--          (click)="share()"-->
+      <!--          round icon-only fill="clear">-->
+      <!--          <ion-img class="ion-no-padding" style="width: 35px; height: 35px; " src='./assets/icons/cringeIcon.png'></ion-img>-->
+      <!--        </ion-button>-->
+      <!--      </ion-col>-->
+      <!--      turd    -->
+      <ion-col class="ion-no-padding" size="2" style="padding-left: 0px;">
         <ion-button
           class="ion-no-padding"
           (pressup)="turd()"
@@ -66,14 +77,15 @@
           <ion-img class="ion-no-padding" style="width: 35px; height: 35px; " src='./assets/icons/poop.png'></ion-img>
         </ion-button>
       </ion-col>
-      <!--      angry -->
-      <ion-col class="ion-no-padding" size="2.4" style="padding-left: 5px; padding-right: 10px;">
+      <!--      angry     -->
+      <ion-col class="ion-no-padding" size="2" style="padding-left: 1px; padding-right: 10px;">
         <ion-button
           class="ion-no-padding"
           (pressup)="angryBird()"
           (click)="angryBird()"
           round icon-only fill="clear">
-          <ion-img class="ion-no-padding" style="width: 35px; height: 35px; " src='./assets/icons/angryBird.png'></ion-img>
+          <ion-img class="ion-no-padding" style="width: 35px; height: 35px; "
+                   src='./assets/icons/angryBird.png'></ion-img>
         </ion-button>
       </ion-col>
     </ion-row>

@@ -8,14 +8,16 @@
   <form #form="ngForm" (ngSubmit)="onLogin(form)" #f="ngForm">
     <ion-item lines="full">
       <ion-label position="floating">Username</ion-label>
-      <ion-input type="text" name="username" class="form-control" [(ngModel)]="login.username" #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="3"></ion-input>
+      <ion-input type="text" name="username" class="form-control" [(ngModel)]="login.username" #username="ngModel"
+                 [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="3"></ion-input>
       <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
         <div *ngIf="username.errors?.required">Username is required</div>
       </div>
     </ion-item>
     <ion-item lines="full">
       <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" name="password" class="form-control" [(ngModel)]="login.password" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required minlength="4"></ion-input>
+      <ion-input type="password" name="password" class="form-control" [(ngModel)]="login.password" #password="ngModel"
+                 [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required minlength="4"></ion-input>
       <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
         <div *ngIf="password.errors?.required">Password is required</div>
         <div *ngIf="password.errors?.minlength">Passwords contain at least 4 characters</div>

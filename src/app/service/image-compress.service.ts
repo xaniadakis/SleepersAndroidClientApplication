@@ -26,7 +26,7 @@ export class ImageCompressService {
       .then(
         (result: string) => {
           this.imgResult = result;
-          console.error('img size: ', this.imageCompress.byteCount(result)/1000000, 'MB')
+          console.error('img size: ', this.imageCompress.byteCount(result) / 1000000, 'MB')
 
         },
         (result: string) => {
@@ -40,14 +40,14 @@ export class ImageCompressService {
       ({image, orientation}) => {
 
         // this.imgResultBeforeCompression = image;
-        console.log("Size in bytes of the uploaded image was:",this.imageCompress.byteCount(image)/1000000, 'MB');
+        console.log("Size in bytes of the uploaded image was:", this.imageCompress.byteCount(image) / 1000000, 'MB');
 
         this.imageCompress
           .compressFile(image, orientation, 50, 50) // 50% ratio, 50% quality
           .then(
             (compressedImage) => {
               this.imgResult = compressedImage;
-              console.log("Size in bytes after compression is now:",this.imageCompress.byteCount(compressedImage)/1000000, 'MB');
+              console.log("Size in bytes after compression is now:", this.imageCompress.byteCount(compressedImage) / 1000000, 'MB');
               return compressedImage;
             }
           );

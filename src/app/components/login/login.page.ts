@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import {Component, OnInit} from '@angular/core';
+import {ToastController} from '@ionic/angular';
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
 import {Headers} from "node-fetch";
@@ -9,7 +9,7 @@ import {JwtTokenPayload} from "../../dto/jwt-token";
 import {GlobalConstants} from "../../util/global-constants";
 import {SharedService} from "../../service/shared.service";
 
-async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message:string) {
+async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
   const toast = await toastController.create({
     message: message,
     duration: 1000
@@ -17,15 +17,15 @@ async function presentToast(toastController: ToastController, position: 'top' | 
   await toast.present();
 }
 
-function onLoginLoadProfilePicado(username:string, profilePicName: string){
+function onLoginLoadProfilePicado(username: string, profilePicName: string) {
   console.log("picado lanado")
-  const profilePic: string = GlobalConstants.APIURL+"/file/image?filename="+profilePicName;
+  const profilePic: string = GlobalConstants.APIURL + "/file/image?filename=" + profilePicName;
   const profilePicDiv: HTMLElement | null = document.getElementById("profilePic");
-  if(profilePicDiv != null) {
+  if (profilePicDiv != null) {
     profilePicDiv.innerHTML = "<div class=\"container\">\n" +
       "  <div class=\"outer\">\n" +
       "    <ion-avatar>\n" +
-      "       <img alt=\""+username+"'s Profile Picture\" id=\"profilePicImg\" src=\"" + profilePic + "\"/>\n" +
+      "       <img alt=\"" + username + "'s Profile Picture\" id=\"profilePicImg\" src=\"" + profilePic + "\"/>\n" +
       "    </ion-avatar>\n" +
       // "    <ion-img height=\"50px;\" width=\"50px;\" alt=\""+username+"'s Profile Picture\" id=\"profilePicImg\" src=\"" + profilePic + "\"></ion-img>\n" +
       "    <div class=\"inner\">\n" +
@@ -40,7 +40,7 @@ function onLoginLoadProfilePicado(username:string, profilePicName: string){
     //   "<ion-row><ion-item>Welcome "+username+ "!</ion-item></ion-row>"
     // "</ion-card>";
     console.log(profilePicDiv.innerHTML)
-  }else console.log("null profilePicDiv");
+  } else console.log("null profilePicDiv");
 }
 
 
@@ -57,12 +57,14 @@ export class LoginPage implements OnInit {
     password: ''
   };
 
-  constructor(private toastController: ToastController, private router: Router, private sharedService: SharedService) {}
+  constructor(private toastController: ToastController, private router: Router, private sharedService: SharedService) {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
-  onLogin(form: NgForm){
-    if(form.valid) {
+  onLogin(form: NgForm) {
+    if (form.valid) {
       var raw = JSON.stringify({
         "username": form.controls["username"].value,
         "password": form.controls["password"].value
@@ -103,8 +105,7 @@ export class LoginPage implements OnInit {
       xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
       xhr.withCredentials = false;
       xhr.send(raw);
-    }
-    else
+    } else
       presentToast(this.toastController, "middle", "Something's up with your creds, sign in properly")
   }
 

@@ -53,6 +53,8 @@ export class ShowReactionsComponent {
         return this.iconsDir + "sad.png"
       case ReactionEnum.TURD:
         return this.iconsDir + "poop.png"
+      case ReactionEnum.HAHA:
+        return this.iconsDir + "haha.png"
       case ReactionEnum.LOVE:
       default:
         return this.iconsDir + "love.png"

@@ -179,7 +179,7 @@ export class EditPostModalComponent {
             this.youtubeVideoId = getVideoId(data.url).id;
             this.imgResult = null;
             if (this.youtubeVideoId == null)
-              this.toastService.presentToast("middle","Gimme a valid link lil mate");
+              this.toastService.presentToast("middle", "Gimme a valid link lil mate");
             else
               this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
           }

@@ -9,7 +9,7 @@ import {JwtTokenPayload} from "../../dto/jwt-token";
 import {GlobalConstants} from "../../util/global-constants";
 import {SharedService} from "../../service/shared.service";
 
-async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message:string) {
+async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
   const toast = await toastController.create({
     message: message,
     duration: 1000
@@ -24,11 +24,11 @@ async function presentToast(toastController: ToastController, position: 'top' | 
   await toast.present();
 }
 
-function onLoginLoadProfilePicado(username:string, profilePicName: string){
+function onLoginLoadProfilePicado(username: string, profilePicName: string) {
   console.log("picado lanado")
-  const profilePic: string = GlobalConstants.APIURL+"/file/image?filename="+profilePicName;
+  const profilePic: string = GlobalConstants.APIURL + "/file/image?filename=" + profilePicName;
   const profilePicDiv: HTMLElement | null = document.getElementById("profilePic");
-  if(profilePicDiv != null) {
+  if (profilePicDiv != null) {
     profilePicDiv.innerHTML = "<div class=\"container\">\n" +
       "  <div class=\"outer\">\n" +
       "    <div class=\"inner\">\n" +
@@ -43,7 +43,7 @@ function onLoginLoadProfilePicado(username:string, profilePicName: string){
     //   "<ion-row><ion-item>Welcome "+username+ "!</ion-item></ion-row>"
     // "</ion-card>";
     console.log(profilePicDiv.innerHTML)
-  }else console.log("null profilePicDiv");
+  } else console.log("null profilePicDiv");
 }
 
 
@@ -62,17 +62,19 @@ export class SignupPage implements OnInit {
     profilePic: ''
   };
 
-  constructor(private toastController: ToastController, private router: Router, private sharedService: SharedService) {}
+  constructor(private toastController: ToastController, private router: Router, private sharedService: SharedService) {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   onFileChanged(event: any): void {
     this.signup.profilePic = event.target.files[0];
     console.log(event);
   }
 
-  onSignup(form: NgForm){
-    if(form.valid)
+  onSignup(form: NgForm) {
+    if (form.valid)
       this.xhrSignUpRequest(form);
   }
 
@@ -86,13 +88,15 @@ export class SignupPage implements OnInit {
     const options = {
       url: GlobalConstants.APIURL + "/user/signup" + requestParams,
       data: formData,
-      headers: { "Content-Type": "multipart/form-data",
-                 "Accept": "*/*",
-                 "Access-Control-Allow-Origin": "*"}
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Accept": "*/*",
+        "Access-Control-Allow-Origin": "*"
+      }
     };
     var myRouter = this.router;
     var myToastController = this.toastController;
-    Http.request({ ...options, method: 'POST' })
+    Http.request({...options, method: 'POST'})
       .then(async response => {
         if (response.status === 200) {
           const jsonResponse: SignUpResponse = await response.data;
@@ -137,7 +141,7 @@ export class SignupPage implements OnInit {
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         console.log(JSON.stringify(JSON.parse(this.responseText)));
-        if(GlobalConstants.DEBUG)
+        if (GlobalConstants.DEBUG)
           presentToast(myToastController, "top", JSON.stringify(JSON.parse(this.responseText)));
 
         if (xhr.status == 200) {
@@ -167,7 +171,7 @@ export class SignupPage implements OnInit {
     // console.log("size of req is "+formData.get("profilePic").length)
     xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhr.withCredentials = false;
-    if(GlobalConstants.DEBUG)
+    if (GlobalConstants.DEBUG)
       presentToast(myToastController, "middle", "Sending request to " + GlobalConstants.APIURL + "/user/signup" + requestParams);
     xhr.send(formData);
   }

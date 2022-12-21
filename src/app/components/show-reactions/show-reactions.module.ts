@@ -15,4 +15,5 @@ import {ShowReactionsRoutingModule} from "./show-reactions-routing.module";
   ],
   declarations: [ShowReactionsComponent]
 })
-export class ReactionsPageModule {}
+export class ReactionsPageModule {
+}

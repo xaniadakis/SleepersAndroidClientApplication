@@ -3,8 +3,8 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()" id="logo-button">
         <!--              [routerLink]="['/welcome']" -->
-        <ion-img  style="margin-left: 2.5px; padding-bottom: 0; padding-top: 0; width:16vw;  height: 16vh;"
-                  fill="clear"
+        <ion-img style="margin-left: 2.5px; padding-bottom: 0; padding-top: 0; width:16vw;  height: 16vh;"
+                 fill="clear"
                  class="logo"
                  src="../assets/og_turtle_cropped.png" alt="logo"></ion-img>
       </ion-button>
@@ -32,7 +32,7 @@
       </div>
       <form #form="ngForm" (ngSubmit)="addComment(form)" #f="ngForm" novalidate>
         <ion-item class="inline ion-no-padding">
-          <ion-chip style="padding-left: 20px;">
+          <ion-chip style="padding-left: 13px;">
             <!--          <ion-avatar>-->
             <!--            <img alt="avatar" src="{{imageApi+profilePic}}"/>-->
             <!--          </ion-avatar>-->
@@ -53,23 +53,24 @@
           </ion-button>
         </ion-item>
       </form>
-      <tr *ngFor="let comment of comments">
-        <ion-item class="inline ion-no-padding">
-          <ion-chip style="padding-left: 20px;">
+      <ion-list text-wrap *ngFor="let comment of comments">
+        <ion-item text-wrap class="inline ion-no-padding" s style="margin-left: 8px;">
+          <ion-chip class="ion-no-padding ion-no-margin"
+                    style="margin-top:0; top:0; bottom:0; padding: 0 5px 0 8px; width: 85px; height: 38px;">
             <!--          <ion-avatar>-->
             <!--            <img alt="avatar" src="{{imageApi+profilePic}}"/>-->
             <!--          </ion-avatar>-->
-            <ion-label class="ion-no-padding commentator">{{comment.owner}}</ion-label>
+            <ion-label text-wrap class="ion-no-padding ion-no-margin commentator">{{comment.owner}}</ion-label>
           </ion-chip>
 
           <pre class="comment">{{comment.text}}</pre>
-<!--          <div class="ion-float-right">-->
-<!--            <ion-chip>-->
-<!--              <ion-label>{{comment.commentedAt}}</ion-label>-->
-<!--            </ion-chip>-->
-<!--          </div>-->
+          <!--          <div class="ion-float-right">-->
+          <!--            <ion-chip>-->
+          <!--              <ion-label>{{comment.commentedAt}}</ion-label>-->
+          <!--            </ion-chip>-->
+          <!--          </div>-->
         </ion-item>
-      </tr>
+      </ion-list>
     </ion-card>
   </ion-item>
 

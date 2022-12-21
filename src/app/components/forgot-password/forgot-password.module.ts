@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { ForgotPasswordPageRoutingModule } from './forgot-password-routing.module';
+import {ForgotPasswordPageRoutingModule} from './forgot-password-routing.module';
 
-import { ForgotPasswordPage } from './forgot-password.page';
+import {ForgotPasswordPage} from './forgot-password.page';
 
 @NgModule({
   imports: [
@@ -17,4 +17,5 @@ import { ForgotPasswordPage } from './forgot-password.page';
   ],
   declarations: [ForgotPasswordPage]
 })
-export class ForgotPasswordPageModule {}
+export class ForgotPasswordPageModule {
+}

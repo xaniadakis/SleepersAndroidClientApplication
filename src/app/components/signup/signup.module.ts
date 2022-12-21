@@ -9,12 +9,13 @@ import {SignupPageRoutingModule} from './signup-routing.module';
 import {SignupPage} from './signup.page';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        SignupPageRoutingModule
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    SignupPageRoutingModule
+  ],
   declarations: [SignupPage]
 })
-export class SignupPageModule {}
+export class SignupPageModule {
+}

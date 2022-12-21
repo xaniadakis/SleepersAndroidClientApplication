@@ -1,9 +1,9 @@
-export class JwtTokenHeader{
+export class JwtTokenHeader {
   typ: string;
   alg: string;
 }
 
-export class JwtTokenPayload{
+export class JwtTokenPayload {
   iat: bigint;
   exp: bigint;
   name: string;

@@ -36,10 +36,10 @@ export class ShowPostModalComponent {
   constructor(private modalCtrl: ModalController
     , private toastService: ToastService
     , private postService: PostService
-  , private platform: Platform) {
-      this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
-        return this.modalCtrl.dismiss(null, 'cancel');
-      })
+    , private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
+      return this.modalCtrl.dismiss(null, 'cancel');
+    })
   }
 
   ngOnInit() {

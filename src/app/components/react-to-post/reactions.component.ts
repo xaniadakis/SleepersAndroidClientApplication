@@ -47,6 +47,11 @@ export class ReactionsComponent {
     this.dismiss(ReactionEnum.RED_CARD);
   }
 
+  haha() {
+    // window.alert("redCard");
+    this.dismiss(ReactionEnum.HAHA);
+  }
+
   sad() {
     // window.alert("sad");
     this.dismiss(ReactionEnum.SAD);

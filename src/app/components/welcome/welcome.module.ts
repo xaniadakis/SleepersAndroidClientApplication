@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { WelcomePageRoutingModule } from './welcome-routing.module';
+import {WelcomePageRoutingModule} from './welcome-routing.module';
 
-import { WelcomePage } from './welcome.page';
+import {WelcomePage} from './welcome.page';
 
 @NgModule({
   imports: [
@@ -17,4 +17,5 @@ import { WelcomePage } from './welcome.page';
   ],
   declarations: [WelcomePage]
 })
-export class WelcomePageModule {}
+export class WelcomePageModule {
+}

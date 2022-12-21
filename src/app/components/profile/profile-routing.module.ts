@@ -8,6 +8,7 @@ const routes: Routes = [
     component: ProfilePage
   }
 ];
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

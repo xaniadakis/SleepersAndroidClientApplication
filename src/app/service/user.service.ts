@@ -39,10 +39,10 @@ export class UserService {
   }
 
   public checkIfUserExists(username: string) {
-    return this.http.get<boolean>(this.checkIfUserExistsUrl+"?username="+username);
+    return this.http.get<boolean>(this.checkIfUserExistsUrl + "?username=" + username);
   }
 
   checkIfUserExistsWithMail(mail: any) {
-    return this.http.get<boolean>(this.checkIfUserExistsUrlWithMail+"?mail="+mail);
+    return this.http.get<boolean>(this.checkIfUserExistsUrlWithMail + "?mail=" + mail);
   }
 }

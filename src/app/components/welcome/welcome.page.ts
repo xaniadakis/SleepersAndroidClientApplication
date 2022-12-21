@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ToastController} from "@ionic/angular";
 import {Router} from "@angular/router";
 
@@ -11,9 +11,10 @@ export class WelcomePage implements OnInit {
 
   constructor(
     private toastController: ToastController, private router: Router
-  ) {}
+  ) {
+  }
 
-  async presentToast(position: 'top' | 'middle' | 'bottom', message:string, url:string) {
+  async presentToast(position: 'top' | 'middle' | 'bottom', message: string, url: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 5000,
@@ -21,7 +22,9 @@ export class WelcomePage implements OnInit {
         {
           text: 'Ok navigate me home.',
           role: 'cancel',
-          handler: () => { this.navigateToHome(); }
+          handler: () => {
+            this.navigateToHome();
+          }
         }
       ]
     });
@@ -33,9 +36,10 @@ export class WelcomePage implements OnInit {
     this.router.navigateByUrl("/home/tabs/tab2")
   }
 
-  navigateToUrl(url:string) {
+  navigateToUrl(url: string) {
     this.router.navigateByUrl(url)
   }
+
   ngOnInit() {
   }
 
