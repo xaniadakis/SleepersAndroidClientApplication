@@ -33,6 +33,7 @@ import {NgxImageCompressService} from "ngx-image-compress";
 import {ImageCompressService} from "../../service/image-compress.service";
 import {ProfilePage} from "../profile/profile.page";
 import {UserService} from "../../service/user.service";
+import {PostsPage} from "../posts/posts.page";
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import { StatusBar } from '@ionic-native/status-bar/ngx';
 // import { AppUpdate } from '@ionic-native/app-update/ngx';
@@ -51,6 +52,7 @@ import {UserService} from "../../service/user.service";
     , ShowReactionsComponent
     , ProfilePage
     , SafePipe
+    , PostsPage
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],

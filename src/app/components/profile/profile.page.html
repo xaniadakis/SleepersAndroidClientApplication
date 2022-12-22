@@ -255,7 +255,7 @@
         <ng-template #showOffMode>
           <ion-list class="white ion-no-padding">
 
-            <div *ngIf="notEmpty(userDetails.email)">
+            <div *ngIf="!hiddenEditButton && notEmpty(userDetails.email)">
               <ion-item class="white" lines="none">
                 <ion-avatar slot="start">
                   <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"

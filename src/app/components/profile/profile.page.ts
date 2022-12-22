@@ -102,7 +102,7 @@ export class ProfilePage implements OnInit {
     console.log("imma retrieve those user details");
     this.retrieveUserDetails(this.userId);
     console.log("did ma best");
-    console.log('Initializing ProfilePage for: ' + this.userDetails.username);
+    console.log('Initializing PostsPage for: ' + this.userDetails.username);
   }
 
   goBack() {

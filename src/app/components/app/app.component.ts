@@ -12,7 +12,7 @@ import {PostType} from "../../dto/post-type";
 import {ToastService} from "../../service/toast.service";
 import {Platform, ToastButton} from "@ionic/angular";
 import {AppVersion} from '@awesome-cordova-plugins/app-version/ngx';
-import {gt} from "semver";
+import { compareVersions } from 'compare-versions';
 import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {PostService} from "../../service/post.service";
@@ -236,8 +236,9 @@ export class AppComponent {
   }
 
   checkForUpdates() {
-    // a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
-    // semver.gt('1.2.3', '9.8.7') // false
+    // compareVersions('11.1.1', '10.0.0'); //  1
+    // compareVersions('10.0.0', '10.0.0'); //  0
+    // compareVersions('10.0.0', '11.1.1'); // -1
     var xhr = new XMLHttpRequest();
     const currentVersion = this.currentVersion
     const toastService = this.toastService
@@ -246,7 +247,7 @@ export class AppComponent {
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         const jsonResponse: Update = JSON.parse(this.responseText);
-        const updateExists: boolean = gt(jsonResponse.version, currentVersion)
+        const updateExists: boolean = compareVersions(jsonResponse.version, currentVersion) == 1
         if (updateExists) {
           const buttons: ToastButton[] = [{
             icon: 'clipboard',

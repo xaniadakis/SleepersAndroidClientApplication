@@ -22,7 +22,6 @@ export class ModalService {
       initialBreakpoint: 1,
       backdropBreakpoint: 1,
       backdropDismiss: false,
-      swipeToClose: true,
       canDismiss: true,
       handleBehavior: "cycle",
       handle: true
@@ -40,7 +39,6 @@ export class ModalService {
       initialBreakpoint: 1,
       backdropBreakpoint: 1,
       backdropDismiss: false,
-      swipeToClose: true,
       canDismiss: true,
       handleBehavior: "cycle",
       handle: true
@@ -51,13 +49,13 @@ export class ModalService {
   }
 
   async openPostModal(postId: bigint, postImage: string, postText: string, postType: PostType) {
+    console.log("imma show comments");
     const modal = await this.modalCtrl.create({
       component: ShowPostModalComponent,
       componentProps: {id: postId, image: postImage, text: postText, type: postType},
       initialBreakpoint: 1,
       backdropBreakpoint: 1,
       backdropDismiss: false,
-      swipeToClose: true,
       canDismiss: true,
       handleBehavior: "cycle",
       handle: true
