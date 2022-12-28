@@ -282,4 +282,8 @@ export class AppComponent {
   editProfile() {
     this.sharedService.immaEditProfile(true);
   }
+
+  reload() {
+    location.reload();
+  }
 }
