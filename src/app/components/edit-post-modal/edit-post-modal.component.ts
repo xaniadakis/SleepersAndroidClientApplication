@@ -9,7 +9,8 @@ import {PostType} from "../../dto/post-type";
 import {ToastService} from "../../service/toast.service";
 import {SharedService} from "../../service/shared.service";
 import {NgxImageCompressService} from "ngx-image-compress";
-import {ImageCompressService} from "../../service/image-compress.service";
+import {Camera, CameraOptions} from "@awesome-cordova-plugins/camera/ngx";
+import { File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -24,8 +25,9 @@ export class EditPostModalComponent {
   hidden: boolean = true;
   youtubeVideoId: string | null = null;
   imageUploaded: File;
-  imgResult: string | null;
+  imgResult: string | ArrayBuffer | null;
   youtubeThumbnail: string | null;
+  uploadImage: boolean = false;
 
   @Input("image") image: string;
   @Input("text") text: string;
@@ -46,6 +48,8 @@ export class EditPostModalComponent {
     , private sharedService: SharedService
     , public ngxImageCompressService: NgxImageCompressService
     , private loadingCtrl: LoadingController
+    , private camera: Camera
+    , private file: CordovaFile
   ) {
   }
 
@@ -75,6 +79,35 @@ export class EditPostModalComponent {
       console.log("notified em about whats comin: " + this.type)
     }, 300);
     return this.modalCtrl.dismiss(this.name, 'confirm');
+  }
+
+
+  takePictureInstantly() {
+    const options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      let filename = imageData.substring(imageData.lastIndexOf('/')+1);
+      let path =  imageData.substring(0,imageData.lastIndexOf('/')+1);
+      console.log("filename: "+filename+" , path: "+path);
+      //then use the method reasDataURL  btw. var_picture is ur image variable
+      this.file.readAsDataURL(path, filename).then(res=> this.imgResult = res  );
+
+      this.uploadImage = true;
+      this.imageUploaded = imageData;
+
+    }, (err) => {
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
+    });
   }
 
   compressFileWithAlgorithm() {
@@ -119,6 +152,7 @@ export class EditPostModalComponent {
               .then(
                 (compressedImage) => {
                   this.imgResult = compressedImage;
+                  this.uploadImage = true;
                   let newSize = this.ngxImageCompressService.byteCount(compressedImage) / 1000000;
                   this.toastService.presentToastWithDuration("bottom", "Compressed this one from " + oldSize + "MB down to " + newSize + "MB", 1200)
                   // window.alert("old size: "+oldSize+" mb, new size: "+newSize+" mb");
@@ -131,6 +165,7 @@ export class EditPostModalComponent {
               );
           } else {
             this.imgResult = image;
+            this.uploadImage = true;
             console.log("aint compressadoing this one..")
             this.imageUploaded = this.dataURItoBlob(image, fileName);
             await loading.dismiss()
@@ -162,6 +197,7 @@ export class EditPostModalComponent {
 
   unloadImage() {
     this.imgResult = null;
+    this.uploadImage = false;
   }
 
   unloadYoutubeVideo() {
@@ -180,8 +216,10 @@ export class EditPostModalComponent {
             this.imgResult = null;
             if (this.youtubeVideoId == null)
               this.toastService.presentToast("middle", "Gimme a valid link lil mate");
-            else
+            else {
+              this.uploadImage = false;
               this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
+            }
           }
         }
       ],

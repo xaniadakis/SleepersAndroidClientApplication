@@ -19,7 +19,8 @@ dependencies {
     implementation project(':capacitor-preferences')
     implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-status-bar')
-
+    implementation "androidx.core:core:1.6.+"
+    implementation "androidx.webkit:webkit:1.4.0"
 }
 
 

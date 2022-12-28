@@ -5,11 +5,16 @@ import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
 import {PostType} from "../../dto/post-type";
 import {SharedService} from "../../service/shared.service";
-import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import getVideoId from 'get-video-id';
 import {ToastService} from "../../service/toast.service";
 import {NgxImageCompressService} from "ngx-image-compress";
+import {Camera, CameraOptions} from '@awesome-cordova-plugins/camera/ngx';
+import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
+import {IWriteOptions, FileEntry} from '@awesome-cordova-plugins/file/ngx';
+import {Capacitor} from '@capacitor/core';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -42,6 +47,8 @@ export class CreatePostModalComponent {
   imageUploaded: File;
   imgResult: string | null;
   youtubeThumbnail: string | null;
+  uploadImage: boolean = false;
+  safeImg: SafeUrl;
 
   constructor(private modalCtrl: ModalController
     , private postService: PostService
@@ -51,6 +58,9 @@ export class CreatePostModalComponent {
     , private toastService: ToastService
     , public ngxImageCompressService: NgxImageCompressService
     , private loadingCtrl: LoadingController
+    , private camera: Camera
+    , private file: CordovaFile
+    , private sanitizer: DomSanitizer
   ) {
   }
 
@@ -61,7 +71,6 @@ export class CreatePostModalComponent {
     console.log(this.text);
     console.log("TYPE: " + this.postType)
   }
-
 
   async presentAlert() {
     const alert = await this.alertController.create({
@@ -74,8 +83,10 @@ export class CreatePostModalComponent {
             this.imgResult = null;
             if (this.youtubeVideoId == null)
               this.toastService.presentToast("middle", "Gimme a valid link lil mate");
-            else
+            else {
+              this.uploadImage = false;
               this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
+            }
           }
         }
       ],
@@ -127,6 +138,8 @@ export class CreatePostModalComponent {
 
   unloadImage() {
     this.imgResult = null;
+    // this.safeImg = null;
+    this.uploadImage = false;
   }
 
   unloadYoutubeVideo() {
@@ -136,29 +149,80 @@ export class CreatePostModalComponent {
 
   createPost(form: NgForm) {
     const text = form.controls["text"].value;
-    if (((text == null || text == '') && this.imageUploaded == null && this.youtubeVideoId == null) || (this.postType == null)) {
+    if (((text == null || text == '') && !this.uploadImage && this.youtubeVideoId == null) || (this.postType == null)) {
       this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
       return;
     }
-    this.postService.savePost(text, this.imageUploaded, this.youtubeVideoId, this.postType).subscribe(data => {
+    this.postService.savePost(text, this.imageUploaded, this.youtubeVideoId, this.postType, this.uploadImage).subscribe(data => {
       // const response: CreateCommentResponse = data;
       form.reset();
       this.hidden = true;
       this.imageSrc = null;
-      //   this.sharedService.posted(postType);
-      //   if (postType == PostType.STORY)
-      //     this.router.navigateByUrl("/home/tabs/tab3")
-      //   else if (postType == PostType.ART)
-      //     this.router.navigateByUrl("/home/tabs/tab1")
-      //   else
-      //     this.router.navigateByUrl("/home/tabs/tab2")
-      // });
     });
   }
 
+  takePictureInstantly() {
+    const options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    }
+
+    this.camera.getPicture(options).then(async (imageData) => {
+      const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
+      const path = imageData.substring(0, imageData.lastIndexOf('/') + 1);
+      const image = path + filename;
+      console.log("image: " + image);
+
+      this.imgResult = Capacitor.convertFileSrc(image);
+      console.log("resolvedImg: " + this.imgResult);
+
+      this.safeImg = this.sanitizer.bypassSecurityTrustUrl(this.imgResult);
+      this.uploadImage = true;
+      this.fileUriToFile(imageData, filename)
+        .then((value) => {
+          this.imageUploaded = value;
+          console.log(value)
+        }, (error) => {
+          console.log(error)
+        });
+    }, (err) => {
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
+    });
+  }
+
+  fileUriToFile(imageData: any, filename: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.file.resolveLocalFilesystemUrl(imageData)
+        .then((fileEntry: any) => {
+
+          fileEntry.file(function (resFile: File) {
+
+            var reader = new FileReader();
+            reader.onloadend = (evt: any) => {
+              var imgBlob: any = new File([evt.target.result], filename, {
+                type: "image/jpeg"
+              });
+              resolve(imgBlob);
+            };
+
+            reader.onerror = (e) => {
+              console.log('Failed file read: ' + e.toString());
+              reject(e);
+            };
+
+            reader.readAsArrayBuffer(resFile);
+          });
+        });
+    });
+  }
 
   compressFile() {
-
     this.ngxImageCompressService.uploadFile()
       .then(async ({image, fileName, orientation}) => {
           const loading = await this.loadingCtrl.create({
@@ -182,6 +246,7 @@ export class CreatePostModalComponent {
               .then(
                 (compressedImage) => {
                   this.imgResult = compressedImage;
+                  this.uploadImage = true;
                   let newSize = this.ngxImageCompressService.byteCount(compressedImage) / 1000000;
                   this.toastService.presentToastWithDuration("bottom", "Compressed this one from " + oldSize + "MB down to " + newSize + "MB", 1200)
                   // window.alert("old size: "+oldSize+" mb, new size: "+newSize+" mb");
@@ -194,6 +259,7 @@ export class CreatePostModalComponent {
               );
           } else {
             this.imgResult = image;
+            this.uploadImage = true;
             console.log("aint compressadoing this one..")
             this.imageUploaded = this.dataURItoBlob(image, fileName);
             loading.dismiss()

@@ -15,9 +15,9 @@
 
     <ion-card id="postado-form">
       <!--    image display   -->
-      <ion-row style="background-color: #121212;" class="ion-justify-content-center" *ngIf="imgResult">
+      <ion-row style="background-color: #121212;" class="ion-justify-content-center" *ngIf="uploadImage">
         <div class="container">
-          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-image"
+          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-edit-image"
                [src]="imgResult" alt="your image"/>
           <ion-button class="fas fa-download" (click)="unloadImage()">
             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
@@ -31,7 +31,7 @@
       <!--    yt video display   -->
       <ion-row style="background-color: #121212;" class="ion-justify-content-center" *ngIf="youtubeThumbnail">
         <div class="container">
-          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-image"
+          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-edit-yt-video"
                [src]="youtubeThumbnail" alt="your image"/>
           <ion-button class="fas fa-download" (click)="unloadYoutubeVideo()">
             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
@@ -69,6 +69,16 @@
       </ion-label>
     </ion-card-content>
 
+    <!--    CAMERA  -->
+    <!--    <button (click)="compressFile()">Upload and compress Image</button>-->
+    <label (click)="takePictureInstantly()" class="custom-file-upload">
+      <i class="fa fa-cloud-upload"></i>
+      <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+           viewBox="0 0 24 24">
+        <path fill="white"
+              d="M12.5 9q-.275 0-.425-.25q-.15-.25 0-.5L15 3.175q.2-.325.5-.388q.3-.062.65.113q1.725.775 3.05 2.162Q20.525 6.45 21.25 8.2q.125.325-.038.562Q21.05 9 20.7 9Zm-3.575 1.225l-3-5.2q-.2-.325-.1-.65t.4-.525Q7.425 3 8.888 2.5Q10.35 2 12 2q.375 0 .825.037q.45.038.75.088q.35.05.463.3q.112.25-.063.55L9.8 10.225q-.15.25-.437.25q-.288 0-.438-.25ZM2.85 14q-.275 0-.5-.188q-.225-.187-.275-.462q-.05-.275-.062-.6Q2 12.425 2 12q0-1.575.513-3.137Q3.025 7.3 4.1 5.9q.275-.35.638-.35q.362 0 .562.375l4.2 7.325q.15.25-.012.5q-.163.25-.438.25Zm5 7.1q-1.65-.8-3.025-2.175Q3.45 17.55 2.75 15.8q-.125-.325.05-.562q.175-.238.525-.238h8.15q.275 0 .425.25q.15.25 0 .5l-2.875 5.025q-.2.325-.5.425q-.3.1-.675-.1ZM12 22q-.35 0-.787-.038q-.438-.037-.763-.087q-.35-.05-.475-.3t.05-.55l4.125-7.2q.15-.25.5-.25t.5.25l2.95 5.125q.175.275.113.6q-.063.325-.413.6q-1.15.85-2.687 1.35q-1.538.5-3.113.5Zm6.775-3.875l-4.25-7.375q-.15-.25.013-.5q.162-.25.437-.25h6.175q.275 0 .5.188q.225.187.275.462q.05.275.063.6q.012.325.012.75q0 1.575-.512 3.162q-.513 1.588-1.588 2.963q-.2.275-.575.288q-.375.012-.55-.288Z"/>
+      </svg>
+    </label>
     <!--    IMAGE UPLOAD  -->
     <!--    <button (click)="compressFile()">Upload and compress Image</button>-->
     <label (click)="compressFile()" class="custom-file-upload">

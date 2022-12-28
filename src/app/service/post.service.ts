@@ -70,12 +70,13 @@ export class PostService {
     return this.http.post<CreatePostResponse>(this.reactPostUrl, react);
   }
 
-  public savePost(text: string | null, image: File, youtubeVideoId: string | null, postType: PostType) {
+  public savePost(text: string | null, image: File, youtubeVideoId: string | null, postType: PostType, uploadImage: boolean) {
     var savePost: FormData = new FormData()
     if (text != null)
       savePost.append("text", text)
     savePost.append("postType", postType)
-    savePost.append("image", image)
+    if (uploadImage)
+      savePost.append("image", image)
     if (youtubeVideoId != null)
       savePost.append("youtubeVideoId", youtubeVideoId)
     return this.http.post<CreatePostResponse>(this.getAllPostsUrl, savePost);
