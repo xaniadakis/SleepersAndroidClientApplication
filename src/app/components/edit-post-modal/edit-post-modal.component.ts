@@ -25,7 +25,7 @@ export class EditPostModalComponent {
   hidden: boolean = true;
   youtubeVideoId: string | null = null;
   imageUploaded: File;
-  imgResult: string | ArrayBuffer | null;
+  imgResult: string | null = null;
   youtubeThumbnail: string | null;
   uploadImage: boolean = false;
 
@@ -261,6 +261,81 @@ export class EditPostModalComponent {
       form.reset();
       this.hidden = true;
       this.imageSrc = null;
+    });
+  }
+
+  onModifyV2(form: NgForm) {
+    const text = form.controls["text"].value;
+    if (((text == null || text == '') && this.imgResult == '' && this.youtubeVideoId == null) || (this.type == null)) {
+      this.toastService.presentToast("top", "Mate why did you bother editing, if you aint editing.");
+      return;
+    }
+    this.postService.modifyPostV2(this.id, text, this.imgResult, this.youtubeVideoId, this.type).subscribe(data => {
+      // const response: CreateCommentResponse = data;
+      form.reset();
+      this.hidden = true;
+      this.imageSrc = null;
+    });
+  }
+
+  async takePictureInstantlyDataUri() {
+    const options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Optimizing this lil picture',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
+    this.camera.getPicture(options).then(async (imageData) => {
+      await loading.present();
+      console.log('image data =>  ', imageData);
+      this.imgResult = 'data:image/jpeg;base64,' + imageData;
+      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      this.uploadImage = true;
+      await loading.dismiss();
+    }, (err) => {
+      loading.dismiss();
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
+    });
+  }
+
+  async uploadFromGalleryDataUri() {
+    const options: CameraOptions = {
+      quality: 50,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Optimizing this lil picture',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
+    this.camera.getPicture(options).then(async (imageData) => {
+      loading.present();
+      console.log('image data => [', imageData + "]");
+      this.imgResult = 'data:image/jpeg;base64,' + imageData;
+      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      this.uploadImage = true;
+      loading.dismiss();
+    }, (err) => {
+      loading.dismiss();
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
     });
   }
 }

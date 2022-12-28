@@ -15,7 +15,9 @@ export class PostService {
   private getPostCommentsUrl: string;
   private getPostReactionsUrl: string;
   private savePostUrl: string;
+  private savePostV2Url: string;
   private modifyPostUrl: string;
+  private modifyPostV2Url: string;
   private deletePostUrl: string;
   private commentPostUrl: string;
   private reactPostUrl: string;
@@ -24,7 +26,9 @@ export class PostService {
   constructor(private http: HttpClient) {
     this.getAllPostsUrl = GlobalConstants.APIURL + '/post/';
     this.modifyPostUrl = GlobalConstants.APIURL + '/post/';
+    this.modifyPostV2Url = GlobalConstants.APIURL + '/post/v2/';
     this.savePostUrl = GlobalConstants.APIURL + '/post/';
+    this.savePostV2Url = GlobalConstants.APIURL + '/post/v2/';
     this.deletePostUrl = GlobalConstants.APIURL + '/post/';
     this.commentPostUrl = GlobalConstants.APIURL + '/post/comment/';
     this.reactPostUrl = GlobalConstants.APIURL + '/post/react/';
@@ -72,11 +76,28 @@ export class PostService {
     if (text != null)
       savePost.append("text", text)
     savePost.append("postType", postType)
-    if (uploadImage)
+    if (uploadImage) {
+      console.log("imma upload: " + image.name.toString() + " of type: " + image.type + " and size: " + image.size);
       savePost.append("image", image)
+    }
     if (youtubeVideoId != null)
       savePost.append("youtubeVideoId", youtubeVideoId)
-    return this.http.post<CreatePostResponse>(this.getAllPostsUrl, savePost);
+    return this.http.post<CreatePostResponse>(this.savePostUrl, savePost);
+  }
+
+  public savePostV2(text: string | null, image: string | null, youtubeVideoId: string | null, postType: PostType, uploadImage: boolean) {
+    var savePost: FormData = new FormData()
+    if (text != null)
+      savePost.append("text", text)
+    savePost.append("postType", postType)
+    if (uploadImage && image != null) {
+      console.log("imma upload: " + image);
+      console.log("size: " + image.length);
+      savePost.append("image", image)
+    }
+    if (youtubeVideoId != null)
+      savePost.append("youtubeVideoId", youtubeVideoId)
+    return this.http.post<CreatePostResponse>(this.savePostV2Url, savePost);
   }
 
   public modifyPost(postId: bigint, text: string, image: File, youtubeVideoId: string | null, postType: PostType) {
@@ -88,6 +109,18 @@ export class PostService {
     if (youtubeVideoId != null)
       modifyPost.append("youtubeVideoId", youtubeVideoId)
     return this.http.put<ModifyPostResponse>(this.modifyPostUrl, modifyPost);
+  }
+
+  public modifyPostV2(postId: bigint, text: string, image: string | null, youtubeVideoId: string | null, postType: PostType) {
+    var modifyPost: FormData = new FormData()
+    modifyPost.append("postId", postId.toString())
+    modifyPost.append("text", text)
+    modifyPost.append("postType", postType)
+    if (image != null)
+      modifyPost.append("image", image)
+    if (youtubeVideoId != null)
+      modifyPost.append("youtubeVideoId", youtubeVideoId)
+    return this.http.put<ModifyPostResponse>(this.modifyPostV2Url, modifyPost);
   }
 
   public deletePost(postId: bigint, postType: PostType) {

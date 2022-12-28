@@ -10,10 +10,9 @@ import getVideoId from 'get-video-id';
 import {ToastService} from "../../service/toast.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Camera, CameraOptions} from '@awesome-cordova-plugins/camera/ngx';
-import {File as CordovaFile, FileEntry, FileError, FileReader, IFile} from '@awesome-cordova-plugins/file/ngx';
+import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
 import {Capacitor} from '@capacitor/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {FileChangeEvent} from "@angular/compiler-cli/src/perform_watch";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -39,7 +38,7 @@ export class CreatePostModalComponent {
   };
   @Input("postType") postType: PostType;
 
-  loading: string = "/src/assets/icon/loading.webp";
+  loading: HTMLIonLoadingElement;
   imageSrc: string | ArrayBuffer | null;
   hidden: boolean = true;
   youtubeVideoId: string | null = null;
@@ -63,12 +62,18 @@ export class CreatePostModalComponent {
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     //print 123
     console.log(this.image);
     //print 234
     console.log(this.text);
     console.log("TYPE: " + this.postType)
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Optimizing this lil picture',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
   }
 
   async presentAlert() {
@@ -107,7 +112,7 @@ export class CreatePostModalComponent {
   }
 
   confirm(form: NgForm) {
-    this.createPost(form)
+    this.createPostV2(form)
     setTimeout(() => {
       this.sharedService.posted(this.postType);
       console.log("notified em about whats comin: " + this.postType)
@@ -152,6 +157,7 @@ export class CreatePostModalComponent {
       this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
       return;
     }
+
     this.postService.savePost(text, this.imageUploaded, this.youtubeVideoId, this.postType, this.uploadImage).subscribe(data => {
       // const response: CreateCommentResponse = data;
       form.reset();
@@ -160,7 +166,97 @@ export class CreatePostModalComponent {
     });
   }
 
-  takePictureInstantly() {
+  createPostV2(form: NgForm) {
+    const text = form.controls["text"].value;
+    if (((text == null || text == '') && !this.uploadImage && this.youtubeVideoId == null) || (this.postType == null)) {
+      this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
+      return;
+    }
+
+    this.postService.savePostV2(text, this.imgResult, this.youtubeVideoId, this.postType, this.uploadImage).subscribe(data => {
+      // const response: CreateCommentResponse = data;
+      form.reset();
+      this.hidden = true;
+      this.imageSrc = null;
+    });
+  }
+
+  async takePictureInstantlyDataUri() {
+    const options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Optimizing this lil picture',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
+    this.camera.getPicture(options).then(async (imageData) => {
+      await loading.present();
+      console.log('image data =>  ', imageData);
+      this.imgResult = 'data:image/jpeg;base64,' + imageData;
+      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      this.uploadImage = true;
+      // let filename = new Date().valueOf().toString() + ".jpg";
+      // this.imageUploaded = this.dataURItoBlob(this.imgResult, filename)
+      // console.log("I GAVE: " + filename);
+      // console.log("I GOT: " + this.imageUploaded.type.toString());
+      // console.log("IMAGE NAME: " + this.imageUploaded.name.toString());
+      // console.log("IMAGE SIZE: " + this.imageUploaded.size);
+      // console.log(JSON.stringify(this.imageUploaded));
+      await loading.dismiss();
+    }, (err) => {
+      loading.dismiss();
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
+    });
+  }
+
+  async uploadFromGalleryDataUri() {
+    const options: CameraOptions = {
+      quality: 50,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Optimizing this lil picture',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
+    this.camera.getPicture(options).then(async (imageData) => {
+      loading.present();
+      console.log('image data => [', imageData + "]");
+      this.imgResult = 'data:image/jpeg;base64,' + imageData;
+      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      this.uploadImage = true;
+      // let filename = new Date().valueOf().toString() + ".jpg";
+      // this.imageUploaded = this.dataURItoBlob(this.imgResult, filename);
+      // console.log("I GAVE: " + filename);
+      // console.log("I GOT: " + this.imageUploaded.type.toString());
+      // console.log("IMAGE NAME: " + this.imageUploaded.name.toString());
+      // console.log("IMAGE SIZE: " + this.imageUploaded.size);
+      // console.log(JSON.stringify(this.imageUploaded));
+      loading.dismiss();
+    }, (err) => {
+      loading.dismiss();
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
+    });
+  }
+
+  takePictureInstantlyFileUri() {
     const options: CameraOptions = {
       quality: 50,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -184,70 +280,39 @@ export class CreatePostModalComponent {
       this.safeImg = this.sanitizer.bypassSecurityTrustUrl(this.imgResult);
       this.uploadImage = true;
       console.log("BEFORE");
-      this.fileUriToFile(imageData, filename)
-        .then((value) => {
-          console.log("IM IIIIINN YOOOOOOO!: " + value);
-          this.imageUploaded = value;
-          console.log("IM IIIIINN YOOOOOOO2!: " + this.imageUploaded);
-        })
-        .catch((error) => {
-          console.log("IM IIIIINN ERROR!: " + error);
-        });
+      // this.fileUriToFile(imageData, filename)
+      //   .then((value) => {
+      //     console.log("IM IIIIINN YOOOOOOO!: " + value);
+      //     this.imageUploaded = value;
+      //     console.log("IM IIIIINN YOOOOOOO2!: " + this.imageUploaded);
+      //   })
+      //   .catch((error) => {
+      //     console.log("IM IIIIINN ERROR!: " + error);
+      //   });
+      this.imageDataToBlob(imageData)
+
       console.log("AFTER");
     }, (err) => {
       this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
     });
   }
 
-  fileUriToFile(imageData: any, filename: string): Promise<File> {
-    return new Promise((resolve, reject) => {
-      console.log("working on it");
-
-      // @ts-ignore
-      this.file.resolveLocalFilesystemUrl(imageData).then((fileEntry: FileEntry) => {
-        console.log("working on it more");
-
-        // @ts-ignore
-        fileEntry.file((resFile: IFile) => {
-            console.log("working on it merrier");
-
-            var reader = new FileReader();
-            reader.onloadend = function (evt: any) {
-              alert("working on it marriado");
-              var imgFile: any = new File([evt?.target?.result], filename, {
-                type: "image/jpeg"
-              });
-              console.log("RESOLVED: " + imgFile);
-              resolve(imgFile);
-            };
-
-            reader.onerror = function (e) {
-              console.log('Failed file read: ' + e.toString());
-              console.log("REJECTED: " + e);
-              reject(e);
-            };
-            console.log("RESFILE: " + resFile.name.toString());
-            reader.readAsArrayBuffer(resFile);
-          }
-          , (err: FileError) => {
-            console.error(err);
-          });
-      });
-    });
+  imageDataToBlob(imageData: any) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', imageData);
+    xhr.responseType = 'blob';
+    xhr.onload = () => {
+      let blobImage = xhr.response;
+    }
+    xhr.send();
   }
 
-  compressFile() {
-    this.ngxImageCompressService.uploadFile()
-      .then(async ({image, fileName, orientation}) => {
-          const loading = await this.loadingCtrl.create({
-            spinner: 'bubbles',
-            message: 'Optimizing this lil picture',
-            duration: 10000,
-            cssClass: 'custom-loading',
-          });
-
-          await loading.present();
-
+  async compressFile() {
+    console.log("INSIDE THIS");
+    await this.ngxImageCompressService.uploadFile()
+      .then(({image, fileName, orientation}) => {
+          console.log("INSIDE THAT");
+          this.loading.present();
           // this.imgResultBeforeCompression = image;
           let oldSize = this.ngxImageCompressService.byteCount(image) / 1000000;
 
@@ -261,13 +326,14 @@ export class CreatePostModalComponent {
                 (compressedImage) => {
                   this.imgResult = compressedImage;
                   this.uploadImage = true;
+                  console.log("YO: " + this.uploadImage);
                   let newSize = this.ngxImageCompressService.byteCount(compressedImage) / 1000000;
                   this.toastService.presentToastWithDuration("bottom", "Compressed this one from " + oldSize + "MB down to " + newSize + "MB", 1200)
                   // window.alert("old size: "+oldSize+" mb, new size: "+newSize+" mb");
                   console.log("Size in bytes after compression is now:", this.ngxImageCompressService.byteCount(compressedImage) / 1000000, 'MB');
                   // console.log(compressedImage)
                   this.imageUploaded = this.dataURItoBlob(compressedImage, fileName);
-                  loading.dismiss()
+                  this.loading.dismiss();
                   // this.imageUploaded = new File([this.imgResult], fileName);
                 }
               );
@@ -276,10 +342,13 @@ export class CreatePostModalComponent {
             this.uploadImage = true;
             console.log("aint compressadoing this one..")
             this.imageUploaded = this.dataURItoBlob(image, fileName);
-            loading.dismiss()
+            this.loading.dismiss();
           }
         }
-      );
+      )
+      .catch((error) => {
+        console.log("ERROR WHILE UPLOADING PICADO: " + error);
+      });
   }
 
   dataURItoBlob(dataURI: string, fileName: string) {
@@ -290,8 +359,30 @@ export class CreatePostModalComponent {
     }
     let type = 'image/' + fileName.split('.').pop();
     console.log("type: " + type);
-    return new File([new Uint8Array(array)], fileName, {
-      type: type
-    });
+    console.log("READY: " + fileName);
+    return new File([new Uint8Array(array)], fileName, {type: type});
+  }
+
+  urltoFile(url: string, filename: string, mimeType: string) {
+    return (fetch(url)
+      .then(function (res) {
+        return res.arrayBuffer();
+      })
+      .then(function (buf) {
+        console.log("BUF SIZE: " + buf.byteLength);
+        return new File([buf], filename, {type: mimeType});
+      }));
+  }
+
+  dataURLtoFile(dataUrl: string, filename: string): File {
+    // @ts-ignore
+    var arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, {type: mime});
   }
 }

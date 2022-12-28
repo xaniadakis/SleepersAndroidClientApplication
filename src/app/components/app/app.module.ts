@@ -30,7 +30,6 @@ import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 import {SafePipe} from "../safe-pipe/safe.pipe";
 import {NgxImageCompressService} from "ngx-image-compress";
-import {ImageCompressService} from "../../service/image-compress.service";
 import {ProfilePage} from "../profile/profile.page";
 import {UserService} from "../../service/user.service";
 import {PostsPage} from "../posts/posts.page";
@@ -86,7 +85,7 @@ import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
     GuardService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptorService, multi: true},
     NgxImageCompressService,
-    ImageCompressService,
+    // ImageCompressService,
     UserService,
     FormBuilder,
     Camera,
