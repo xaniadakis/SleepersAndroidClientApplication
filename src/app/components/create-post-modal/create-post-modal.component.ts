@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {AlertController, AlertInput, LoadingController, ModalController} from '@ionic/angular';
+import {AlertController, LoadingController, ModalController} from '@ionic/angular';
 import {GlobalConstants} from "../../util/global-constants";
 import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
@@ -10,11 +10,10 @@ import getVideoId from 'get-video-id';
 import {ToastService} from "../../service/toast.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Camera, CameraOptions} from '@awesome-cordova-plugins/camera/ngx';
-import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
-import {IWriteOptions, FileEntry} from '@awesome-cordova-plugins/file/ngx';
+import {File as CordovaFile, FileEntry, FileError, FileReader, IFile} from '@awesome-cordova-plugins/file/ngx';
 import {Capacitor} from '@capacitor/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {error} from "@angular/compiler-cli/src/transformers/util";
+import {FileChangeEvent} from "@angular/compiler-cli/src/perform_watch";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -184,41 +183,56 @@ export class CreatePostModalComponent {
 
       this.safeImg = this.sanitizer.bypassSecurityTrustUrl(this.imgResult);
       this.uploadImage = true;
+      console.log("BEFORE");
       this.fileUriToFile(imageData, filename)
         .then((value) => {
+          console.log("IM IIIIINN YOOOOOOO!: " + value);
           this.imageUploaded = value;
-          console.log(value)
-        }, (error) => {
-          console.log(error)
+          console.log("IM IIIIINN YOOOOOOO2!: " + this.imageUploaded);
+        })
+        .catch((error) => {
+          console.log("IM IIIIINN ERROR!: " + error);
         });
+      console.log("AFTER");
     }, (err) => {
       this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
     });
   }
 
-  fileUriToFile(imageData: any, filename: string): Promise<any> {
+  fileUriToFile(imageData: any, filename: string): Promise<File> {
     return new Promise((resolve, reject) => {
-      this.file.resolveLocalFilesystemUrl(imageData)
-        .then((fileEntry: any) => {
+      console.log("working on it");
 
-          fileEntry.file(function (resFile: File) {
+      // @ts-ignore
+      this.file.resolveLocalFilesystemUrl(imageData).then((fileEntry: FileEntry) => {
+        console.log("working on it more");
+
+        // @ts-ignore
+        fileEntry.file((resFile: IFile) => {
+            console.log("working on it merrier");
 
             var reader = new FileReader();
-            reader.onloadend = (evt: any) => {
-              var imgBlob: any = new File([evt.target.result], filename, {
+            reader.onloadend = function (evt: any) {
+              alert("working on it marriado");
+              var imgFile: any = new File([evt?.target?.result], filename, {
                 type: "image/jpeg"
               });
-              resolve(imgBlob);
+              console.log("RESOLVED: " + imgFile);
+              resolve(imgFile);
             };
 
-            reader.onerror = (e) => {
+            reader.onerror = function (e) {
               console.log('Failed file read: ' + e.toString());
+              console.log("REJECTED: " + e);
               reject(e);
             };
-
+            console.log("RESFILE: " + resFile.name.toString());
             reader.readAsArrayBuffer(resFile);
+          }
+          , (err: FileError) => {
+            console.error(err);
           });
-        });
+      });
     });
   }
 

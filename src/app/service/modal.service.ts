@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {EditPostModalComponent} from "../components/edit-post-modal/edit-post-modal.component";
 import {ShowPostModalComponent} from "../components/show-post-modal/show-post-modal.component";
 import {ModalController} from "@ionic/angular";

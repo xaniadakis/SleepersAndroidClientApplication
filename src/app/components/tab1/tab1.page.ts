@@ -1,23 +1,5 @@
 import {Component} from '@angular/core';
-import {NgForm} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {GlobalConstants} from "../../util/global-constants";
-import {UiPostDto} from "../../dto/ui-post-dto";
-import {CreatePostResponse, ReactResponse} from "../../dto/create-post-response";
-import {ToastService} from "../../service/toast.service";
-import {DeletePostResponse} from "../../dto/delete-post-response";
-import {PostService} from "../../service/post.service";
 import {PostType} from "../../dto/post-type";
-import {EditPostModalComponent} from "../edit-post-modal/edit-post-modal.component";
-import {ShowPostModalComponent} from "../show-post-modal/show-post-modal.component";
-import {OuterPostService} from "../../service/outer-post.service";
-import {ModalController, PopoverController} from "@ionic/angular";
-import {ModalService} from "../../service/modal.service";
-import {Subscription} from "rxjs";
-import {SharedService} from "../../service/shared.service";
-import {ReactionsComponent} from "../react-to-post/reactions.component";
-import {ReactionEnum} from "../../dto/get-post-response";
-import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 
 @Component({
   selector: 'app-tab1',
@@ -45,7 +27,9 @@ export class Tab1Page {
     "\n" +
     "      Or does it explode?";
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 }

@@ -37,8 +37,8 @@ import {PostsPage} from "../posts/posts.page";
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import { StatusBar } from '@ionic-native/status-bar/ngx';
 // import { AppUpdate } from '@ionic-native/app-update/ngx';
-import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
-import { File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
+import {Camera} from '@awesome-cordova-plugins/camera/ngx';
+import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
 
 @NgModule({
   declarations: [AppComponent

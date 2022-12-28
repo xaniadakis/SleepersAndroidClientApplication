@@ -9,4 +9,4 @@ npx cap sync android;
 npx cap open android;
 
 end=$(date +%s)
-echo "Redeploying took $((end-start))s"
+echo "Redeploying took $((end-start))s and finished at $(date +"%H:%M:%S")"

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ToastController} from '@ionic/angular';
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
-import {Headers} from "node-fetch";
 import jwt_decode from "jwt-decode";
 import {SignInResponse} from "../../dto/sign-in-response";
 import {JwtTokenPayload} from "../../dto/jwt-token";

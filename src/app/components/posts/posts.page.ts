@@ -41,40 +41,41 @@ export class PostsPage implements OnInit {
 
   constructor(
     private router: Router
-    ,private activatedRoute: ActivatedRoute
-    ,private toastService: ToastService
-    ,public postService: PostService
-    ,public modalService: ModalService
-    ,private sharedService: SharedService
-    ,private popoverCtrl: PopoverController) {}
+    , private activatedRoute: ActivatedRoute
+    , private toastService: ToastService
+    , public postService: PostService
+    , public modalService: ModalService
+    , private sharedService: SharedService
+    , private popoverCtrl: PopoverController) {
+  }
 
   ngOnInit() {
     this.pageNumber = 0;
-    this.posts.splice(0,this.posts.length)
+    this.posts.splice(0, this.posts.length)
     this.getAllPosts(this.pageNumber, this.pageLimit);
-    if(this.postType==PostType.CAR)
+    if (this.postType == PostType.CAR)
       this.sharedService.onCarPost.subscribe({
         next: (event: boolean) => {
           this.pageNumber = 0;
-          this.posts.splice(0,this.posts.length)
+          this.posts.splice(0, this.posts.length)
           console.log(`Received message #${event}`);
           this.getAllPosts(this.pageNumber, this.pageLimit);
         }
       })
-    else if(this.postType==PostType.ART)
+    else if (this.postType == PostType.ART)
       this.sharedService.onArtPost.subscribe({
         next: (event: boolean) => {
           this.pageNumber = 0;
-          this.posts.splice(0,this.posts.length)
+          this.posts.splice(0, this.posts.length)
           console.log(`Received message #${event}`);
           this.getAllPosts(this.pageNumber, this.pageLimit);
         }
       })
-    else if(this.postType==PostType.STORY)
+    else if (this.postType == PostType.STORY)
       this.sharedService.onStory.subscribe({
         next: (event: boolean) => {
           this.pageNumber = 0;
-          this.posts.splice(0,this.posts.length)
+          this.posts.splice(0, this.posts.length)
           console.log(`Received message #${event}`);
           this.getAllPosts(this.pageNumber, this.pageLimit);
         }
@@ -143,11 +144,11 @@ export class PostsPage implements OnInit {
         return throwError(err);
       }))
       .subscribe(data => {
-      console.log(data.postDtos)
-      for (let i = 0; i < data.postDtos.length; i++) {
-        this.posts.push(data.postDtos[i]);
-      }
-    });
+        console.log(data.postDtos)
+        for (let i = 0; i < data.postDtos.length; i++) {
+          this.posts.push(data.postDtos[i]);
+        }
+      });
     console.log("I received all posts successfully.")
     this.fetching = false;
   }
@@ -191,6 +192,6 @@ export class PostsPage implements OnInit {
   }
 
   goToProfilePage(ownerId: bigint) {
-    this.router.navigateByUrl("/home/profile/"+ownerId);
+    this.router.navigateByUrl("/home/profile/" + ownerId);
   }
 }

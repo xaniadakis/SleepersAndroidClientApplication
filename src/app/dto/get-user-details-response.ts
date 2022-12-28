@@ -1,5 +1,3 @@
-import {ReactionEnum} from "./get-post-response";
-
 export class GetUserDetailsResponse {
   userDetailsDto: UserDetailsDto;
   message: string;

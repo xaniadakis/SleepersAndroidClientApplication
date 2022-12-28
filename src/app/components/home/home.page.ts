@@ -1,13 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SharedService} from "../../service/shared.service";
 import {PostType} from "../../dto/post-type";
-import {
-  ActionPerformed,
-  PushNotificationSchema,
-  PushNotifications,
-  Token,
-} from '@capacitor/push-notifications';
-import {Capacitor} from "@capacitor/core";
 
 @Component({
   selector: 'app-home',

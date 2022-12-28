@@ -1,14 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {PostService} from "./post.service";
-import {NgForm} from "@angular/forms";
-import {GetAllPostsResponse} from "../dto/get-all-posts-response";
 import {UiPostDto} from "../dto/ui-post-dto";
-import {PostType} from "../dto/post-type";
 import {ToastService} from "./toast.service";
-import {exit} from "ionicons/icons";
 import {Router} from "@angular/router";
-import {Subscription} from "rxjs";
 
 @Injectable()
 export class OuterPostService {

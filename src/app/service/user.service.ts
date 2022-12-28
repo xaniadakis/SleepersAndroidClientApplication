@@ -4,10 +4,8 @@ import {GlobalConstants} from "../util/global-constants";
 import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
 import {SignOutResponse} from "../dto/sign-out-response";
 import {GetUserDetailsResponse} from "../dto/get-user-details-response";
-import {PostType} from "../dto/post-type";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {Observable} from "rxjs";
-import {GetAllPostsResponse} from "../dto/get-all-posts-response";
 
 @Injectable()
 export class UserService {

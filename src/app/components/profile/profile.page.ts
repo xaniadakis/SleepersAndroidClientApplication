@@ -1,12 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SharedService} from "../../service/shared.service";
 import {GlobalConstants} from "../../util/global-constants";
 import {ActivatedRoute, Router} from "@angular/router";
-import {InputCustomEvent, LoadingController, Platform} from "@ionic/angular";
+import {LoadingController, Platform} from "@ionic/angular";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {ToastService} from "../../service/toast.service";
 import {ProfilePicChangeResponse} from "../../dto/profile-pic-change-response";
-import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../service/user.service";
 import {UserDetailsDto} from "../../dto/get-user-details-response";
 import {catchError} from "rxjs/operators";
@@ -73,18 +73,18 @@ export class ProfilePage implements OnInit {
               private route: ActivatedRoute
   ) {
     let userIdString = this.route.snapshot.paramMap.get('userId');
-    if(userIdString!=null)
+    if (userIdString != null)
       this.userId = BigInt(userIdString);
 
-    if(userIdString!="0") {
+    if (userIdString != "0") {
       this.hiddenEditButton = true;
       this.sharedService.hideEditButtonForALilWhile(true);
     } else {
-      if(this.myUserId!=null)
+      if (this.myUserId != null)
         this.userId = BigInt(this.myUserId);
     }
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
-      if(this.hiddenEditButton)
+      if (this.hiddenEditButton)
         this.sharedService.hideEditButtonForALilWhile(false);
       this.sharedService.hidePostButtonForALilWhile(false);
       this.router.navigateByUrl('/home/tabs/tab3');
@@ -106,7 +106,7 @@ export class ProfilePage implements OnInit {
   }
 
   goBack() {
-    if(this.hiddenEditButton)
+    if (this.hiddenEditButton)
       this.sharedService.hideEditButtonForALilWhile(false);
     this.sharedService.hidePostButtonForALilWhile(false);
     this.router.navigateByUrl('/home/tabs/tab3');

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse} from '@angular/common/http';
+import {HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {catchError} from "rxjs/operators";
 import {throwError} from 'rxjs';
 

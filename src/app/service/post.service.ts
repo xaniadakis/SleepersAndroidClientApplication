@@ -7,9 +7,6 @@ import {GlobalConstants} from "../util/global-constants";
 import {GetCommentsResponse, GetReactionsResponse, ReactionEnum} from "../dto/get-post-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {PostType} from "../dto/post-type";
-import {DataUrl} from "ngx-image-compress";
-import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
-import {SignOutResponse} from "../dto/sign-out-response";
 
 @Injectable()
 export class PostService {

@@ -1,12 +1,4 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {GetAllPostsResponse} from '../dto/get-all-posts-response';
-import {Observable} from 'rxjs';
-import {CreatePostResponse} from "../dto/create-post-response";
-import {GlobalConstants} from "../util/global-constants";
-import {GetCommentsResponse, GetReactionsResponse, ReactionEnum} from "../dto/get-post-response";
-import {ModifyPostResponse} from "../dto/modify-post-response";
-import {PostType} from "../dto/post-type";
 import {NgxImageCompressService} from "ngx-image-compress";
 
 @Injectable()

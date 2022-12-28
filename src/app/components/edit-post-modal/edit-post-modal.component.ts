@@ -10,7 +10,7 @@ import {ToastService} from "../../service/toast.service";
 import {SharedService} from "../../service/shared.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Camera, CameraOptions} from "@awesome-cordova-plugins/camera/ngx";
-import { File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
+import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -96,11 +96,11 @@ export class EditPostModalComponent {
 
     this.camera.getPicture(options).then((imageData) => {
       // imageData is either a base64 encoded string or a file URI
-      let filename = imageData.substring(imageData.lastIndexOf('/')+1);
-      let path =  imageData.substring(0,imageData.lastIndexOf('/')+1);
-      console.log("filename: "+filename+" , path: "+path);
+      let filename = imageData.substring(imageData.lastIndexOf('/') + 1);
+      let path = imageData.substring(0, imageData.lastIndexOf('/') + 1);
+      console.log("filename: " + filename + " , path: " + path);
       //then use the method reasDataURL  btw. var_picture is ur image variable
-      this.file.readAsDataURL(path, filename).then(res=> this.imgResult = res  );
+      this.file.readAsDataURL(path, filename).then(res => this.imgResult = res);
 
       this.uploadImage = true;
       this.imageUploaded = imageData;

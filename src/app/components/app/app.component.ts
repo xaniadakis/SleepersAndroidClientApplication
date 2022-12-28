@@ -12,10 +12,9 @@ import {PostType} from "../../dto/post-type";
 import {ToastService} from "../../service/toast.service";
 import {Platform, ToastButton} from "@ionic/angular";
 import {AppVersion} from '@awesome-cordova-plugins/app-version/ngx';
-import { compareVersions } from 'compare-versions';
+import {compareVersions} from 'compare-versions';
 import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
-import {PostService} from "../../service/post.service";
 import {UserService} from "../../service/user.service";
 import {PushNotificationsService} from "../../service/push-notifications.service";
 

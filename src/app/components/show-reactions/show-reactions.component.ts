@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {PopoverController} from "@ionic/angular";
-import {ReactResponse} from "../../dto/create-post-response";
 import {PostService} from "../../service/post.service";
 import {ReactionEnum, SimpleReactionDto} from "../../dto/get-post-response";
 import {PostType} from "../../dto/post-type";

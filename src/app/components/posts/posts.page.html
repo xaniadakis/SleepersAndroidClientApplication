@@ -8,7 +8,8 @@
   <ng-template #showContentBlock>
     <ion-list style="background: #0d0d0d" *ngFor="let post of posts; trackBy:trackByArtNo">
       <ion-item-sliding>
-        <ion-item style="background: #0d0d0d; margin-left: auto; margin-right: auto;" lines="none" class="ion-no-padding ion-no-margin" (dblclick)="likeIt(post.id)" >
+        <ion-item style="background: #0d0d0d; margin-left: auto; margin-right: auto;" lines="none"
+                  class="ion-no-padding ion-no-margin" (dblclick)="likeIt(post.id)">
           <ion-card class="ion-no-padding">
             <ion-card-header>
               <ion-card-subtitle type="dark">
@@ -27,11 +28,13 @@
                 </div>
               </ion-card-subtitle>
             </ion-card-header>
-            <div *ngIf="notEmpty(post.image)" (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
+            <div *ngIf="notEmpty(post.image)"
+                 (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
               <img id="post-image" alt="ey where my pic at yo" src="{{imageApi+post.image}}"
                    loading="lazy"/>
             </div>
-            <div *ngIf="notEmpty(post.youtubeVideoId)" (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
+            <div *ngIf="notEmpty(post.youtubeVideoId)"
+                 (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)">
               <iframe style="width: 100vw; height: 30vh;" [src]="(youtubeEmbedApi+post.youtubeVideoId) | safe"
                       frameborder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

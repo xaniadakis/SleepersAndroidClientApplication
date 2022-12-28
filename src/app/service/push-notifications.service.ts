@@ -2,10 +2,8 @@ import {ActionPerformed, PushNotifications, PushNotificationSchema, Token} from 
 import {Injectable} from '@angular/core';
 import {Capacitor} from '@capacitor/core';
 import {ToastService} from "./toast.service";
-import {ToastButton} from "@ionic/angular";
 import {Clipboard} from "@awesome-cordova-plugins/clipboard/ngx";
 import {UserService} from "./user.service";
-import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
 
 @Injectable({
   providedIn: 'root'
