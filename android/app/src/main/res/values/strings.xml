@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="app_name">Sleepers</string>
-  <string name="title_activity_main">Sleepers</string>
+  <string name="app_name">Taco</string>
+  <string name="title_activity_main">Taco</string>
   <string name="package_name">com.glf.sleepers</string>
   <string name="custom_url_scheme">com.glf.sleepers</string>
 </resources>

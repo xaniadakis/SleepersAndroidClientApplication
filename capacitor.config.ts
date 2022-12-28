@@ -2,7 +2,7 @@ import {CapacitorConfig} from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.glf.sleepers',
-  appName: 'Sleepers',
+  appName: 'Taco',
   webDir: 'www',
   bundledWebRuntime: false,
   plugins: {
