@@ -28,7 +28,7 @@ export class ReactionsComponent {
     this.react(reaction);
     this.popoverController.dismiss();
     setTimeout(() => {
-      this.sharedService.posted(this.postType)
+      this.sharedService.editedOrReacted(this.postType, this.postId);
     }, 300);
   }
 

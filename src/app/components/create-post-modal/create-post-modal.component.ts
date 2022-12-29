@@ -13,6 +13,8 @@ import {Camera, CameraOptions} from '@awesome-cordova-plugins/camera/ngx';
 import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
 import {Capacitor} from '@capacitor/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {catchError} from "rxjs/operators";
+import {throwError} from "rxjs";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -113,10 +115,17 @@ export class CreatePostModalComponent {
 
   confirm(form: NgForm) {
     this.createPostV2(form)
-    setTimeout(() => {
-      this.sharedService.posted(this.postType);
-      console.log("notified em about whats comin: " + this.postType)
-    }, 300);
+      .catch(error => {
+        console.log("error: " + error)
+      })
+      .then((postId: bigint | void) => {
+        if (postId != null)
+          setTimeout(() => {
+            this.sharedService.posted(this.postType, postId);
+            console.log("notified em about whats comin: " + this.postType)
+          }, 300)
+        else console.log("error")
+      });
     return this.modalCtrl.dismiss(this.name, 'confirm');
   }
 
@@ -166,18 +175,28 @@ export class CreatePostModalComponent {
     });
   }
 
-  createPostV2(form: NgForm) {
-    const text = form.controls["text"].value;
-    if (((text == null || text == '') && !this.uploadImage && this.youtubeVideoId == null) || (this.postType == null)) {
-      this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
-      return;
-    }
+  createPostV2(form: NgForm): Promise<bigint> {
+    return new Promise((resolve, reject) => {
+      const text = form.controls["text"].value;
+      if (((text == null || text == '') && !this.uploadImage && this.youtubeVideoId == null) || (this.postType == null)) {
+        this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
+        reject();
+      }
 
-    this.postService.savePostV2(text, this.imgResult, this.youtubeVideoId, this.postType, this.uploadImage).subscribe(data => {
-      // const response: CreateCommentResponse = data;
-      form.reset();
-      this.hidden = true;
-      this.imageSrc = null;
+      this.postService.savePostV2(text, this.imgResult, this.youtubeVideoId, this.postType, this.uploadImage)
+        .pipe(catchError(err => {
+          this.toastService.presentToastWithDuration("bottom",
+            "Error while saving post: " + err,
+            1500);
+          return throwError(err);
+        }))
+        .subscribe(data => {
+          console.log("SUCCESS: " + data.message);
+          form.reset();
+          this.hidden = true;
+          this.imageSrc = null;
+          resolve(data.newPostId);
+        });
     });
   }
 

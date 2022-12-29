@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {SharedService} from "../../service/shared.service";
-import {PostType} from "../../dto/post-type";
 
 @Component({
   selector: 'app-home',
@@ -18,7 +17,7 @@ export class HomePage implements OnInit {
     setTimeout(() => {
       console.log("gotta refresh");
       // location.reload();
-      this.sharedService.posted(PostType[localStorage.getItem("postType") as keyof typeof PostType]);
+      this.sharedService.refreshed();
       event.target.complete();
     }, 500);
   };

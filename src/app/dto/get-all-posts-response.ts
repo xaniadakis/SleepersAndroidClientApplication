@@ -4,3 +4,8 @@ export class GetAllPostsResponse {
   message: string;
   postDtos: UiPostDto[];
 }
+
+export class GetPostResponse {
+  message: string;
+  postDto: UiPostDto;
+}

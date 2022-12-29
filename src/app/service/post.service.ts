@@ -1,17 +1,19 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {GetAllPostsResponse} from '../dto/get-all-posts-response';
+import {GetAllPostsResponse, GetPostResponse} from '../dto/get-all-posts-response';
 import {Observable} from 'rxjs';
 import {CreatePostResponse} from "../dto/create-post-response";
 import {GlobalConstants} from "../util/global-constants";
 import {GetCommentsResponse, GetReactionsResponse, ReactionEnum} from "../dto/get-post-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {PostType} from "../dto/post-type";
+import {DeletePostResponse} from "../dto/delete-post-response";
 
 @Injectable()
 export class PostService {
 
   private getAllPostsUrl: string;
+  private getPostUrl: string;
   private getPostCommentsUrl: string;
   private getPostReactionsUrl: string;
   private savePostUrl: string;
@@ -25,6 +27,7 @@ export class PostService {
 
   constructor(private http: HttpClient) {
     this.getAllPostsUrl = GlobalConstants.APIURL + '/post/';
+    this.getPostUrl = GlobalConstants.APIURL + '/post/unique/';
     this.modifyPostUrl = GlobalConstants.APIURL + '/post/';
     this.modifyPostV2Url = GlobalConstants.APIURL + '/post/v2/';
     this.savePostUrl = GlobalConstants.APIURL + '/post/';
@@ -39,6 +42,10 @@ export class PostService {
 
   public findAll(postType: PostType, pageNumber: number, pageLimit: number): Observable<GetAllPostsResponse> {
     return this.http.get<GetAllPostsResponse>(this.getAllPostsUrl + "?postType=" + postType + "&pageNumber=" + pageNumber + "&pageLimit=" + pageLimit);
+  }
+
+  public findPost(postType: PostType, postId: bigint): Observable<GetPostResponse> {
+    return this.http.get<GetPostResponse>(this.getPostUrl + "?postType=" + postType + "&postId=" + postId);
   }
 
   public findAllComments(postId: bigint, postType: string): Observable<GetCommentsResponse> {
@@ -116,8 +123,12 @@ export class PostService {
     modifyPost.append("postId", postId.toString())
     modifyPost.append("text", text)
     modifyPost.append("postType", postType)
-    if (image != null)
+    if (image != null) {
+      console.log("imma upload: " + image);
+      console.log("size: " + image.length);
       modifyPost.append("image", image)
+    } else
+      console.log("image be null");
     if (youtubeVideoId != null)
       modifyPost.append("youtubeVideoId", youtubeVideoId)
     return this.http.put<ModifyPostResponse>(this.modifyPostV2Url, modifyPost);
@@ -125,7 +136,7 @@ export class PostService {
 
   public deletePost(postId: bigint, postType: PostType) {
     const reqParams = "?postId=" + postId.toString() + "&postType=" + postType;
-    return this.http.delete<ModifyPostResponse>(this.deletePostUrl + reqParams);
+    return this.http.delete<DeletePostResponse>(this.deletePostUrl + reqParams);
   }
 
 }

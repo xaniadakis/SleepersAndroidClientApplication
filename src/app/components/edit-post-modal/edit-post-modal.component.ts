@@ -11,6 +11,8 @@ import {SharedService} from "../../service/shared.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Camera, CameraOptions} from "@awesome-cordova-plugins/camera/ngx";
 import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
+import {catchError} from "rxjs/operators";
+import {throwError} from "rxjs";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -73,11 +75,18 @@ export class EditPostModalComponent {
   }
 
   confirm(form: NgForm) {
-    this.onModify(form);
-    setTimeout(() => {
-      this.sharedService.posted(this.type);
-      console.log("notified em about whats comin: " + this.type)
-    }, 300);
+    this.onModifyV2(form)
+      .catch(error => {
+        console.log("error: " + error)
+      })
+      .then((postId: bigint | void) => {
+        if (postId != null)
+          setTimeout(() => {
+            this.sharedService.editedOrReacted(this.type, postId);
+            console.log("notified em about whats comin: " + this.type)
+          }, 300)
+        else console.log("error")
+      });
     return this.modalCtrl.dismiss(this.name, 'confirm');
   }
 
@@ -264,17 +273,32 @@ export class EditPostModalComponent {
     });
   }
 
-  onModifyV2(form: NgForm) {
-    const text = form.controls["text"].value;
-    if (((text == null || text == '') && this.imgResult == '' && this.youtubeVideoId == null) || (this.type == null)) {
-      this.toastService.presentToast("top", "Mate why did you bother editing, if you aint editing.");
-      return;
-    }
-    this.postService.modifyPostV2(this.id, text, this.imgResult, this.youtubeVideoId, this.type).subscribe(data => {
-      // const response: CreateCommentResponse = data;
-      form.reset();
-      this.hidden = true;
-      this.imageSrc = null;
+  onModifyV2(form: NgForm): Promise<bigint> {
+    return new Promise((resolve, reject) => {
+      const text = form.controls["text"].value;
+      if (((text == null || text == '') && this.imgResult == '' && this.youtubeVideoId == null) || (this.type == null)) {
+        this.toastService.presentToast("top", "Mate why did you bother editing, if you aint editing.");
+        reject();
+      }
+      if (this.imgResult != null) {
+        console.log("imma upload: " + this.imgResult);
+        console.log("size: " + this.imgResult.length);
+      } else
+        console.log("image be null");
+      this.postService.modifyPostV2(this.id, text, this.imgResult, this.youtubeVideoId, this.type)
+        .pipe(catchError(err => {
+          this.toastService.presentToastWithDuration("bottom",
+            "Error while editing post: " + err,
+            1500);
+          return throwError(err);
+        }))
+        .subscribe(data => {
+          console.log("SUCCESS: " + data.message);
+          form.reset();
+          this.hidden = true;
+          this.imageSrc = null;
+          resolve(data.modifiedPostId);
+        });
     });
   }
 
@@ -299,7 +323,7 @@ export class EditPostModalComponent {
       await loading.present();
       console.log('image data =>  ', imageData);
       this.imgResult = 'data:image/jpeg;base64,' + imageData;
-      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      console.log("IMAGE LENGTHyy boi: " + this.imgResult.length);
       this.uploadImage = true;
       await loading.dismiss();
     }, (err) => {
@@ -330,7 +354,7 @@ export class EditPostModalComponent {
       loading.present();
       console.log('image data => [', imageData + "]");
       this.imgResult = 'data:image/jpeg;base64,' + imageData;
-      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      console.log("IMAGE LENGTHyy boi: " + this.imgResult.length);
       this.uploadImage = true;
       loading.dismiss();
     }, (err) => {

@@ -15,7 +15,6 @@ import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 import {catchError} from "rxjs/operators";
 
-
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.page.html',
@@ -53,33 +52,87 @@ export class PostsPage implements OnInit {
     this.pageNumber = 0;
     this.posts.splice(0, this.posts.length)
     this.getAllPosts(this.pageNumber, this.pageLimit);
-    if (this.postType == PostType.CAR)
+    this.sharedService.onRefresh.subscribe({
+      next: (value: boolean) => {
+        this.pageNumber = 0;
+        this.posts.splice(0, this.posts.length)
+        this.getAllPosts(this.pageNumber, this.pageLimit)
+      }
+    });
+    if (this.postType == PostType.CAR) {
       this.sharedService.onCarPost.subscribe({
-        next: (event: boolean) => {
-          this.pageNumber = 0;
-          this.posts.splice(0, this.posts.length)
-          console.log(`Received message #${event}`);
-          this.getAllPosts(this.pageNumber, this.pageLimit);
+        next: (postId: bigint) => {
+          this.getPost(postId)
+            .then(newPost => this.posts.unshift(newPost));
+          console.log(`Received new post #${postId}`);
         }
-      })
-    else if (this.postType == PostType.ART)
+      });
+      this.sharedService.onCarEditOrReact.subscribe({
+        next: (postId: bigint) => {
+          let reactedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+          if (reactedPost == undefined)
+            return;
+          let postIndex = this.posts.indexOf(reactedPost); // 👉️
+          if (postIndex > -1)
+            this.getPost(postId)
+              .then(refinedPost => this.posts.splice(postIndex, 1, refinedPost));
+        }
+      });
+    } else if (this.postType == PostType.ART) {
       this.sharedService.onArtPost.subscribe({
-        next: (event: boolean) => {
-          this.pageNumber = 0;
-          this.posts.splice(0, this.posts.length)
-          console.log(`Received message #${event}`);
-          this.getAllPosts(this.pageNumber, this.pageLimit);
+        next: (postId: bigint) => {
+          this.getPost(postId)
+            .then(newPost => this.posts.unshift(newPost));
+          console.log(`Received new post #${postId}`);
         }
-      })
-    else if (this.postType == PostType.STORY)
+      });
+      this.sharedService.onArtEditOrReact.subscribe({
+        next: (postId: bigint) => {
+          let reactedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+          if (reactedPost == undefined)
+            return;
+          let postIndex = this.posts.indexOf(reactedPost); // 👉️
+          if (postIndex > -1)
+            this.getPost(postId)
+              .then(refinedPost => this.posts.splice(postIndex, 1, refinedPost));
+        }
+      });
+    } else if (this.postType == PostType.STORY) {
       this.sharedService.onStory.subscribe({
-        next: (event: boolean) => {
-          this.pageNumber = 0;
-          this.posts.splice(0, this.posts.length)
-          console.log(`Received message #${event}`);
-          this.getAllPosts(this.pageNumber, this.pageLimit);
+        next: (postId: bigint) => {
+          this.getPost(postId)
+            .then(newPost => this.posts.unshift(newPost));
+          console.log(`Received new post #${postId}`);
         }
-      })
+        // next: (event: boolean) => {
+        //   this.pageNumber = 0;
+        //   this.posts.splice(0, this.posts.length)
+        //   console.log(`Received message #${event}`);
+        //   this.getAllPosts(this.pageNumber, this.pageLimit);
+        // }
+      });
+      this.sharedService.onStoryEditOrReact.subscribe({
+        next: (postId: bigint) => {
+          let reactedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+          if (reactedPost == undefined)
+            return;
+          let postIndex = this.posts.indexOf(reactedPost); // 👉️
+          if (postIndex > -1)
+            this.getPost(postId)
+              .then(refinedPost => this.posts.splice(postIndex, 1, refinedPost));
+        }
+      });
+      // this.sharedService.onStoryDelete.subscribe({
+      //   next: (postId: bigint) => {
+      //     let deletedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+      //     if (deletedPost == undefined)
+      //       return;
+      //     let postIndex = this.posts.indexOf(deletedPost); // 👉️
+      //     if (postIndex > -1)
+      //       this.posts.splice(postIndex, 1);
+      //   }
+      // });
+    }
   }
 
   react(reaction: ReactionEnum, postId: bigint) {
@@ -118,7 +171,12 @@ export class PostsPage implements OnInit {
 
   likeIt(postId: bigint) {
     this.react(ReactionEnum.LOVE, postId);
-    this.ngOnInit();
+    // @ts-ignore
+    let reactedPost: UiPostDto = this.posts.find(uiPostDto => uiPostDto.id === postId);
+    let postIndex = this.posts.indexOf(reactedPost); // 👉️  0
+    this.getPost(postId)
+      .then(refinedPost => this.posts.splice(postIndex, 1, refinedPost));
+    // this.ngOnInit();
   }
 
   notEmpty(string: string) {
@@ -153,6 +211,25 @@ export class PostsPage implements OnInit {
     this.fetching = false;
   }
 
+  async getPost(postId: bigint): Promise<UiPostDto> {
+    // this.fetching = true;
+    console.log("fetching post: " + postId);
+    return new Promise((resolve, reject) => {
+      this.postService.findPost(this.postType, postId)
+        .pipe(catchError(err => {
+          // this.fetching = false;
+          this.toastService.presentToastWithDuration("bottom",
+            "Error while fetching post: " + postId,
+            1500);
+          return throwError(err);
+        }))
+        .subscribe(data => {
+          console.log("SUCCESS: " + data.message);
+          resolve(data.postDto);
+        });
+    });
+  }
+
   doInfinite(event: any) {
     this.pageNumber += 1;
     console.log("Shall fetch postados for page: " + this.pageNumber);
@@ -163,10 +240,25 @@ export class PostsPage implements OnInit {
     if (this.userId == null) {
       return
     }
-    this.postService.deletePost(postId, this.postType).subscribe(data => {
-      console.log(data);
-      this.ngOnInit();
-    });
+    this.postService.deletePost(postId, this.postType)
+      .pipe(catchError(err => {
+        this.toastService.presentToastWithDuration("bottom",
+          "Error while deleting post: " + err,
+          1500);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        console.log("SUCCESS: " + data.message);
+        console.log(data);
+        // this.ngOnInit();
+        // this.sharedService.deleted(this.postType, postId);
+        let deletedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+        if (deletedPost == undefined)
+          return;
+        let postIndex = this.posts.indexOf(deletedPost); // 👉️
+        if (postIndex > -1)
+          this.posts.splice(postIndex, 1);
+      });
   }
 
   getReactionsDesc(num: number) {

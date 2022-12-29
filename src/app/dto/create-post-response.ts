@@ -1,5 +1,6 @@
 export class CreatePostResponse {
   message: string;
+  newPostId: bigint;
 }
 
 export class CreateCommentResponse {
