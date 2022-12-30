@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {GlobalConstants} from "../util/global-constants";
 import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
 import {SignOutResponse} from "../dto/sign-out-response";
-import {GetUserDetailsResponse} from "../dto/get-user-details-response";
+import {GetUserDetailsResponse, GetUsersResponse} from "../dto/get-user-details-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {Observable} from "rxjs";
 
@@ -11,6 +11,7 @@ import {Observable} from "rxjs";
 export class UserService {
 
   private changeProfilePicUrl: string;
+  private getAllUsersUrl: string;
   private logoutUrl: string;
   private checkIfUserExistsUrl: string;
   private checkIfUserExistsUrlWithMail: string;
@@ -25,6 +26,7 @@ export class UserService {
     this.sendFcmTokenUrl = GlobalConstants.APIURL + "/user/push";
     this.checkIfUserExistsUrl = GlobalConstants.APIURL + "/user/existsUsername";
     this.checkIfUserExistsUrlWithMail = GlobalConstants.APIURL + "/user/existsMail";
+    this.getAllUsersUrl = GlobalConstants.APIURL + "/user/";
     this.getUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
     this.modifyUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
   }
@@ -43,6 +45,10 @@ export class UserService {
 
   public logOut() {
     return this.http.get<SignOutResponse>(this.logoutUrl);
+  }
+
+  public getAllUsers(): Observable<GetUsersResponse> {
+    return this.http.get<GetUsersResponse>(this.getAllUsersUrl);
   }
 
   public checkIfUserExists(username: string) {

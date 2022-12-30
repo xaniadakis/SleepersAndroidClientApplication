@@ -11,6 +11,7 @@ import {UserService} from "../../service/user.service";
 import {UserDetailsDto} from "../../dto/get-user-details-response";
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
+import {PostType} from "../../dto/post-type";
 
 
 @Component({
@@ -21,6 +22,7 @@ import {throwError} from "rxjs";
 export class ProfilePage implements OnInit {
 
   imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
+  postType: PostType = PostType.ALL;
 
   // @ts-ignore
   userId: bigint;
@@ -303,5 +305,10 @@ export class ProfilePage implements OnInit {
       this.showOldPasswordDiv = false;
     else
       this.showOldPasswordDiv = true;
+  }
+
+  goToUserPosts() {
+    this.sharedService.hideEditButtonForALilWhile(true);
+    this.router.navigateByUrl('/home/userPosts/'+this.userId);
   }
 }

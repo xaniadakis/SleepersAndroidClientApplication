@@ -4,6 +4,7 @@ export enum PostType {
   CAR = "CAR",
   STORY = "STORY",
   ART = "ART",
+  ALL = "ALL",
   REFRESH = "REFRESH"
 }
 

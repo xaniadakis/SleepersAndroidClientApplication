@@ -10,6 +10,7 @@ export class Tab3Page {
 
   postPlaceholder: string = "Whatz crackalackin pimpalimpin?";
   postType: PostType = PostType.STORY;
+  nonUserPosts: bigint = BigInt(-1);
 
   constructor() {
   }

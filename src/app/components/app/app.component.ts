@@ -286,4 +286,8 @@ export class AppComponent {
   reload() {
     location.reload();
   }
+
+  checkSleepers() {
+    this.router.navigateByUrl('/home/sleepers');
+  }
 }

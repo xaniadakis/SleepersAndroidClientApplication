@@ -7,6 +7,8 @@ import {Tab2Page} from "../tab2/tab2.page";
 import {Tab3Page} from "../tab3/tab3.page";
 import {GuardService} from "../../configuration/authentication/guard.service";
 import {ProfilePage} from "../profile/profile.page";
+import {UserPostsPage} from "../user-posts/user-posts.page";
+import {SleepersPage} from "../sleepers/sleepers.page";
 
 const routes: Routes = [
   {
@@ -51,6 +53,14 @@ const routes: Routes = [
     }, {
       path: 'profile/:userId',
       component: ProfilePage,
+      canActivate: [GuardService]
+    }, {
+      path: 'userPosts/:userId',
+      component: UserPostsPage,
+      canActivate: [GuardService]
+    }, {
+      path: 'sleepers',
+      component: SleepersPage,
       canActivate: [GuardService]
     }]
     // ,loadChildren: () => Tab1PageModule

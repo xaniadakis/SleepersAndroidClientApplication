@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {SharedService} from "../../service/shared.service";
 import {GlobalConstants} from "../../util/global-constants";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PopoverController} from "@ionic/angular";
+import {IonContent, PopoverController} from "@ionic/angular";
 import {ToastService} from "../../service/toast.service";
 import {throwError} from "rxjs";
 import {PostType} from "../../dto/post-type";
@@ -22,7 +22,11 @@ import {catchError} from "rxjs/operators";
 })
 export class PostsPage implements OnInit {
 
+  @ViewChild(IonContent, { static: false }) content: IonContent;
+
   @Input() postType: PostType;
+  @Input() userIdPosted: bigint;
+
   posts: UiPostDto[] = [];
 
   imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
@@ -36,7 +40,7 @@ export class PostsPage implements OnInit {
   fetching: boolean = true;
 
   pageNumber = 0;
-  pageLimit = 2;
+  pageLimit = 3;
 
   constructor(
     private router: Router
@@ -59,12 +63,13 @@ export class PostsPage implements OnInit {
         this.getAllPosts(this.pageNumber, this.pageLimit)
       }
     });
-    if (this.postType == PostType.CAR) {
+    if (this.postType == PostType.CAR || this.postType == PostType.ALL) {
       this.sharedService.onCarPost.subscribe({
         next: (postId: bigint) => {
           this.getPost(postId)
             .then(newPost => this.posts.unshift(newPost));
           console.log(`Received new post #${postId}`);
+          this.scrollToTop();
         }
       });
       this.sharedService.onCarEditOrReact.subscribe({
@@ -78,12 +83,14 @@ export class PostsPage implements OnInit {
               .then(refinedPost => this.posts.splice(postIndex, 1, refinedPost));
         }
       });
-    } else if (this.postType == PostType.ART) {
+    }
+    if (this.postType == PostType.ART || this.postType == PostType.ALL) {
       this.sharedService.onArtPost.subscribe({
         next: (postId: bigint) => {
           this.getPost(postId)
             .then(newPost => this.posts.unshift(newPost));
           console.log(`Received new post #${postId}`);
+          this.scrollToTop();
         }
       });
       this.sharedService.onArtEditOrReact.subscribe({
@@ -97,19 +104,15 @@ export class PostsPage implements OnInit {
               .then(refinedPost => this.posts.splice(postIndex, 1, refinedPost));
         }
       });
-    } else if (this.postType == PostType.STORY) {
+    }
+    if (this.postType == PostType.STORY || this.postType == PostType.ALL) {
       this.sharedService.onStory.subscribe({
         next: (postId: bigint) => {
           this.getPost(postId)
             .then(newPost => this.posts.unshift(newPost));
           console.log(`Received new post #${postId}`);
+          this.scrollToTop();
         }
-        // next: (event: boolean) => {
-        //   this.pageNumber = 0;
-        //   this.posts.splice(0, this.posts.length)
-        //   console.log(`Received message #${event}`);
-        //   this.getAllPosts(this.pageNumber, this.pageLimit);
-        // }
       });
       this.sharedService.onStoryEditOrReact.subscribe({
         next: (postId: bigint) => {
@@ -122,17 +125,11 @@ export class PostsPage implements OnInit {
               .then(refinedPost => this.posts.splice(postIndex, 1, refinedPost));
         }
       });
-      // this.sharedService.onStoryDelete.subscribe({
-      //   next: (postId: bigint) => {
-      //     let deletedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
-      //     if (deletedPost == undefined)
-      //       return;
-      //     let postIndex = this.posts.indexOf(deletedPost); // 👉️
-      //     if (postIndex > -1)
-      //       this.posts.splice(postIndex, 1);
-      //   }
-      // });
     }
+  }
+
+  scrollToTop() {
+    this.content.scrollToTop(1500);
   }
 
   react(reaction: ReactionEnum, postId: bigint) {
@@ -193,20 +190,39 @@ export class PostsPage implements OnInit {
   async getAllPosts(pageNumber: number, pageLimit: number) {
     this.fetching = true;
     console.log("fetching page: " + pageNumber + " with limit: " + pageLimit);
-    await this.postService.findAll(this.postType, pageNumber, pageLimit)
-      .pipe(catchError(err => {
-        this.fetching = false;
-        this.toastService.presentToastWithDuration("middle",
-          "You might wanna sleep on it for a sec, cause either you aint connected or the server is gettin another upgrade",
-          5000);
-        return throwError(err);
-      }))
-      .subscribe(data => {
-        console.log(data.postDtos)
-        for (let i = 0; i < data.postDtos.length; i++) {
-          this.posts.push(data.postDtos[i]);
-        }
-      });
+
+    if(this.userIdPosted==BigInt(-1)) {
+      await this.postService.findAll(this.postType, pageNumber, pageLimit)
+        .pipe(catchError(err => {
+          this.fetching = false;
+          this.toastService.presentToastWithDuration("middle",
+            "You might wanna sleep on it for a sec, cause either you aint connected or the server is gettin another upgrade",
+            5000);
+          return throwError(err);
+        }))
+        .subscribe(data => {
+          console.log(data.postDtos)
+          for (let i = 0; i < data.postDtos.length; i++) {
+            this.posts.push(data.postDtos[i]);
+          }
+        });
+    }
+    else {
+      await this.postService.findAllOfUser(this.userIdPosted, pageNumber, pageLimit)
+        .pipe(catchError(err => {
+          this.fetching = false;
+          this.toastService.presentToastWithDuration("middle",
+            "You might wanna sleep on it for a sec, cause either you aint connected or the server is gettin another upgrade",
+            5000);
+          return throwError(err);
+        }))
+        .subscribe(data => {
+          console.log(data.postDtos)
+          for (let i = 0; i < data.postDtos.length; i++) {
+            this.posts.push(data.postDtos[i]);
+          }
+        });
+    }
     console.log("I received all posts successfully.")
     this.fetching = false;
   }

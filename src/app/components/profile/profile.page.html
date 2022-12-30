@@ -2,13 +2,8 @@
   <div *ngIf="!fetching else showSpinner">
 
     <div class="card ion-no-padding ion-no-margin">
+      <!--      PROFILE PICTURE     -->
       <div class="header ion-no-padding ion-no-margin">
-        <!--      <div>-->
-        <!--        <div id="editbutton" (click)="setEditMode(true)">-->
-        <!--          <a style="color: #1e1e00;">edit</a>-->
-        <!--        </div>-->
-        <!--      </div>-->
-
         <div class="avatar">
           <img class="profilepic" [src]="(imageApi + userDetails.profilePic)" alt="">
           <label *ngIf="!hiddenEditButton" (click)="compressFile()" class="custom-file-upload">
@@ -34,12 +29,15 @@
             </svg>
           </label>
         </div>
-
       </div>
+
+      <!--      DETAILS     -->
       <div class="card-body">
         <div class="user-meta ion-text-center">
           <h3 *ngIf="!editMode" class="playername">{{userDetails.username}}</h3>
         </div>
+
+        <!--        EDIT DETAILS MODE       -->
         <div *ngIf="editMode else showOffMode" style="margin-top: 60px">
 
           <form [formGroup]="editUser" (ngSubmit)="onEdit(editUser)">
@@ -252,7 +250,7 @@
             </ion-list>
           </form>
         </div>
-
+        <!--        SHOW DETAILS MODE       -->
         <ng-template #showOffMode>
           <ion-list class="white ion-no-padding">
 
@@ -333,13 +331,17 @@
             </div>
           </ion-list>
         </ng-template>
-
       </div>
     </div>
+
+
+    <!--    <app-posts [postType]="postType" [userIdPosted]="userId"></app-posts>-->
+
   </div>
   <ng-template #showSpinner>
     <ion-spinner class="loadingCenter" style="transform: scale(5); " name="bubbles"></ion-spinner>
   </ng-template>
+
 
 </ion-content>
 
@@ -354,7 +356,7 @@
     </div>
   </div>
   <ng-template #showBackButton>
-    <ion-button color="light" class="ion-no-padding" style=" margin: 10px; margin-top: 7px; padding: 0px"
+    <ion-button color="light" class="ion-no-padding ion-float-left" style=" margin: 10px; margin-top: 7px; padding: 0px"
                 (click)="goBack()">
       &nbsp;&nbsp;<svg slot="start" xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
                        preserveAspectRatio="xMidYMid meet"
@@ -363,6 +365,15 @@
             d="M15.125 21.1L6.7 12.7q-.15-.15-.212-.325q-.063-.175-.063-.375t.063-.375q.062-.175.212-.325l8.425-8.425q.35-.35.875-.35t.9.375q.375.375.375.875t-.375.875L9.55 12l7.35 7.35q.35.35.35.862q0 .513-.375.888t-.875.375q-.5 0-.875-.375Z"/>
     </svg>
       Back&nbsp;&nbsp;
+    </ion-button>
+    <ion-button color="light" class="ion-no-padding ion-float-right" style=" margin: 10px; margin-top: 7px; padding: 0px"
+                (click)="goToUserPosts()">
+      &nbsp;&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2em" preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 20 20">
+      <path fill="white"
+            d="m10.44 3.02l1.82-1.82l6.36 6.35l-1.83 1.82a2.731 2.731 0 0 0-3.41.36l-.75.75c-.92.93-1.04 2.35-.35 3.41l-1.83 1.82l-2.41-2.41l-2.8 2.79c-.42.42-3.38 2.71-3.8 2.29s1.86-3.39 2.28-3.81l2.79-2.79L4.1 9.36l1.83-1.82c1.05.69 2.48.57 3.4-.36l.75-.75c.93-.92 1.05-2.35.36-3.41z"/>
+    </svg>
+      &nbsp;&nbsp;Check Posts&nbsp;&nbsp;
     </ion-button>
   </ng-template>
 </ion-footer>

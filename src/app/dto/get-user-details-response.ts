@@ -13,3 +13,15 @@ export class UserDetailsDto {
   myHobby: string;
   myQuote: string;
 }
+
+export class GetUsersResponse {
+  uiUserDtos: UiUserDto[];
+  message: string;
+}
+
+export class UiUserDto {
+  id: bigint;
+  username: string;
+  profilePic: string;
+  isOnline: string;
+}

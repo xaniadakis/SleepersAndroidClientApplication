@@ -13,6 +13,7 @@ import {DeletePostResponse} from "../dto/delete-post-response";
 export class PostService {
 
   private getAllPostsUrl: string;
+  private getAllPostsOfUserUrl: string;
   private getPostUrl: string;
   private getPostCommentsUrl: string;
   private getPostReactionsUrl: string;
@@ -27,6 +28,7 @@ export class PostService {
 
   constructor(private http: HttpClient) {
     this.getAllPostsUrl = GlobalConstants.APIURL + '/post/';
+    this.getAllPostsOfUserUrl = GlobalConstants.APIURL + '/post/ofUser/';
     this.getPostUrl = GlobalConstants.APIURL + '/post/unique/';
     this.modifyPostUrl = GlobalConstants.APIURL + '/post/';
     this.modifyPostV2Url = GlobalConstants.APIURL + '/post/v2/';
@@ -42,6 +44,11 @@ export class PostService {
 
   public findAll(postType: PostType, pageNumber: number, pageLimit: number): Observable<GetAllPostsResponse> {
     return this.http.get<GetAllPostsResponse>(this.getAllPostsUrl + "?postType=" + postType + "&pageNumber=" + pageNumber + "&pageLimit=" + pageLimit);
+  }
+
+  public findAllOfUser(userId: bigint, pageNumber: number, pageLimit: number): Observable<GetAllPostsResponse> {
+    return this.http.get<GetAllPostsResponse>(this.getAllPostsOfUserUrl
+      + "?pageNumber=" + pageNumber + "&pageLimit=" + pageLimit + "&userId=" + userId);
   }
 
   public findPost(postType: PostType, postId: bigint): Observable<GetPostResponse> {

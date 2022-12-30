@@ -1,0 +1,33 @@
+<ion-content fullscreen="true" slot="fixed">
+  <div *ngIf="fetching; else showContentBlock">
+    <ion-spinner class="myLoadingCenter" style="transform: scale(5);" name="bubbles"></ion-spinner>
+  </div>
+  <ng-template #showContentBlock>
+    <div style="padding-top: 10px; background: #0d0d0d;">
+    <ion-list style="background: #0d0d0d;" *ngFor="let sleeper of sleepers;">
+      <ion-item style="background: #0d0d0d; margin-left: auto; margin-right: auto; color: white; padding-top: 0px; margin-top: -17px;">
+<!--        <ion-chip id="post-owner-avatar">-->
+          <ion-avatar>
+            <img alt="avatar" src="{{(imageApi+sleeper.profilePic)}}"/>
+          </ion-avatar>
+          <ion-label style="padding-left: 15px">{{sleeper.username}}</ion-label>
+<!--        </ion-chip>-->
+      </ion-item>
+    </ion-list>
+    </div>
+  </ng-template>
+</ion-content>
+
+<ion-footer class="my-footer" translucent no-border>
+  <ion-button color="light" class="ion-no-padding ion-float-left backbutton"
+              style=" width: 95px; height: 35px; margin: 10px; margin-top: 7px; padding: 0px"
+              (click)="goBack()">
+    <svg class="ion-no-padding" slot="start" xmlns="http://www.w3.org/2000/svg"
+         width="2.5em" height="2.5em"
+         preserveAspectRatio="xMidYMid meet"
+         viewBox="0 0 24 24">
+      <path fill="white"
+            d="M15.125 21.1L6.7 12.7q-.15-.15-.212-.325q-.063-.175-.063-.375t.063-.375q.062-.175.212-.325l8.425-8.425q.35-.35.875-.35t.9.375q.375.375.375.875t-.375.875L9.55 12l7.35 7.35q.35.35.35.862q0 .513-.375.888t-.875.375q-.5 0-.875-.375Z"/>
+    </svg>&nbsp;Back&nbsp;
+  </ion-button>
+</ion-footer>

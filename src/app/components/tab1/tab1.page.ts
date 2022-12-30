@@ -10,7 +10,7 @@ import {PostType} from "../../dto/post-type";
 export class Tab1Page {
 
   postType: PostType = PostType.ART;
-
+  nonUserPosts: bigint = BigInt(-1);
   postPlaceholder: string = "Post some art. . .";
   poem1: string = "What happens to a dream deferred?\n" +
     "\n" +

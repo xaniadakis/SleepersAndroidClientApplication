@@ -38,6 +38,8 @@ import {PostsPage} from "../posts/posts.page";
 // import { AppUpdate } from '@ionic-native/app-update/ngx';
 import {Camera} from '@awesome-cordova-plugins/camera/ngx';
 import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
+import {UserPostsPage} from "../user-posts/user-posts.page";
+import {SleepersPage} from "../sleepers/sleepers.page";
 
 @NgModule({
   declarations: [AppComponent
@@ -54,6 +56,8 @@ import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
     , ProfilePage
     , SafePipe
     , PostsPage
+    , UserPostsPage
+    , SleepersPage
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],
@@ -93,6 +97,9 @@ import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
     // CdkVirtualScrollViewport,
     // LogUpdateService,
     // CheckForUpdateService
+  ],
+  exports: [
+    PostsPage
   ],
   bootstrap: [AppComponent]
   // ,schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

@@ -8,7 +8,7 @@ import {PostType} from "../../dto/post-type";
 })
 export class Tab2Page {
   postType: PostType = PostType.CAR;
-
+  nonUserPosts: bigint = BigInt(-1);
   postPlaceholder: string = "Send it dude . .";
 
   constructor() {

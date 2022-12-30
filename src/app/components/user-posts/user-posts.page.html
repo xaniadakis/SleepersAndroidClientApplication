@@ -1,0 +1,25 @@
+<ion-content fullscreen="true" slot="fixed">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Art</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <app-posts [postType]="postType" [userIdPosted]="userId"></app-posts>
+
+</ion-content>
+
+
+<ion-footer class="my-footer" translucent no-border>
+  <ion-button color="light" class="ion-no-padding ion-float-left backbutton"
+              style=" width: 95px; height: 35px; margin: 10px; margin-top: 7px; padding: 0px"
+              (click)="goBack()">
+    <svg class="ion-no-padding" slot="start" xmlns="http://www.w3.org/2000/svg"
+         width="2.5em" height="2.5em"
+         preserveAspectRatio="xMidYMid meet"
+         viewBox="0 0 24 24">
+      <path fill="white"
+            d="M15.125 21.1L6.7 12.7q-.15-.15-.212-.325q-.063-.175-.063-.375t.063-.375q.062-.175.212-.325l8.425-8.425q.35-.35.875-.35t.9.375q.375.375.375.875t-.375.875L9.55 12l7.35 7.35q.35.35.35.862q0 .513-.375.888t-.875.375q-.5 0-.875-.375Z"/>
+    </svg>&nbsp;Back&nbsp;
+  </ion-button>
+</ion-footer>
