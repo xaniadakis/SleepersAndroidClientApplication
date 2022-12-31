@@ -12,6 +12,7 @@ export class UserDetailsDto {
   myOccupation: string;
   myHobby: string;
   myQuote: string;
+  lastActedAt: string;
 }
 
 export class GetUsersResponse {
@@ -23,5 +24,5 @@ export class UiUserDto {
   id: bigint;
   username: string;
   profilePic: string;
-  isOnline: string;
+  lastActedAt: string;
 }

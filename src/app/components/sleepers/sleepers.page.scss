@@ -25,3 +25,10 @@ ion-button.backbutton {
   transform: translate(-50%, -50%);
   color: whitesmoke;
 }
+
+.sleeper:hover a{
+  --background-color: #DA0037 !important;
+  --background-hover: #DA0037;
+  --color: white;
+  cursor: pointer;
+}

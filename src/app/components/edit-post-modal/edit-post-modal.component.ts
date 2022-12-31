@@ -261,11 +261,11 @@ export class EditPostModalComponent {
 
   onModify(form: NgForm) {
     const text = form.controls["text"].value;
-    if (((text == null || text == '') && this.imgResult == '' && this.youtubeVideoId == null) || (this.type == null)) {
+    if (((text == null || text == '') && this.imgResult == '' && this.youtubeVideoId == null)) {
       this.toastService.presentToast("top", "Mate why did you bother editing, if you aint editing.");
       return;
     }
-    this.postService.modifyPost(this.id, text, this.imageUploaded, this.youtubeVideoId, this.type).subscribe(data => {
+    this.postService.modifyPost(this.id, text, this.imageUploaded, this.youtubeVideoId).subscribe(data => {
       // const response: CreateCommentResponse = data;
       form.reset();
       this.hidden = true;
@@ -276,7 +276,7 @@ export class EditPostModalComponent {
   onModifyV2(form: NgForm): Promise<bigint> {
     return new Promise((resolve, reject) => {
       const text = form.controls["text"].value;
-      if (((text == null || text == '') && this.imgResult == '' && this.youtubeVideoId == null) || (this.type == null)) {
+      if (((text == null || text == '') && this.imgResult == '' && this.youtubeVideoId == null)) {
         this.toastService.presentToast("top", "Mate why did you bother editing, if you aint editing.");
         reject();
       }
@@ -285,7 +285,7 @@ export class EditPostModalComponent {
         console.log("size: " + this.imgResult.length);
       } else
         console.log("image be null");
-      this.postService.modifyPostV2(this.id, text, this.imgResult, this.youtubeVideoId, this.type)
+      this.postService.modifyPostV2(this.id, text, this.imgResult, this.youtubeVideoId)
         .pipe(catchError(err => {
           this.toastService.presentToastWithDuration("bottom",
             "Error while editing post: " + err,

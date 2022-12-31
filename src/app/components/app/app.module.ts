@@ -40,6 +40,8 @@ import {Camera} from '@awesome-cordova-plugins/camera/ngx';
 import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
 import {UserPostsPage} from "../user-posts/user-posts.page";
 import {SleepersPage} from "../sleepers/sleepers.page";
+import {ProposeChangeModalComponent} from "../propose-change-modal/propose-change-modal.component";
+import {SafePipeHtml} from "../safe-pipe-html/safe.pipe";
 
 @NgModule({
   declarations: [AppComponent
@@ -51,10 +53,12 @@ import {SleepersPage} from "../sleepers/sleepers.page";
     , EditPostModalComponent
     , ShowPostModalComponent
     , CreatePostModalComponent
+    , ProposeChangeModalComponent
     , ReactionsComponent
     , ShowReactionsComponent
     , ProfilePage
     , SafePipe
+    , SafePipeHtml
     , PostsPage
     , UserPostsPage
     , SleepersPage

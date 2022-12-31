@@ -4,17 +4,23 @@
   </div>
   <ng-template #showContentBlock>
     <div style="padding-top: 10px; background: #0d0d0d;">
-    <ion-list style="background: #0d0d0d;" *ngFor="let sleeper of sleepers;">
-      <ion-item style="background: #0d0d0d; margin-left: auto; margin-right: auto; color: white; padding-top: 0px; margin-top: -17px;">
-<!--        <ion-chip id="post-owner-avatar">-->
+      <ion-list style="background: #0d0d0d;" *ngFor="let sleeper of sleepers;">
+        <ion-item class="sleeper" style="background: #0d0d0d; margin-left: auto; margin-right: auto;
+                       color: white; padding-top: 0px; margin-top: -16px;"
+                  (click)="goToProfilePage(sleeper.id)">
           <ion-avatar>
             <img alt="avatar" src="{{(imageApi+sleeper.profilePic)}}"/>
           </ion-avatar>
           <ion-label style="padding-left: 15px">{{sleeper.username}}</ion-label>
-<!--        </ion-chip>-->
-      </ion-item>
-    </ion-list>
+          <div [innerHTML]="setBadge(sleeper.lastActedAt) | safeHtml">
+<!--            <ion-badge style="margin-right: 15px" [color]="getBadgeColor(sleeper.lastActedAt)">{{getBadgeText(sleeper.lastActedAt)}}</ion-badge>-->
+          </div>
+        </ion-item>
+      </ion-list>
     </div>
+    <ion-infinite-scroll style="background: #0d0d0d; color: grey;" (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </ng-template>
 </ion-content>
 

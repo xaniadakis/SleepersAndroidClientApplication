@@ -290,4 +290,8 @@ export class AppComponent {
   checkSleepers() {
     this.router.navigateByUrl('/home/sleepers');
   }
+
+  onProposal() {
+
+  }
 }

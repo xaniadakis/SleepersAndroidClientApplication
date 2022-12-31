@@ -47,8 +47,8 @@ export class UserService {
     return this.http.get<SignOutResponse>(this.logoutUrl);
   }
 
-  public getAllUsers(): Observable<GetUsersResponse> {
-    return this.http.get<GetUsersResponse>(this.getAllUsersUrl);
+  public getAllUsers(pageNumber: number, pageLimit: number): Observable<GetUsersResponse> {
+    return this.http.get<GetUsersResponse>(this.getAllUsersUrl + "?pageNumber=" + pageNumber + "&pageLimit=" + pageLimit);
   }
 
   public checkIfUserExists(username: string) {

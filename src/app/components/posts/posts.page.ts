@@ -22,7 +22,7 @@ import {catchError} from "rxjs/operators";
 })
 export class PostsPage implements OnInit {
 
-  @ViewChild(IonContent, { static: false }) content: IonContent;
+  @ViewChild(IonContent, {static: false}) content: IonContent;
 
   @Input() postType: PostType;
   @Input() userIdPosted: bigint;
@@ -136,7 +136,7 @@ export class PostsPage implements OnInit {
     if (this.userId == null) {
       return;
     }
-    this.postService.saveReaction(postId, reaction, this.postType).subscribe(data => {
+    this.postService.saveReaction(postId, reaction).subscribe(data => {
       const response: ReactResponse = data;
       console.log(response)
     });
@@ -191,7 +191,7 @@ export class PostsPage implements OnInit {
     this.fetching = true;
     console.log("fetching page: " + pageNumber + " with limit: " + pageLimit);
 
-    if(this.userIdPosted==BigInt(-1)) {
+    if (this.userIdPosted == BigInt(-1)) {
       await this.postService.findAll(this.postType, pageNumber, pageLimit)
         .pipe(catchError(err => {
           this.fetching = false;
@@ -206,8 +206,7 @@ export class PostsPage implements OnInit {
             this.posts.push(data.postDtos[i]);
           }
         });
-    }
-    else {
+    } else {
       await this.postService.findAllOfUser(this.userIdPosted, pageNumber, pageLimit)
         .pipe(catchError(err => {
           this.fetching = false;
@@ -231,12 +230,13 @@ export class PostsPage implements OnInit {
     // this.fetching = true;
     console.log("fetching post: " + postId);
     return new Promise((resolve, reject) => {
-      this.postService.findPost(this.postType, postId)
+      this.postService.findPost(postId)
         .pipe(catchError(err => {
           // this.fetching = false;
-          this.toastService.presentToastWithDuration("bottom",
-            "Error while fetching post: " + postId,
-            1500);
+          // this.toastService.presentToastWithDuration("bottom",
+          //   "Error while fetching post: " + postId,
+          //   1500);
+          console.log("Error while fetching post: " + postId);
           return throwError(err);
         }))
         .subscribe(data => {
@@ -256,7 +256,7 @@ export class PostsPage implements OnInit {
     if (this.userId == null) {
       return
     }
-    this.postService.deletePost(postId, this.postType)
+    this.postService.deletePost(postId)
       .pipe(catchError(err => {
         this.toastService.presentToastWithDuration("bottom",
           "Error while deleting post: " + err,
@@ -300,6 +300,37 @@ export class PostsPage implements OnInit {
   }
 
   goToProfilePage(ownerId: bigint) {
-    this.router.navigateByUrl("/home/profile/" + ownerId);
+    this.router.navigateByUrl("/home/profile/" + ownerId + "/" + 0);
+  }
+
+  setBadge(lastActedAt: string): string {
+    if(this.empty(lastActedAt))
+      return "danger";
+    var lastActedAtDate = new Date(lastActedAt);
+    var now = new Date();
+    var diffMins = this.diffMinutes(lastActedAtDate, now)
+
+    switch (true) {
+      case (diffMins<5):
+        return "success";
+        break;
+      case (diffMins<1500):
+        return "warning";
+        break;
+      default:
+        return "danger";
+        break;
+    }
+  }
+
+  diffMinutes(date1: Date, date2: Date) {
+    return Math.round((date2.getTime() - date1.getTime()) / 60000);
+  }
+
+  empty(string: string) {
+    if (string == null || string.length === 0)
+      return true;
+    else
+      return false;
   }
 }

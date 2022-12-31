@@ -11,12 +11,13 @@
         <ion-item style="background: #0d0d0d; margin-left: auto; margin-right: auto;" lines="none"
                   class="ion-no-padding ion-no-margin" (dblclick)="likeIt(post.id)">
           <ion-card class="ion-no-padding">
-            <ion-card-header>
+            <ion-card-header (click)="goToProfilePage(post.ownerId)">
               <ion-card-subtitle type="dark">
                 <div class="ion-float-start">
-                  <ion-chip id="post-owner-avatar" (click)="goToProfilePage(post.ownerId)">
+                  <ion-chip id="post-owner-avatar">
                     <ion-avatar>
                       <img alt="avatar" src="{{(imageApi+post.ownerProfilePic)}}"/>
+                      <ion-badge [color]="setBadge(post.ownerLastActedAt)">&nbsp;</ion-badge>
                     </ion-avatar>
                     <ion-label><b>{{post.owner}}</b></ion-label>
                   </ion-chip>

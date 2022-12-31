@@ -65,6 +65,8 @@ export class ProfilePage implements OnInit {
 
   hiddenEditButton: boolean = false;
 
+  backToSleepersList: boolean = false;
+
   constructor(private sharedService: SharedService,
               private router: Router,
               private platform: Platform,
@@ -78,19 +80,25 @@ export class ProfilePage implements OnInit {
     if (userIdString != null)
       this.userId = BigInt(userIdString);
 
-    if (userIdString != "0") {
+    if (userIdString != "0" && userIdString!=this.myUserId) {
       this.hiddenEditButton = true;
       this.sharedService.hideEditButtonForALilWhile(true);
     } else {
       if (this.myUserId != null)
         this.userId = BigInt(this.myUserId);
+      this.sharedService.hideEditButtonForALilWhile(false);
     }
+    let naviedFromUsersList = this.route.snapshot.paramMap.get('naviedFromUsersList');
+    if(naviedFromUsersList=="1")
+      this.backToSleepersList = true;
+    else
+      this.backToSleepersList = false;
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
-      if (this.hiddenEditButton)
-        this.sharedService.hideEditButtonForALilWhile(false);
-      this.sharedService.hidePostButtonForALilWhile(false);
-      this.router.navigateByUrl('/home/tabs/tab3');
+      this.goBack();
     })
+    console.log("userId: "+this.userId);
+    console.log("naviedFromUsersList: "+this.backToSleepersList);
+
   }
 
   ngOnInit() {
@@ -108,10 +116,17 @@ export class ProfilePage implements OnInit {
   }
 
   goBack() {
-    if (this.hiddenEditButton)
-      this.sharedService.hideEditButtonForALilWhile(false);
-    this.sharedService.hidePostButtonForALilWhile(false);
-    this.router.navigateByUrl('/home/tabs/tab3');
+    if(!this.backToSleepersList) {
+      if (this.hiddenEditButton)
+        this.sharedService.hideEditButtonForALilWhile(false);
+      this.sharedService.hidePostButtonForALilWhile(false);
+      this.router.navigateByUrl('/home/tabs/tab3');
+    }
+    else {
+      if (!this.hiddenEditButton)
+        this.sharedService.hideEditButtonForALilWhile(true);
+      this.router.navigateByUrl('/home/sleepers');
+    }
   }
 
   compressFile() {
@@ -236,6 +251,7 @@ export class ProfilePage implements OnInit {
 
   async retrieveUserDetails(userId: bigint) {
     this.fetching = true;
+    console.log("retrieving detailados for userId: "+this.userId);
     this.userService.retrieveUserDetails(userId)
       .pipe(catchError(err => {
         this.toastService.presentToastWithDuration("middle", err, 3000);
@@ -309,6 +325,7 @@ export class ProfilePage implements OnInit {
 
   goToUserPosts() {
     this.sharedService.hideEditButtonForALilWhile(true);
-    this.router.navigateByUrl('/home/userPosts/'+this.userId);
+    var i = this.backToSleepersList ? 1 : 0;
+    this.router.navigateByUrl('/home/userPosts/' + this.userId+"/"+i);
   }
 }

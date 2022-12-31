@@ -8,6 +8,7 @@ import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
 import {PostType} from "../../dto/post-type";
 import {CreateCommentResponse} from "../../dto/create-post-response";
+import {SharedService} from "../../service/shared.service";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -36,6 +37,7 @@ export class ShowPostModalComponent {
   constructor(private modalCtrl: ModalController
     , private toastService: ToastService
     , private postService: PostService
+    , private sharedService: SharedService
     , private platform: Platform) {
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
       return this.modalCtrl.dismiss(null, 'cancel');
@@ -49,7 +51,7 @@ export class ShowPostModalComponent {
   private getPostComments() {
     if (this.userId == null)
       return
-    this.postService.findAllComments(this.id, this.type).subscribe(data => {
+    this.postService.findAllComments(this.id).subscribe(data => {
       this.comments = data.postCommentsDto.comments;
 
       console.log(this.comments);
@@ -63,10 +65,13 @@ export class ShowPostModalComponent {
     if (this.userId == null) {
       return;
     }
-    this.postService.saveComment(this.id, form.controls["commentText"].value, this.type).subscribe(data => {
+    this.postService.saveComment(this.id, form.controls["commentText"].value).subscribe(data => {
       const response: CreateCommentResponse = data;
       // alert(response)
       form.reset()
+      setTimeout(() => {
+        this.sharedService.editedOrReacted(this.type, this.id);
+      }, 300);
       this.ngOnInit();
     });
   }

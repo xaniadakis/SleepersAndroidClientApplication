@@ -51,11 +51,11 @@ const routes: Routes = [
           canActivate: [GuardService],
         }]
     }, {
-      path: 'profile/:userId',
+      path: 'profile/:userId/:naviedFromUsersList',
       component: ProfilePage,
       canActivate: [GuardService]
     }, {
-      path: 'userPosts/:userId',
+      path: 'userPosts/:userId/:naviedFromUsersList',
       component: UserPostsPage,
       canActivate: [GuardService]
     }, {

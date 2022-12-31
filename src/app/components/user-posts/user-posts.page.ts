@@ -16,6 +16,7 @@ export class UserPostsPage {
   userId: bigint;
   myUserIdString: string | null = localStorage.getItem("userId");
   myUserId: bigint;
+  backToSleepersList: boolean;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -28,19 +29,30 @@ export class UserPostsPage {
 
     if (this.myUserIdString != null)
       this.myUserId = BigInt(this.myUserIdString);
+
+    let naviedFromUsersList = this.route.snapshot.paramMap.get('naviedFromUsersList');
+    if (naviedFromUsersList == "1")
+      this.backToSleepersList = true;
+    else
+      this.backToSleepersList = false;
   }
 
   ngOnInit() {
   }
 
   goBack() {
-    if (this.userId == this.myUserId) {
-      console.log("its me yoo!!");
-      this.sharedService.hidePostButtonForALilWhile(true);
-      setTimeout(() => {
-        this.sharedService.hideEditButtonForALilWhile(false)
-      }, 100);
+    // if (this.userId == this.myUserId) {
+    //   console.log("its me yoo!!");
+    //   this.sharedService.hidePostButtonForALilWhile(true);
+    //   setTimeout(() => {
+    //     this.sharedService.hideEditButtonForALilWhile(true);
+    //   }, 100);
+    // }
+    if(this.backToSleepersList)
+      this.router.navigateByUrl('/home/sleepers');
+    else{
+      this.sharedService.hidePostButtonForALilWhile(false);
+      this.router.navigateByUrl('/home/tabs/tab3');
     }
-    this.router.navigateByUrl('/home/profile/' + this.userId);
   }
 }

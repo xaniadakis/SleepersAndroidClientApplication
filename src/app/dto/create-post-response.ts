@@ -10,3 +10,8 @@ export class CreateCommentResponse {
 export class ReactResponse {
   message: string;
 }
+
+export class ProposeChangeResponse {
+  message: string;
+  changeProposalId: bigint;
+}

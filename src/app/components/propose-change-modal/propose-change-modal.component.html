@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Propose a change</ion-title>
+    <ion-buttons slot="end">
+      <ion-button type="submit" (click)="confirm(form)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="white" d="M2.01 21L23 12L2.01 3L2 10l15 2l-15 2z"/>
+        </svg>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <form #form="ngForm" (ngSubmit)="proposeChange(form)">
+
+    <ion-card id="postado-form">
+      <ion-row style="background-color: #121212;" class="ion-justify-content-center" *ngIf="uploadImage">
+        <div class="container">
+          <img style=" margin-bottom: 2px; border-radius: 10px" id="display-image"
+               [src]="imgResult" alt="your image"/>
+          <ion-button class="fas fa-download" (click)="unloadImage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                 viewBox="0 0 24 24">
+              <path fill="#DA0037"
+                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2zm4.207 12.793l-1.414 1.414L12 13.414l-2.793 2.793l-1.414-1.414L10.586 12L7.793 9.207l1.414-1.414L12 10.586l2.793-2.793l1.414 1.414L13.414 12l2.793 2.793z"/>
+            </svg>
+          </ion-button>
+        </div>
+      </ion-row>
+    </ion-card>
+
+    <ion-row class="inline">
+      <ion-textarea [autoGrow]="true" style="box-shadow: inset -2px -2px 3.5px rgba(100, 100, 100, 0.5),
+                                  inset 1.5px 1.5px 3px rgba(10, 10, 10, 0.7);"
+                    class="ion-float-left change-custom-textarea" placeholder="Report a bug or propose a new feature to the developer .."
+                    name="text" [(ngModel)]="postForm.text" ngControl="text">
+      </ion-textarea>
+
+      <!--    CAMERA  -->
+      <!--    <button (click)="compressFile()">Upload and compress Image</button>-->
+      <label (click)="takePictureInstantlyDataUri()" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="white"
+                d="M12.5 9q-.275 0-.425-.25q-.15-.25 0-.5L15 3.175q.2-.325.5-.388q.3-.062.65.113q1.725.775 3.05 2.162Q20.525 6.45 21.25 8.2q.125.325-.038.562Q21.05 9 20.7 9Zm-3.575 1.225l-3-5.2q-.2-.325-.1-.65t.4-.525Q7.425 3 8.888 2.5Q10.35 2 12 2q.375 0 .825.037q.45.038.75.088q.35.05.463.3q.112.25-.063.55L9.8 10.225q-.15.25-.437.25q-.288 0-.438-.25ZM2.85 14q-.275 0-.5-.188q-.225-.187-.275-.462q-.05-.275-.062-.6Q2 12.425 2 12q0-1.575.513-3.137Q3.025 7.3 4.1 5.9q.275-.35.638-.35q.362 0 .562.375l4.2 7.325q.15.25-.012.5q-.163.25-.438.25Zm5 7.1q-1.65-.8-3.025-2.175Q3.45 17.55 2.75 15.8q-.125-.325.05-.562q.175-.238.525-.238h8.15q.275 0 .425.25q.15.25 0 .5l-2.875 5.025q-.2.325-.5.425q-.3.1-.675-.1ZM12 22q-.35 0-.787-.038q-.438-.037-.763-.087q-.35-.05-.475-.3t.05-.55l4.125-7.2q.15-.25.5-.25t.5.25l2.95 5.125q.175.275.113.6q-.063.325-.413.6q-1.15.85-2.687 1.35q-1.538.5-3.113.5Zm6.775-3.875l-4.25-7.375q-.15-.25.013-.5q.162-.25.437-.25h6.175q.275 0 .5.188q.225.187.275.462q.05.275.063.6q.012.325.012.75q0 1.575-.512 3.162q-.513 1.588-1.588 2.963q-.2.275-.575.288q-.375.012-.55-.288Z"/>
+        </svg>
+      </label>
+
+      <!--    IMAGE UPLOAD  -->
+      <!--    <button (click)="compressFile()">Upload and compress Image</button>-->
+      <label (click)="uploadFromGalleryDataUri()" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em" preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="white"
+                d="M6 17h12l-3.75-5l-3 4L9 13Zm-2 4q-.825 0-1.412-.587Q2 19.825 2 19V7q0-.825.588-1.412Q3.175 5 4 5h3.15L9 3h6l1.85 2H20q.825 0 1.413.588Q22 6.175 22 7v12q0 .825-.587 1.413Q20.825 21 20 21Zm16-2V7h-4.05l-1.825-2h-4.25L8.05 7H4v12Zm-8-7Z"/>
+        </svg>
+      </label>
+    </ion-row>
+  </form>
+
+</ion-content>

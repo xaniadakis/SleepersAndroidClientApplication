@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {GetAllPostsResponse, GetPostResponse} from '../dto/get-all-posts-response';
 import {Observable} from 'rxjs';
-import {CreatePostResponse} from "../dto/create-post-response";
+import {CreatePostResponse, ProposeChangeResponse} from "../dto/create-post-response";
 import {GlobalConstants} from "../util/global-constants";
 import {GetCommentsResponse, GetReactionsResponse, ReactionEnum} from "../dto/get-post-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
@@ -25,6 +25,7 @@ export class PostService {
   private commentPostUrl: string;
   private reactPostUrl: string;
   private getImageUrl: string;
+  private proposeChangeUrl: string;
 
   constructor(private http: HttpClient) {
     this.getAllPostsUrl = GlobalConstants.APIURL + '/post/';
@@ -40,6 +41,7 @@ export class PostService {
     this.getPostCommentsUrl = GlobalConstants.APIURL + '/post/comments/';
     this.getPostReactionsUrl = GlobalConstants.APIURL + '/post/reactions/';
     this.getImageUrl = GlobalConstants.APIURL + "/file/image?filename=";
+    this.proposeChangeUrl = GlobalConstants.APIURL + "/post/changeProposal/";
   }
 
   public findAll(postType: PostType, pageNumber: number, pageLimit: number): Observable<GetAllPostsResponse> {
@@ -51,17 +53,17 @@ export class PostService {
       + "?pageNumber=" + pageNumber + "&pageLimit=" + pageLimit + "&userId=" + userId);
   }
 
-  public findPost(postType: PostType, postId: bigint): Observable<GetPostResponse> {
-    return this.http.get<GetPostResponse>(this.getPostUrl + "?postType=" + postType + "&postId=" + postId);
+  public findPost(postId: bigint): Observable<GetPostResponse> {
+    return this.http.get<GetPostResponse>(this.getPostUrl + "?postId=" + postId);
   }
 
-  public findAllComments(postId: bigint, postType: string): Observable<GetCommentsResponse> {
-    const reqParams = "?postId=" + postId.toString() + "&postType=" + postType;
+  public findAllComments(postId: bigint): Observable<GetCommentsResponse> {
+    const reqParams = "?postId=" + postId.toString();
     return this.http.get<GetCommentsResponse>(this.getPostCommentsUrl + reqParams);
   }
 
-  public findAllReactions(postId: bigint, postType: string): Observable<GetReactionsResponse> {
-    const reqParams = "?postId=" + postId.toString() + "&postType=" + postType;
+  public findAllReactions(postId: bigint): Observable<GetReactionsResponse> {
+    const reqParams = "?postId=" + postId.toString();
     return this.http.get<GetReactionsResponse>(this.getPostReactionsUrl + reqParams);
   }
 
@@ -69,19 +71,17 @@ export class PostService {
     return this.http.get<File>(this.getImageUrl + image);
   }
 
-  public saveComment(postId: bigint, text: string, postType: PostType) {
+  public saveComment(postId: bigint, text: string) {
     var comment: FormData = new FormData()
     comment.append("postId", postId.toString())
     comment.append("text", text)
-    comment.append("postType", postType)
     return this.http.post<CreatePostResponse>(this.commentPostUrl, comment);
   }
 
-  public saveReaction(postId: bigint, reaction: ReactionEnum, postType: PostType) {
+  public saveReaction(postId: bigint, reaction: ReactionEnum) {
     var react: FormData = new FormData()
     react.append("postId", postId.toString())
     react.append("reaction", reaction)
-    react.append("postType", postType)
     return this.http.post<CreatePostResponse>(this.reactPostUrl, react);
   }
 
@@ -114,22 +114,22 @@ export class PostService {
     return this.http.post<CreatePostResponse>(this.savePostV2Url, savePost);
   }
 
-  public modifyPost(postId: bigint, text: string, image: File, youtubeVideoId: string | null, postType: PostType) {
+  public modifyPost(postId: bigint, text: string, image: File, youtubeVideoId: string | null) {
     var modifyPost: FormData = new FormData()
     modifyPost.append("postId", postId.toString())
     modifyPost.append("text", text)
-    modifyPost.append("postType", postType)
+    // modifyPost.append("newPostType", newPostType)
     modifyPost.append("image", image)
     if (youtubeVideoId != null)
       modifyPost.append("youtubeVideoId", youtubeVideoId)
     return this.http.put<ModifyPostResponse>(this.modifyPostUrl, modifyPost);
   }
 
-  public modifyPostV2(postId: bigint, text: string, image: string | null, youtubeVideoId: string | null, postType: PostType) {
+  public modifyPostV2(postId: bigint, text: string, image: string | null, youtubeVideoId: string | null) {
     var modifyPost: FormData = new FormData()
     modifyPost.append("postId", postId.toString())
     modifyPost.append("text", text)
-    modifyPost.append("postType", postType)
+    // modifyPost.append("newPostType", newPostType)
     if (image != null) {
       console.log("imma upload: " + image);
       console.log("size: " + image.length);
@@ -141,9 +141,20 @@ export class PostService {
     return this.http.put<ModifyPostResponse>(this.modifyPostV2Url, modifyPost);
   }
 
-  public deletePost(postId: bigint, postType: PostType) {
-    const reqParams = "?postId=" + postId.toString() + "&postType=" + postType;
+  public deletePost(postId: bigint) {
+    const reqParams = "?postId=" + postId.toString();
     return this.http.delete<DeletePostResponse>(this.deletePostUrl + reqParams);
   }
 
+  public proposeChange(text: string | null, image: string | null, uploadImage: boolean) {
+    var savePost: FormData = new FormData()
+    if (text != null)
+      savePost.append("text", text)
+    if (uploadImage && image != null) {
+      console.log("imma upload: " + image);
+      console.log("size: " + image.length);
+      savePost.append("image", image)
+    }
+    return this.http.post<ProposeChangeResponse>(this.proposeChangeUrl, savePost);
+  }
 }

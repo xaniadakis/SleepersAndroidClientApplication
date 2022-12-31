@@ -67,6 +67,8 @@ export class UserDto {
   profilePic: string;
 
   token: string;
+
+  lastActedAt: string;
 }
 
 export class CommentDto {
