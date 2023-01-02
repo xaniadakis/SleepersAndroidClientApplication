@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {GlobalConstants} from "../util/global-constants";
 import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
 import {SignOutResponse} from "../dto/sign-out-response";
-import {GetUserDetailsResponse, GetUsersResponse} from "../dto/get-user-details-response";
+import {ForgotPasswordResponse, GetUserDetailsResponse, GetUsersResponse} from "../dto/get-user-details-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {Observable} from "rxjs";
 
@@ -18,6 +18,7 @@ export class UserService {
   private sendFcmTokenUrl: string;
   private getUserDetailsUrl: string;
   private modifyUserDetailsUrl: string;
+  private forgotPasswordUrl: string;
 
 
   constructor(private http: HttpClient) {
@@ -29,6 +30,7 @@ export class UserService {
     this.getAllUsersUrl = GlobalConstants.APIURL + "/user/";
     this.getUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
     this.modifyUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
+    this.forgotPasswordUrl = GlobalConstants.APIURL + "/user/forgotPassword";
   }
 
   public changeProfilePic(image: File) {
@@ -49,6 +51,10 @@ export class UserService {
 
   public getAllUsers(pageNumber: number, pageLimit: number): Observable<GetUsersResponse> {
     return this.http.get<GetUsersResponse>(this.getAllUsersUrl + "?pageNumber=" + pageNumber + "&pageLimit=" + pageLimit);
+  }
+
+  public forgotPassword(email: string): Observable<ForgotPasswordResponse> {
+    return this.http.get<ForgotPasswordResponse>(this.forgotPasswordUrl + "?email=" + email);
   }
 
   public checkIfUserExists(username: string) {

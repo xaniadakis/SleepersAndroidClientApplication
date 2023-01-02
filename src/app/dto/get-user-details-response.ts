@@ -26,3 +26,8 @@ export class UiUserDto {
   profilePic: string;
   lastActedAt: string;
 }
+
+export class ForgotPasswordResponse {
+  // newPassword: string;
+  message: string;
+}
