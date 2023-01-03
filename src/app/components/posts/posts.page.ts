@@ -63,13 +63,18 @@ export class PostsPage implements OnInit {
         this.getAllPosts(this.pageNumber, this.pageLimit)
       }
     });
+    this.sharedService.onGoScrollToTop.subscribe({
+      next: (value: boolean) => {
+        this.scrollToTop(700);
+      }
+    });
     if (this.postType == PostType.CAR || this.postType == PostType.ALL) {
       this.sharedService.onCarPost.subscribe({
         next: (postId: bigint) => {
           this.getPost(postId)
             .then(newPost => this.posts.unshift(newPost));
           console.log(`Received new post #${postId}`);
-          this.scrollToTop();
+          this.scrollToTop(700);
         }
       });
       this.sharedService.onCarEditOrReact.subscribe({
@@ -90,7 +95,7 @@ export class PostsPage implements OnInit {
           this.getPost(postId)
             .then(newPost => this.posts.unshift(newPost));
           console.log(`Received new post #${postId}`);
-          this.scrollToTop();
+          this.scrollToTop(700);
         }
       });
       this.sharedService.onArtEditOrReact.subscribe({
@@ -111,7 +116,7 @@ export class PostsPage implements OnInit {
           this.getPost(postId)
             .then(newPost => this.posts.unshift(newPost));
           console.log(`Received new post #${postId}`);
-          this.scrollToTop();
+          this.scrollToTop(700);
         }
       });
       this.sharedService.onStoryEditOrReact.subscribe({
@@ -128,8 +133,8 @@ export class PostsPage implements OnInit {
     }
   }
 
-  scrollToTop() {
-    this.content.scrollToTop(1500);
+  scrollToTop(fast: number) {
+    this.content.scrollToTop(fast);
   }
 
   react(reaction: ReactionEnum, postId: bigint) {
@@ -304,17 +309,17 @@ export class PostsPage implements OnInit {
   }
 
   setBadge(lastActedAt: string): string {
-    if(this.empty(lastActedAt))
+    if (this.empty(lastActedAt))
       return "danger";
     var lastActedAtDate = new Date(lastActedAt);
     var now = new Date();
     var diffMins = this.diffMinutes(lastActedAtDate, now)
 
     switch (true) {
-      case (diffMins<5):
+      case (diffMins < 5):
         return "success";
         break;
-      case (diffMins<1500):
+      case (diffMins < 1500):
         return "warning";
         break;
       default:

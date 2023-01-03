@@ -9,6 +9,7 @@ import {GuardService} from "../../configuration/authentication/guard.service";
 import {ProfilePage} from "../profile/profile.page";
 import {UserPostsPage} from "../user-posts/user-posts.page";
 import {SleepersPage} from "../sleepers/sleepers.page";
+import {FriendRequestsPage} from "../friend-requests/friend-requests.page";
 
 const routes: Routes = [
   {
@@ -61,6 +62,10 @@ const routes: Routes = [
     }, {
       path: 'sleepers',
       component: SleepersPage,
+      canActivate: [GuardService]
+    }, {
+      path: 'friend-requests',
+      component: FriendRequestsPage,
       canActivate: [GuardService]
     }]
     // ,loadChildren: () => Tab1PageModule

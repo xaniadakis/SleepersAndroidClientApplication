@@ -291,6 +291,10 @@ export class AppComponent {
     this.router.navigateByUrl('/home/sleepers');
   }
 
+  checkForFriendRequests() {
+    this.router.navigateByUrl('/home/friend-requests');
+  }
+
   onProposal() {
 
   }

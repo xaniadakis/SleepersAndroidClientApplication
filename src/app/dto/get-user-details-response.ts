@@ -31,3 +31,28 @@ export class ForgotPasswordResponse {
   // newPassword: string;
   message: string;
 }
+
+export class FriendRequestDto{
+  id: bigint;
+
+  fromUser: UiUserDto;
+
+  toUser: UiUserDto;
+}
+
+export class AddFriendResponse{
+  message: string;
+  friendId: bigint;
+  status: FriendRequestStatusEnum;
+}
+
+export enum FriendRequestStatusEnum{
+  SENT,
+  PENDING,
+  FAILED
+}
+
+export class UnfriendResponse{
+  message: string;
+  unfriendId: bigint;
+}

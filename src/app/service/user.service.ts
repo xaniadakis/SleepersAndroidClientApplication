@@ -3,7 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {GlobalConstants} from "../util/global-constants";
 import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
 import {SignOutResponse} from "../dto/sign-out-response";
-import {ForgotPasswordResponse, GetUserDetailsResponse, GetUsersResponse} from "../dto/get-user-details-response";
+import {
+  AddFriendResponse,
+  ForgotPasswordResponse, FriendRequestDto,
+  GetUserDetailsResponse,
+  GetUsersResponse,
+  UiUserDto, UnfriendResponse
+} from "../dto/get-user-details-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {Observable} from "rxjs";
 
@@ -20,6 +26,13 @@ export class UserService {
   private modifyUserDetailsUrl: string;
   private forgotPasswordUrl: string;
 
+  private addFriendUrl: string;
+  private unfriendUrl: string;
+  private friendRequestsUrl: string;
+  private friendsUrl: string;
+  private nonFriendsUrl: string;
+
+  private handleFriendRequestUrl: string;
 
   constructor(private http: HttpClient) {
     this.changeProfilePicUrl = GlobalConstants.APIURL + "/user/changeProfilePic";
@@ -31,6 +44,13 @@ export class UserService {
     this.getUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
     this.modifyUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
     this.forgotPasswordUrl = GlobalConstants.APIURL + "/user/forgotPassword";
+
+    this.addFriendUrl = GlobalConstants.APIURL + "/user/addFriend";
+    this.unfriendUrl = GlobalConstants.APIURL + "/user/unfriend";
+    this.friendRequestsUrl = GlobalConstants.APIURL + "/user/friendRequests";
+    this.friendsUrl = GlobalConstants.APIURL + "/user/friends";
+    this.nonFriendsUrl = GlobalConstants.APIURL + "/user/nonFriends";
+    this.handleFriendRequestUrl = GlobalConstants.APIURL + "/user/friendRequest";
   }
 
   public changeProfilePic(image: File) {
@@ -67,6 +87,32 @@ export class UserService {
 
   retrieveUserDetails(userId: bigint): Observable<GetUserDetailsResponse> {
     return this.http.get<GetUserDetailsResponse>(this.getUserDetailsUrl + "?userId=" + userId);
+  }
+
+  addFriend(userId: bigint): Observable<AddFriendResponse> {
+    return this.http.get<AddFriendResponse>(this.addFriendUrl + "?friendId=" + userId);
+  }
+
+  unfriend(userId: bigint): Observable<UnfriendResponse> {
+    return this.http.get<UnfriendResponse>(this.unfriendUrl + "?friendId=" + userId);
+  }
+
+  getFriendRequests(): Observable<Set<FriendRequestDto>> {
+    return this.http.get<Set<FriendRequestDto>>(this.friendRequestsUrl);
+  }
+
+  getFriends(): Observable<UiUserDto[]> {
+    return this.http.get<UiUserDto[]>(this.friendsUrl);
+  }
+
+  getNonFriends(): Observable<UiUserDto[]> {
+    return this.http.get<UiUserDto[]>(this.nonFriendsUrl);
+  }
+
+  handleFriendRequest(friendRequestId: bigint, accept: boolean): Observable<String> {
+    let uri = this.handleFriendRequestUrl + "?id=" + friendRequestId + "&accept=" + accept;
+    console.log(uri)
+    return this.http.get<String>(uri);
   }
 
   modifyUserDetails(email: string,

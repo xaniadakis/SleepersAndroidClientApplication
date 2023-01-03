@@ -42,6 +42,7 @@ import {UserPostsPage} from "../user-posts/user-posts.page";
 import {SleepersPage} from "../sleepers/sleepers.page";
 import {ProposeChangeModalComponent} from "../propose-change-modal/propose-change-modal.component";
 import {SafePipeHtml} from "../safe-pipe-html/safe.pipe";
+import {FriendRequestsPage} from "../friend-requests/friend-requests.page";
 
 @NgModule({
   declarations: [AppComponent
@@ -62,6 +63,7 @@ import {SafePipeHtml} from "../safe-pipe-html/safe.pipe";
     , PostsPage
     , UserPostsPage
     , SleepersPage
+    ,FriendRequestsPage
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],

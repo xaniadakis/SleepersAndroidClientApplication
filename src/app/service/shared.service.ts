@@ -14,6 +14,7 @@ export class SharedService {
   public onStory: EventEmitter<bigint> = new EventEmitter<bigint>();
 
   public onRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onGoScrollToTop: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   public onArtEditOrReact: EventEmitter<bigint> = new EventEmitter<bigint>();
   public onStoryEditOrReact: EventEmitter<bigint> = new EventEmitter<bigint>();
@@ -22,8 +23,13 @@ export class SharedService {
   public onArtDelete: EventEmitter<bigint> = new EventEmitter<bigint>();
   public onCarDelete: EventEmitter<bigint> = new EventEmitter<bigint>();
 
+
   public refreshed() {
     this.onRefresh.emit(true);
+  }
+
+  public pleaseScrollToTop() {
+    this.onGoScrollToTop.emit(true);
   }
 
   public fire(value: boolean) {

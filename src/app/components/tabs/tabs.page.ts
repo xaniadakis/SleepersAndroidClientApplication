@@ -35,7 +35,12 @@ export class TabsPage {
   }
 
   changedTab(postType: PostType) {
-    localStorage.setItem("postType", postType)
-    console.log("just changed tab to: " + postType)
+    const current: PostType = PostType[localStorage.getItem("postType") as PostType];
+    if(postType==current)
+      this.sharedService.pleaseScrollToTop();
+    else {
+      localStorage.setItem("postType", postType)
+      console.log("just changed tab to: " + postType)
+    }
   }
 }

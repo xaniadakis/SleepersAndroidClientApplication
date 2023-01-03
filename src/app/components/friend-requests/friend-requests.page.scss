@@ -1,0 +1,54 @@
+
+ion-footer.my-footer {
+  margin-bottom: 0;
+  padding-bottom: 2px;
+  padding-top: 2px;
+  height: 57px;
+  background: #1e1e1e;
+}
+
+ion-button.backbutton {
+  background: #1e1e1e;
+  height: 5px;
+  padding: 0px;
+}
+
+.myLoadingCenter {
+  //height: 200px;
+  position: relative;
+  //border: 3px solid green;
+  margin: 0;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  color: whitesmoke;
+}
+
+.sleeper:hover a{
+  --background-color: #DA0037 !important;
+  --background-hover: #DA0037;
+  --color: white;
+  cursor: pointer;
+}
+
+ion-avatar {
+  overflow: visible!important;
+
+  ion-badge {
+    position: absolute;
+    bottom: 0.2rem;
+    left: 1.3rem;
+    //right: -0.2rem;
+    opacity: 0.9;
+    height: 0.6rem;
+    width: 0.3rem;
+    border-radius: 100%;
+    position: absolute;
+
+    & ~ ion-icon {
+      margin-right: 1.2rem;
+    }
+  }
+}

@@ -4,12 +4,11 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Platform} from "@ionic/angular";
 import {SharedService} from "../../service/shared.service";
 import {catchError} from "rxjs/operators";
-import {empty, throwError} from "rxjs";
+import {throwError} from "rxjs";
 import {UserService} from "../../service/user.service";
-import {UiUserDto} from "../../dto/get-user-details-response";
+import {FriendRequestStatusEnum, UiUserDto} from "../../dto/get-user-details-response";
 import {GlobalConstants} from "../../util/global-constants";
-import {DomSanitizer} from "@angular/platform-browser";
-import {UiPostDto} from "../../dto/ui-post-dto";
+import {ToastService} from "../../service/toast.service";
 
 @Component({
   selector: 'app-tab1',
@@ -27,6 +26,7 @@ export class SleepersPage {
   imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
 
   sleepers: UiUserDto[] = [];
+  friends: UiUserDto[] = [];
   pageNumber = 0;
   pageLimit = 15;
 
@@ -35,7 +35,7 @@ export class SleepersPage {
               private platform: Platform,
               private sharedService: SharedService,
               private userService: UserService,
-              private sanitizer: DomSanitizer) {
+              private toastService: ToastService) {
     let userIdString = this.route.snapshot.paramMap.get('userId');
 
     if (userIdString != null)
@@ -48,13 +48,18 @@ export class SleepersPage {
   }
 
   ngOnInit() {
-    this.getAllUsers(this.pageNumber, this.pageLimit);
+    this.getAllFriends();
+    this.getNonFriends();
+    // this.getAllUsers(this.pageNumber, this.pageLimit);
     this.sharedService.onRefresh.subscribe({
       next: (value: boolean) => {
         console.log("refreshin sleepers");
         this.pageNumber = 0;
         this.sleepers.splice(0, this.sleepers.length)
-        this.getAllUsers(this.pageNumber, this.pageLimit);
+        this.friends.splice(0, this.friends.length)
+        this.getAllFriends();
+        this.getNonFriends();
+        // this.getAllUsers(this.pageNumber, this.pageLimit);
       }
     });
   }
@@ -78,6 +83,48 @@ export class SleepersPage {
     this.fetching = false;
   }
 
+  async getAllFriends() {
+    this.fetching = true;
+    this.userService.getFriends()
+      .pipe(catchError(err => {
+        console.log(err);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        // console.log(data.message);
+        console.log(data);
+        // for (let i = 0; i < data.length; i++) {
+        //   this.friends.push(data[i]);
+        // }
+        this.friends = data;
+        this.friends.sort(function(a,b){
+          return new Date(b.lastActedAt).valueOf() - new Date(a.lastActedAt).valueOf();
+        });
+      });
+    this.fetching = false;
+  }
+
+  async getNonFriends() {
+    this.fetching = true;
+    this.userService.getNonFriends()
+      .pipe(catchError(err => {
+        console.log(err);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        // console.log(data.message);
+        console.log(data);
+        // for (let i = 0; i < data.length; i++) {
+        //   this.friends.push(data[i]);
+        // }
+        this.sleepers = data;
+        this.sleepers.sort(function(a,b){
+          return new Date(b.lastActedAt).valueOf() - new Date(a.lastActedAt).valueOf();
+        });
+      });
+    this.fetching = false;
+  }
+
   doInfinite(event: any) {
     this.pageNumber += 1;
     console.log("Shall fetch userados for page: " + this.pageNumber);
@@ -95,7 +142,7 @@ export class SleepersPage {
 
   setBadge(lastActedAt: string): string {
     if(this.empty(lastActedAt))
-      return "<ion-badge style=\"margin-right: 15px\" color=\"danger\">offline</ion-badge>";
+      return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">offline</ion-badge>";
     var lastActedAtDate = new Date(lastActedAt);
     var now = new Date();
     // var diffMs = (new Date().valueOf() - lastActedAtDate.valueOf()); // milliseconds between now & Christmas
@@ -105,16 +152,16 @@ export class SleepersPage {
 
     switch (true) {
       case (diffMins<5):
-        return "<ion-badge style=\"margin-right: 15px\" color=\"success\">active</ion-badge>";
+        return "<ion-badge style=\"margin-right: 10px\" color=\"success\">active</ion-badge>";
         break;
       case (diffMins<60):
-        return "<ion-badge style=\"margin-right: 15px\" color=\"warning\">active before "+diffMins+" minutes</ion-badge>";
+        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before "+diffMins+" minutes</ion-badge>";
         break;
       case (diffMins<1500):
-        return "<ion-badge style=\"margin-right: 15px\" color=\"warning\">active before "+this.diffHoursFromMinutes(diffMins)+" hours</ion-badge>";
+        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before "+this.diffHoursFromMinutes(diffMins)+" hours</ion-badge>";
         break;
       default:
-        return "<ion-badge style=\"margin-right: 15px\" color=\"danger\">active before "+this.diffDaysFromMinutes(diffMins)+" days</ion-badge>";
+        return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">active before "+this.diffDaysFromMinutes(diffMins)+" days</ion-badge>";
         break;
     }
   }
@@ -132,7 +179,7 @@ export class SleepersPage {
   }
 
   diffDaysFromMinutes(diffMinutes: number) {
-    return Math.round(diffMinutes/60*24);
+    return Math.round(diffMinutes/(60*24));
   }
 
   getBadgeColor(lastActedAt: string):string {
@@ -181,5 +228,44 @@ export class SleepersPage {
       return true;
     else
       return false;
+  }
+
+  addFriend(friendId: bigint, friendName: string) {
+    this.userService.addFriend(friendId)
+      .pipe(catchError(err => {
+        this.toastService.presentToastWithDuration("middle", err, 3000);
+        // this.oldPasswordWrong;
+        // window.alert(err);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        console.log(data);
+        if(data.status==FriendRequestStatusEnum.SENT)
+          this.toastService.presentToastWithDuration("middle", "Sent a friend request to "+friendName, 1500);
+        else if(data.status==FriendRequestStatusEnum.PENDING)
+          this.toastService.presentToastWithDuration("middle", "There is already a pending friend request to "+friendName, 1500);
+        else if(data.status==FriendRequestStatusEnum.FAILED)
+          this.toastService.presentToastWithDuration("middle", "There was an error while sending a friend request towards "+friendName, 1500);
+
+      });
+  }
+
+  unfriend(friendId: bigint, friendName: string) {
+    this.userService.unfriend(friendId)
+      .pipe(catchError(err => {
+        this.toastService.presentToastWithDuration("middle", err, 3000);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        console.log(data);
+        let deletedFriend: UiUserDto | undefined = this.friends.find(UiUserDto => UiUserDto.id === data.unfriendId);
+        if (deletedFriend == undefined)
+          return;
+        let friendIndex = this.friends.indexOf(deletedFriend); // 👉️
+        if (friendIndex > -1)
+          this.friends.splice(friendIndex, 1);
+        this.sleepers.unshift(deletedFriend);
+        this.toastService.presentToastWithDuration("middle", "Lil "+friendName+" is no longer your buddy for now..", 1500);
+      });
   }
 }
