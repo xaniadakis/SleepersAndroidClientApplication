@@ -5,6 +5,7 @@ import {ModalController} from "@ionic/angular";
 import {PostType} from "../dto/post-type";
 import {CreatePostModalComponent} from "../components/create-post-modal/create-post-modal.component";
 import {ProposeChangeModalComponent} from "../components/propose-change-modal/propose-change-modal.component";
+import {AnnounceEventModalComponent} from "../components/announce-event-modal/announce-event-modal.component";
 
 @Injectable()
 export class ModalService {
@@ -17,6 +18,23 @@ export class ModalService {
     const modal = await this.modalCtrl.create({
       component: CreatePostModalComponent,
       componentProps: {postType: PostType[localStorage.getItem("postType") as keyof typeof PostType]},
+      // componentProps: ,
+      // showBackdrop: false,
+      initialBreakpoint: 1,
+      backdropBreakpoint: 1,
+      backdropDismiss: false,
+      canDismiss: true,
+      handleBehavior: "cycle",
+      handle: true
+    });
+    modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+  }
+
+  async openAnnounceEventModal() {
+    const modal = await this.modalCtrl.create({
+      component: AnnounceEventModalComponent,
       // componentProps: ,
       // showBackdrop: false,
       initialBreakpoint: 1,

@@ -1,0 +1,22 @@
+
+/////////////
+
+ion-avatar {
+  overflow: visible !important;
+
+  ion-badge {
+    position: absolute;
+    bottom: 0.2rem;
+    left: 1.3rem;
+    //right: -0.2rem;
+    opacity: 0.9;
+    height: 0.6rem;
+    width: 0.3rem;
+    border-radius: 100%;
+    position: absolute;
+
+    & ~ ion-icon {
+      margin-right: 1.2rem;
+    }
+  }
+}

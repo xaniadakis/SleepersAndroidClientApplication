@@ -4,8 +4,10 @@ export enum PostType {
   CAR = "CAR",
   STORY = "STORY",
   ART = "ART",
+  TRIP = "TRIP",
   ALL = "ALL",
-  REFRESH = "REFRESH"
+  SLEEPERS = "SLEEPERS",
+  FRIEND_REQUESTS = "FRIEND_REQUESTS"
 }
 
 export class Video {

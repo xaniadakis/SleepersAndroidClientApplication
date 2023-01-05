@@ -7,12 +7,19 @@ export class SharedService {
   public onChange: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onProfileTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onAFriendsProfileTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onEventsTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+
   public editProfile: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   public onCarPost: EventEmitter<bigint> = new EventEmitter<bigint>();
   public onArtPost: EventEmitter<bigint> = new EventEmitter<bigint>();
   public onStory: EventEmitter<bigint> = new EventEmitter<bigint>();
 
+  public onCarRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onArtRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onStoryRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onFriendRequestRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onSleeperRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onGoScrollToTop: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
@@ -24,8 +31,28 @@ export class SharedService {
   public onCarDelete: EventEmitter<bigint> = new EventEmitter<bigint>();
 
 
-  public refreshed() {
-    this.onRefresh.emit(true);
+  public refreshed(refreshType: PostType) {
+    switch (refreshType) {
+      case PostType.SLEEPERS:
+        this.onSleeperRefresh.emit(true);
+        break;
+      case PostType.FRIEND_REQUESTS:
+        this.onFriendRequestRefresh.emit(true);
+        break;
+      case PostType.ART:
+        this.onArtRefresh.emit(true);
+        break;
+      case PostType.CAR:
+        this.onCarRefresh.emit(true);
+        break;
+      case PostType.STORY:
+        this.onStoryRefresh.emit(true);
+        break;
+      case PostType.ALL:
+      default:
+        this.onRefresh.emit(true);
+        break;
+    }
   }
 
   public pleaseScrollToTop() {
@@ -34,6 +61,10 @@ export class SharedService {
 
   public fire(value: boolean) {
     this.onChange.emit(value);
+  }
+
+  public imOnEventsTab(value: boolean) {
+    this.onEventsTab.emit(value);
   }
 
   public hidePostButtonForALilWhile(value: boolean) {

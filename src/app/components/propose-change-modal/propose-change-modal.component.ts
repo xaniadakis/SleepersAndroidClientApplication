@@ -1,9 +1,8 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {AlertController, LoadingController, ModalController} from '@ionic/angular';
 import {GlobalConstants} from "../../util/global-constants";
 import {NgForm} from "@angular/forms";
 import {PostService} from "../../service/post.service";
-import {PostType} from "../../dto/post-type";
 import {SharedService} from "../../service/shared.service";
 import {Router} from "@angular/router";
 import getVideoId from 'get-video-id';
@@ -11,7 +10,6 @@ import {ToastService} from "../../service/toast.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Camera, CameraOptions} from '@awesome-cordova-plugins/camera/ngx';
 import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
-import {Capacitor} from '@capacitor/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
@@ -165,7 +163,7 @@ export class ProposeChangeModalComponent {
         this.toastService.presentToast("top", "Bud this was an empty proposal, i aint gonna send it over.");
         reject();
       }
-      console.log("TEXT: "+text);
+      console.log("TEXT: " + text);
       this.postService.proposeChange(text, this.imgResult, this.uploadImage)
         .pipe(catchError(err => {
           this.toastService.presentToastWithDuration("bottom",

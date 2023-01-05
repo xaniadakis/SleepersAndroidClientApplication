@@ -5,76 +5,80 @@
   <ng-template #showContentBlock>
     <div *ngIf="!noRequests; else showEmptyRequestsBlock" style="padding-top: 10px; background: #0d0d0d;">
       <ion-list style="background: #0d0d0d" *ngFor="let request of friendRequests;">
-          <ion-item style="background: #0d0d0d; margin-left: 0; margin-right: auto; width: 100vw" lines="none"
-                    class="ion-no-padding ion-no-margin">
-            <ion-card class="ion-no-padding ion-no-margin" style="margin-left: 0; left: 0; width: 100vw">
-              <ion-card-header>
-                <ion-card-subtitle type="dark" style="margin: 0px auto;">
-                  <div class="ion-float-start">
-                    <ion-chip id="post-owner-avatar">
-                      <ion-avatar>
-                        <img alt="avatar" src="{{(imageApi+request.fromUser.profilePic)}}"/>
-                        <ion-badge [color]="setBadge(request.fromUser.lastActedAt)">&nbsp;</ion-badge>
-                      </ion-avatar>
-                      <ion-label  style="margin-bottom: 2.5px; margin-right: -3.5px"><b style="color: grey;">{{request.fromUser.username}}</b></ion-label>
-                    </ion-chip><b style="color: grey;">wants to be your friend</b>
-                  </div>
-                </ion-card-subtitle>
-              </ion-card-header>
-              <ion-row style="margin-top: -10px; padding-bottom: 3px;">
-                <ion-col (click)="acceptRequest(request.id)">
-                  <ion-button class="transparent-button ion-no-padding ion-no-margin "
-                              icon-left>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
-                         preserveAspectRatio="xMidYMid meet"
-                         viewBox="0 0 36 36">
-                      <ellipse cx="23" cy="8" fill="#55ACEE" rx="8" ry="6.75" transform="rotate(-78 23.001 8)"/>
-                      <path fill="#269"
-                            d="M9.724 14.687v1.579c-2.414.525-5.381 1.851-5.829 3.741C2.493 25.919 2.87 35.081 2.87 35.212v.134c0 .654.663.654 1.316.654h16.097c.653 0 1.315 0 1.315-.654V20.007c0-1.719-1.413-3.438-4.632-3.834v-1.486H9.724z"/>
-                      <path fill="#55ACEE"
-                            d="M26.276 13.303v2.963c2.414.525 5.381 1.851 5.829 3.741c1.401 5.913 1.025 15.075 1.025 15.205v.134c0 .654-.663.654-1.316.654H15.717c-.653 0-1.315 0-1.315-.654V20.007c0-1.719 1.413-3.438 4.632-3.834v-1.486l7.242-1.384z"/>
-                      <ellipse cx="12.992" cy="8" fill="#269" rx="6.75" ry="8" transform="rotate(-12 12.992 8)"/>
-                      <path fill="#55ACEE"
-                            d="M19.092 16.088c-1.31.381-3.441.546-5.898-.382c-2.593-.98-4.978-1.944-5.908-2.268c-.846-.295-3.005-.033-3.486.848c-.481.881-.753 2.485.437 3.659s7.458 3.491 9.23 4.533c.928.546.874 3.823.928 6.499c.083 4.043 7.383-13.67 4.697-12.889z"/>
-                      <path fill="#269"
-                            d="M12.233 25.283c1.331.298 3.604.811 5.999-.269c2.527-1.14 4.712-2.732 5.619-3.113c.826-.347 2.571-.683 3.532.629c.594.81.907 2.434-.207 3.679c-1.115 1.246-5.497 3.919-8.739 4.702c-2.749.664-6.967.6-8.313-.793c-2.101-2.175.281-5.245 2.109-4.835zm12.758-8.048c0-1.952 1.724-3.016 3.739-3.797c.835-.324 3.005-.033 3.486.848c.481.881.753 2.485-.437 3.659s-6.788 2.294-6.788-.71z"/>
-                    </svg>
+        <ion-item style="background: #0d0d0d; margin-left: 0; margin-right: auto; width: 100vw" lines="none"
+                  class="ion-no-padding ion-no-margin">
+          <ion-card class="ion-no-padding ion-no-margin" style="margin-left: 0; left: 0; width: 100vw">
+            <ion-card-header>
+              <ion-card-subtitle type="dark" style="margin: 0px auto;">
+                <div class="ion-float-start">
+                  <ion-chip id="post-owner-avatar">
+                    <ion-avatar>
+                      <img alt="avatar" src="{{(imageApi+request.fromUser.profilePic)}}"/>
+                      <ion-badge [color]="setBadge(request.fromUser.lastActedAt)">&nbsp;</ion-badge>
+                    </ion-avatar>
+                    <ion-label style="margin-bottom: 2.5px; margin-right: -3.5px"><b
+                      style="color: grey;">{{request.fromUser.username}}</b></ion-label>
+                  </ion-chip>
+                  <b style="color: grey;">wants to be your friend</b>
+                </div>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <ion-row style="margin-top: -10px; padding-bottom: 3px;">
+              <ion-col (click)="acceptRequest(request.id)">
+                <ion-button class="transparent-button ion-no-padding ion-no-margin "
+                            icon-left>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 36 36">
+                    <ellipse cx="23" cy="8" fill="#55ACEE" rx="8" ry="6.75" transform="rotate(-78 23.001 8)"/>
+                    <path fill="#269"
+                          d="M9.724 14.687v1.579c-2.414.525-5.381 1.851-5.829 3.741C2.493 25.919 2.87 35.081 2.87 35.212v.134c0 .654.663.654 1.316.654h16.097c.653 0 1.315 0 1.315-.654V20.007c0-1.719-1.413-3.438-4.632-3.834v-1.486H9.724z"/>
+                    <path fill="#55ACEE"
+                          d="M26.276 13.303v2.963c2.414.525 5.381 1.851 5.829 3.741c1.401 5.913 1.025 15.075 1.025 15.205v.134c0 .654-.663.654-1.316.654H15.717c-.653 0-1.315 0-1.315-.654V20.007c0-1.719 1.413-3.438 4.632-3.834v-1.486l7.242-1.384z"/>
+                    <ellipse cx="12.992" cy="8" fill="#269" rx="6.75" ry="8" transform="rotate(-12 12.992 8)"/>
+                    <path fill="#55ACEE"
+                          d="M19.092 16.088c-1.31.381-3.441.546-5.898-.382c-2.593-.98-4.978-1.944-5.908-2.268c-.846-.295-3.005-.033-3.486.848c-.481.881-.753 2.485.437 3.659s7.458 3.491 9.23 4.533c.928.546.874 3.823.928 6.499c.083 4.043 7.383-13.67 4.697-12.889z"/>
+                    <path fill="#269"
+                          d="M12.233 25.283c1.331.298 3.604.811 5.999-.269c2.527-1.14 4.712-2.732 5.619-3.113c.826-.347 2.571-.683 3.532.629c.594.81.907 2.434-.207 3.679c-1.115 1.246-5.497 3.919-8.739 4.702c-2.749.664-6.967.6-8.313-.793c-2.101-2.175.281-5.245 2.109-4.835zm12.758-8.048c0-1.952 1.724-3.016 3.739-3.797c.835-.324 3.005-.033 3.486.848c.481.881.753 2.485-.437 3.659s-6.788 2.294-6.788-.71z"/>
+                  </svg>
 
-                  </ion-button>
-                  <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">
-                    &nbsp;&nbsp;&nbsp;&nbsp;<b>Accept friend request</b>
-                  </div>
-                </ion-col>
-                <ion-col (click)="rejectRequest(request.id)">
-                  <ion-button class="transparent-button ion-no-padding ion-no-margin "
-                              icon-left
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
-                         preserveAspectRatio="xMidYMid meet"
-                         viewBox="0 0 36 36">
-                      <path fill="#FFCC4D"
-                            d="M36 18c0 9.941-8.059 18-18 18c-9.94 0-18-8.059-18-18C0 8.06 8.06 0 18 0c9.941 0 18 8.06 18 18"/>
-                      <ellipse cx="11.5" cy="16.5" fill="#664500" rx="2.5" ry="3.5"/>
-                      <ellipse cx="24.5" cy="16.5" fill="#664500" rx="2.5" ry="3.5"/>
-                      <path fill="#664500"
-                            d="M23.485 27.879C23.474 27.835 22.34 23.5 18 23.5s-5.474 4.335-5.485 4.379a.496.496 0 0 0 .232.544a.51.51 0 0 0 .596-.06c.009-.007 1.013-.863 4.657-.863c3.59 0 4.617.83 4.656.863a.496.496 0 0 0 .59.073a.5.5 0 0 0 .239-.557z"/>
-                      <path fill="#5DADEC" d="M10 30c0 2.762-2.238 5-5 5s-5-2.238-5-5s4-10 5-10s5 7.238 5 10z"/>
-                      <path fill="#664500"
-                            d="M30 13c-5.554 0-7.802-4.367-7.895-4.553a1 1 0 0 1 1.787-.899C23.967 7.694 25.713 11 30 11a1 1 0 1 1 0 2zM6 13a1 1 0 0 1 0-2c5.083 0 5.996-3.12 6.033-3.253c.145-.528.69-.848 1.219-.709c.53.139.851.673.718 1.205C13.921 8.437 12.704 13 6 13z"/>
-                    </svg>
-                  </ion-button>
-                  <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">
-                    &nbsp;&nbsp;&nbsp;&nbsp;<b>Reject friend request</b>
-                  </div>
-                </ion-col>
-              </ion-row>
+                </ion-button>
+                <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">
+                  &nbsp;&nbsp;&nbsp;&nbsp;<b>Accept friend request</b>
+                </div>
+              </ion-col>
+              <ion-col (click)="rejectRequest(request.id)">
+                <ion-button class="transparent-button ion-no-padding ion-no-margin "
+                            icon-left
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                       preserveAspectRatio="xMidYMid meet"
+                       viewBox="0 0 36 36">
+                    <path fill="#FFCC4D"
+                          d="M36 18c0 9.941-8.059 18-18 18c-9.94 0-18-8.059-18-18C0 8.06 8.06 0 18 0c9.941 0 18 8.06 18 18"/>
+                    <ellipse cx="11.5" cy="16.5" fill="#664500" rx="2.5" ry="3.5"/>
+                    <ellipse cx="24.5" cy="16.5" fill="#664500" rx="2.5" ry="3.5"/>
+                    <path fill="#664500"
+                          d="M23.485 27.879C23.474 27.835 22.34 23.5 18 23.5s-5.474 4.335-5.485 4.379a.496.496 0 0 0 .232.544a.51.51 0 0 0 .596-.06c.009-.007 1.013-.863 4.657-.863c3.59 0 4.617.83 4.656.863a.496.496 0 0 0 .59.073a.5.5 0 0 0 .239-.557z"/>
+                    <path fill="#5DADEC" d="M10 30c0 2.762-2.238 5-5 5s-5-2.238-5-5s4-10 5-10s5 7.238 5 10z"/>
+                    <path fill="#664500"
+                          d="M30 13c-5.554 0-7.802-4.367-7.895-4.553a1 1 0 0 1 1.787-.899C23.967 7.694 25.713 11 30 11a1 1 0 1 1 0 2zM6 13a1 1 0 0 1 0-2c5.083 0 5.996-3.12 6.033-3.253c.145-.528.69-.848 1.219-.709c.53.139.851.673.718 1.205C13.921 8.437 12.704 13 6 13z"/>
+                  </svg>
+                </ion-button>
+                <div style="font-size: smaller; padding-bottom: 5px;" class="ion-text-center">
+                  &nbsp;&nbsp;&nbsp;&nbsp;<b>Reject friend request</b>
+                </div>
+              </ion-col>
+            </ion-row>
 
-            </ion-card>
-          </ion-item>
+          </ion-card>
+        </ion-item>
       </ion-list>
     </div>
-    <ng-template #showEmptyRequestsBlock >
-      <h4 style="padding-top: 15px; background: #0d0d0d; margin: auto; color: white; left: 0; right: 0; text-align: center">No friend requests this time of the year</h4>
+    <ng-template #showEmptyRequestsBlock>
+      <h4
+        style="padding-top: 15px; background: #0d0d0d; margin: auto; color: white; left: 0; right: 0; text-align: center">
+        No friend requests this time of the year</h4>
     </ng-template>
     <ion-infinite-scroll style="background: #0d0d0d; color: grey;" (ionInfinite)="doInfinite($event)">
       <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>

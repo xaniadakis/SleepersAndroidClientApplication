@@ -4,17 +4,17 @@
   </div>
   <ng-template #showContentBlock>
     <div style="padding-top: 10px; background: #0d0d0d;">
-      <h3>Friends</h3>
+<!--      <h3>Friends</h3>-->
       <ion-list style="background: #0d0d0d;" *ngFor="let friend of friends;">
         <ion-item class="sleeper" style="background: #0d0d0d; margin-left: auto; margin-right: auto;
                        color: white; padding-top: 0px; margin-top: -16px;">
-            <ion-avatar (click)="goToProfilePage(friend.id)">
-              <img alt="avatar" src="{{(imageApi+friend.profilePic)}}"/>
-            </ion-avatar>
-            <ion-label style="padding-left: 15px" (click)="goToProfilePage(friend.id)">{{friend.username}}</ion-label>
-            <div [innerHTML]="setBadge(friend.lastActedAt) | safeHtml">
-              <!--            <ion-badge style="margin-right: 15px" [color]="getBadgeColor(sleeper.lastActedAt)">{{getBadgeText(sleeper.lastActedAt)}}</ion-badge>-->
-            </div>
+          <ion-avatar (click)="goToProfilePage(friend.id)">
+            <img alt="avatar" src="{{(imageApi+friend.profilePic)}}"/>
+          </ion-avatar>
+          <ion-label style="padding-left: 15px" (click)="goToProfilePage(friend.id)">{{friend.username}}</ion-label>
+          <div [innerHTML]="setBadge(friend.lastActedAt) | safeHtml">
+            <!--            <ion-badge style="margin-right: 15px" [color]="getBadgeColor(sleeper.lastActedAt)">{{getBadgeText(sleeper.lastActedAt)}}</ion-badge>-->
+          </div>
           <div (click)="unfriend(friend.id, friend.username)">
             <ion-badge color="danger" style="margin-right: 10px">
               <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" preserveAspectRatio="xMidYMid meet"
@@ -27,11 +27,11 @@
         </ion-item>
       </ion-list>
 
-      <h3>Sleepers</h3>
+<!--      <h3>Sleepers</h3>-->
       <ion-list style="background: #0d0d0d;" *ngFor="let sleeper of sleepers;">
         <ion-item class="sleeper" style="background: #0d0d0d; margin-left: auto; margin-right: auto;
                        color: white; padding-top: 0px; margin-top: -16px;"
-                  >
+        >
           <ion-avatar (click)="goToProfilePage(sleeper.id)">
             <img alt="avatar" src="{{(imageApi+sleeper.profilePic)}}"/>
           </ion-avatar>
@@ -51,9 +51,9 @@
         </ion-item>
       </ion-list>
     </div>
-    <ion-infinite-scroll style="background: #0d0d0d; color: grey;" (ionInfinite)="doInfinite($event)">
-      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+<!--    <ion-infinite-scroll style="background: #0d0d0d; color: grey;" (ionInfinite)="doInfinite($event)">-->
+<!--      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>-->
+<!--    </ion-infinite-scroll>-->
   </ng-template>
 </ion-content>
 

@@ -10,6 +10,8 @@ import {ProfilePage} from "../profile/profile.page";
 import {UserPostsPage} from "../user-posts/user-posts.page";
 import {SleepersPage} from "../sleepers/sleepers.page";
 import {FriendRequestsPage} from "../friend-requests/friend-requests.page";
+import {EventsPage} from "../events/events.page";
+import {Tab4Page} from "../tab4/tab4.page";
 
 const routes: Routes = [
   {
@@ -50,6 +52,11 @@ const routes: Routes = [
           path: 'tab3',
           component: Tab3Page,
           canActivate: [GuardService],
+        },
+        {
+          path: 'tab4',
+          component: Tab4Page,
+          canActivate: [GuardService],
         }]
     }, {
       path: 'profile/:userId/:naviedFromUsersList',
@@ -66,6 +73,10 @@ const routes: Routes = [
     }, {
       path: 'friend-requests',
       component: FriendRequestsPage,
+      canActivate: [GuardService]
+    }, {
+      path: 'events',
+      component: EventsPage,
       canActivate: [GuardService]
     }]
     // ,loadChildren: () => Tab1PageModule

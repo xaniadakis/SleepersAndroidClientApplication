@@ -48,9 +48,9 @@ export class UserPostsPage {
     //     this.sharedService.hideEditButtonForALilWhile(true);
     //   }, 100);
     // }
-    if(this.backToSleepersList)
+    if (this.backToSleepersList)
       this.router.navigateByUrl('/home/sleepers');
-    else{
+    else {
       this.sharedService.hidePostButtonForALilWhile(false);
       this.router.navigateByUrl('/home/tabs/tab3');
     }

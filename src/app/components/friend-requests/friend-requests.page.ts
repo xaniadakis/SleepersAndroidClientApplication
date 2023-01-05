@@ -4,12 +4,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Platform} from "@ionic/angular";
 import {SharedService} from "../../service/shared.service";
 import {catchError} from "rxjs/operators";
-import {empty, throwError} from "rxjs";
+import {throwError} from "rxjs";
 import {UserService} from "../../service/user.service";
-import {FriendRequestDto, UiUserDto} from "../../dto/get-user-details-response";
+import {FriendRequestDto} from "../../dto/get-user-details-response";
 import {GlobalConstants} from "../../util/global-constants";
-import {DomSanitizer} from "@angular/platform-browser";
-import {UiPostDto} from "../../dto/ui-post-dto";
 import {ToastService} from "../../service/toast.service";
 
 @Component({
@@ -48,11 +46,12 @@ export class FriendRequestsPage {
       this.myUserId = BigInt(this.myUserIdString);
     this.sharedService.hideEditButtonForALilWhile(true);
     this.sharedService.hidePostButtonForALilWhile(true);
+    this.sharedService.imOnEventsTab(false);
   }
 
   ngOnInit() {
     this.getFriendRequests();
-    this.sharedService.onRefresh.subscribe({
+    this.sharedService.onFriendRequestRefresh.subscribe({
       next: (value: boolean) => {
         console.log("refreshin sleepers");
         this.noRequests = false;

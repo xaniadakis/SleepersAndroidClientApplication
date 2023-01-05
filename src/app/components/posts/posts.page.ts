@@ -56,19 +56,15 @@ export class PostsPage implements OnInit {
     this.pageNumber = 0;
     this.posts.splice(0, this.posts.length)
     this.getAllPosts(this.pageNumber, this.pageLimit);
-    this.sharedService.onRefresh.subscribe({
-      next: (value: boolean) => {
-        this.pageNumber = 0;
-        this.posts.splice(0, this.posts.length)
-        this.getAllPosts(this.pageNumber, this.pageLimit)
-      }
-    });
-    this.sharedService.onGoScrollToTop.subscribe({
-      next: (value: boolean) => {
-        this.scrollToTop(700);
-      }
-    });
     if (this.postType == PostType.CAR || this.postType == PostType.ALL) {
+      this.sharedService.onCarRefresh.subscribe({
+        next: (value: boolean) => {
+          // this.scrollToTop(700);
+          this.pageNumber = 0;
+          this.posts.splice(0, this.posts.length)
+          this.getAllPosts(this.pageNumber, this.pageLimit)
+        }
+      });
       this.sharedService.onCarPost.subscribe({
         next: (postId: bigint) => {
           this.getPost(postId)
@@ -90,6 +86,14 @@ export class PostsPage implements OnInit {
       });
     }
     if (this.postType == PostType.ART || this.postType == PostType.ALL) {
+      this.sharedService.onArtRefresh.subscribe({
+        next: (value: boolean) => {
+          // this.scrollToTop(700);
+          this.pageNumber = 0;
+          this.posts.splice(0, this.posts.length)
+          this.getAllPosts(this.pageNumber, this.pageLimit)
+        }
+      });
       this.sharedService.onArtPost.subscribe({
         next: (postId: bigint) => {
           this.getPost(postId)
@@ -111,6 +115,14 @@ export class PostsPage implements OnInit {
       });
     }
     if (this.postType == PostType.STORY || this.postType == PostType.ALL) {
+      this.sharedService.onStoryRefresh.subscribe({
+        next: (value: boolean) => {
+          // this.scrollToTop(700);
+          this.pageNumber = 0;
+          this.posts.splice(0, this.posts.length)
+          this.getAllPosts(this.pageNumber, this.pageLimit)
+        }
+      });
       this.sharedService.onStory.subscribe({
         next: (postId: bigint) => {
           this.getPost(postId)
@@ -133,8 +145,8 @@ export class PostsPage implements OnInit {
     }
   }
 
-  scrollToTop(fast: number) {
-    this.content.scrollToTop(fast);
+  scrollToTop(fastButHowFast: number) {
+    this.content.scrollToTop(fastButHowFast);
   }
 
   react(reaction: ReactionEnum, postId: bigint) {

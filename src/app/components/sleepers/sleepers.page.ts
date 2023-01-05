@@ -45,13 +45,14 @@ export class SleepersPage {
       this.myUserId = BigInt(this.myUserIdString);
     this.sharedService.hideEditButtonForALilWhile(true);
     this.sharedService.hidePostButtonForALilWhile(true);
+    this.sharedService.imOnEventsTab(false);
   }
 
   ngOnInit() {
     this.getAllFriends();
     this.getNonFriends();
     // this.getAllUsers(this.pageNumber, this.pageLimit);
-    this.sharedService.onRefresh.subscribe({
+    this.sharedService.onSleeperRefresh.subscribe({
       next: (value: boolean) => {
         console.log("refreshin sleepers");
         this.pageNumber = 0;
@@ -97,7 +98,7 @@ export class SleepersPage {
         //   this.friends.push(data[i]);
         // }
         this.friends = data;
-        this.friends.sort(function(a,b){
+        this.friends.sort(function (a, b) {
           return new Date(b.lastActedAt).valueOf() - new Date(a.lastActedAt).valueOf();
         });
       });
@@ -118,7 +119,7 @@ export class SleepersPage {
         //   this.friends.push(data[i]);
         // }
         this.sleepers = data;
-        this.sleepers.sort(function(a,b){
+        this.sleepers.sort(function (a, b) {
           return new Date(b.lastActedAt).valueOf() - new Date(a.lastActedAt).valueOf();
         });
       });
@@ -137,11 +138,11 @@ export class SleepersPage {
   }
 
   goToProfilePage(id: bigint) {
-    this.router.navigateByUrl("/home/profile/" + id+"/"+1);
+    this.router.navigateByUrl("/home/profile/" + id + "/" + 1);
   }
 
   setBadge(lastActedAt: string): string {
-    if(this.empty(lastActedAt))
+    if (this.empty(lastActedAt))
       return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">offline</ion-badge>";
     var lastActedAtDate = new Date(lastActedAt);
     var now = new Date();
@@ -151,17 +152,17 @@ export class SleepersPage {
     // return '<ion-badge style=\"margin-right: 15px\" color=\"success\">d:'+diffMins+', '+lastActedAtDate.toString()+'</ion-badge>';
 
     switch (true) {
-      case (diffMins<5):
+      case (diffMins < 5):
         return "<ion-badge style=\"margin-right: 10px\" color=\"success\">active</ion-badge>";
         break;
-      case (diffMins<60):
-        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before "+diffMins+" minutes</ion-badge>";
+      case (diffMins < 60):
+        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + diffMins + " minutes</ion-badge>";
         break;
-      case (diffMins<1500):
-        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before "+this.diffHoursFromMinutes(diffMins)+" hours</ion-badge>";
+      case (diffMins < 1500):
+        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + this.diffHoursFromMinutes(diffMins) + " hours</ion-badge>";
         break;
       default:
-        return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">active before "+this.diffDaysFromMinutes(diffMins)+" days</ion-badge>";
+        return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">active before " + this.diffDaysFromMinutes(diffMins) + " days</ion-badge>";
         break;
     }
   }
@@ -175,25 +176,25 @@ export class SleepersPage {
   }
 
   diffHoursFromMinutes(diffMinutes: number) {
-    return Math.round(diffMinutes/60);
+    return Math.round(diffMinutes / 60);
   }
 
   diffDaysFromMinutes(diffMinutes: number) {
-    return Math.round(diffMinutes/(60*24));
+    return Math.round(diffMinutes / (60 * 24));
   }
 
-  getBadgeColor(lastActedAt: string):string {
-    if(this.empty(lastActedAt))
+  getBadgeColor(lastActedAt: string): string {
+    if (this.empty(lastActedAt))
       return 'danger';
     var lastActedAtDate = new Date(lastActedAt);
     var diffMs = (new Date().valueOf() - lastActedAtDate.valueOf()); // milliseconds between now & Christmas
     var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
 
     switch (true) {
-      case (diffMins<5):
+      case (diffMins < 5):
         return 'success';
         break;
-      case (diffMins<60):
+      case (diffMins < 60):
         return 'warning';
         break;
       default:
@@ -202,20 +203,20 @@ export class SleepersPage {
     }
   }
 
-  getBadgeText(lastActedAt: string):string {
-    if(this.empty(lastActedAt))
+  getBadgeText(lastActedAt: string): string {
+    if (this.empty(lastActedAt))
       return 'offline';
     var lastActedAtDate = new Date(lastActedAt);
     var diffMs = (new Date().valueOf() - lastActedAtDate.valueOf()); // milliseconds between now & Christmas
     var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
     switch (true) {
-      case (diffMins<10):
+      case (diffMins < 10):
         return 'active';
         break;
-      case (diffMins<60):
-        return 'active before '+diffMins+" minutes";
+      case (diffMins < 60):
+        return 'active before ' + diffMins + " minutes";
         break;
-      case (diffMins<2):
+      case (diffMins < 2):
         return 'active last hour';
       default:
         return 'offline';
@@ -240,13 +241,12 @@ export class SleepersPage {
       }))
       .subscribe(data => {
         console.log(data);
-        if(data.status==FriendRequestStatusEnum.SENT)
-          this.toastService.presentToastWithDuration("middle", "Sent a friend request to "+friendName, 1500);
-        else if(data.status==FriendRequestStatusEnum.PENDING)
-          this.toastService.presentToastWithDuration("middle", "There is already a pending friend request to "+friendName, 1500);
-        else if(data.status==FriendRequestStatusEnum.FAILED)
-          this.toastService.presentToastWithDuration("middle", "There was an error while sending a friend request towards "+friendName, 1500);
-
+        if (data.status == FriendRequestStatusEnum.SENT)
+          this.toastService.presentToastWithDuration("middle", "Sent a friend request to " + friendName, 1500);
+        else if (data.status == FriendRequestStatusEnum.PENDING)
+          this.toastService.presentToastWithDuration("middle", "There is already a pending friend request to " + friendName, 1500);
+        else if (data.status == FriendRequestStatusEnum.FAILED)
+          this.toastService.presentToastWithDuration("middle", "There was an error while sending a friend request towards " + friendName, 1500);
       });
   }
 
@@ -265,7 +265,7 @@ export class SleepersPage {
         if (friendIndex > -1)
           this.friends.splice(friendIndex, 1);
         this.sleepers.unshift(deletedFriend);
-        this.toastService.presentToastWithDuration("middle", "Lil "+friendName+" is no longer your buddy for now..", 1500);
+        this.toastService.presentToastWithDuration("middle", "Lil " + friendName + " is no longer your buddy for now..", 1500);
       });
   }
 }

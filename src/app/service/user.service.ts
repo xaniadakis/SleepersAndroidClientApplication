@@ -5,10 +5,12 @@ import {ProfilePicChangeResponse} from "../dto/profile-pic-change-response";
 import {SignOutResponse} from "../dto/sign-out-response";
 import {
   AddFriendResponse,
-  ForgotPasswordResponse, FriendRequestDto,
+  ForgotPasswordResponse,
+  FriendRequestDto,
   GetUserDetailsResponse,
   GetUsersResponse,
-  UiUserDto, UnfriendResponse
+  UiUserDto,
+  UnfriendResponse
 } from "../dto/get-user-details-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {Observable} from "rxjs";

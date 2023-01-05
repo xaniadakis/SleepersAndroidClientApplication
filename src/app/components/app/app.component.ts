@@ -34,8 +34,9 @@ export class AppComponent {
   loggedIn: boolean;
   currentVersion: string;
   private sharedServiceSubscription: Subscription;
-  onProfileTab: boolean;
-  onFriendosProfileTab: boolean;
+  onProfileTab: boolean = false;
+  onFriendosProfileTab: boolean = false;
+  onEventsTab: boolean = false;
 
   constructor(
     private platform: Platform,
@@ -56,6 +57,7 @@ export class AppComponent {
       router.navigateByUrl("/home/tabs/tab3")
     }
     this.pushNotificationsService.initPush();
+
   }
 
   ngOnInit() {
@@ -79,20 +81,26 @@ export class AppComponent {
     });
     this.sharedServiceSubscription = this.sharedService.onChange.subscribe({
       next: (event: boolean) => {
-        console.log(`Received message #${event}`);
+        console.log(`Received message onChange #${event}`);
         this.toggleLoggedIn(event);
       }
     })
     this.sharedServiceSubscription = this.sharedService.onProfileTab.subscribe({
       next: (event: boolean) => {
-        console.log(`Received message #${event}`);
+        console.log(`Received message onProfileTab #${event}`);
         this.onProfileTab = event
       }
     })
     this.sharedServiceSubscription = this.sharedService.onAFriendsProfileTab.subscribe({
       next: (event: boolean) => {
-        console.log(`Received message #${event}`);
+        console.log(`Received message onFriendosProfileTab #${event}`);
         this.onFriendosProfileTab = event
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onEventsTab.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message onEventsTab #${event}`);
+        this.onEventsTab = event
       }
     })
   }
@@ -295,7 +303,25 @@ export class AppComponent {
     this.router.navigateByUrl('/home/friend-requests');
   }
 
+  checkForEvents() {
+    this.router.navigateByUrl('/home/events');
+  }
+
   onProposal() {
 
+  }
+
+
+  animate() {
+    var btn = document.getElementById('my-btn');
+    // @ts-ignore
+    console.log("running aniimation..")
+    // @ts-ignore
+    btn.children[0].classList.add('spin-animation');
+    setTimeout(function () {
+      // @ts-ignore
+      btn.children[0].classList.remove('spin-animation');
+    }, 500);
+    this.sharedService.refreshed(PostType.SLEEPERS);
   }
 }

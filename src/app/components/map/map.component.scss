@@ -1,0 +1,82 @@
+//.map-wrap {
+//  position: absolute;
+//  margin: 0 auto;
+//  //margin: -50px 0 0 -50px;
+//  //position: relative;
+//  width: 100vw;
+//  height: 50vh; /* calculate height of the screen minus the heading */
+//}
+//
+//.map {
+//  //display: block;
+//  //margin-left: auto;
+//  //margin-right: auto;
+//  width: 100%;
+//  height: 100%;
+//}
+
+.watermark {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: -999;
+}
+
+/////////////////////////////////////////////////
+@import url('https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css');
+
+.map-wrap {
+  position: relative;
+  height: 32vh;
+  width: 100vw;
+  alignment: center;
+  align-self: stretch;
+  left: 0;
+  right: 0;
+  padding: 0;
+  margin: 0px auto;
+}
+
+.map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.maplibregl-canvas .mapboxgl-canvas{
+  height: auto;
+  width: 100vw;
+}
+
+svg.mapboxgl-ctrl-geocoder--result-icon, svg.maplibre-ctrl-geocoder--result-icon{
+  height: 5px;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.iotDeviceMarker {
+  background-image: url('/assets/icons/sensor.webp');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.androidDeviceMarker {
+  background-image: url('/assets/icons/androidDevice.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.diMarker {
+  background-image: url('/assets/icons/diUoatp.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}

@@ -43,6 +43,10 @@ import {SleepersPage} from "../sleepers/sleepers.page";
 import {ProposeChangeModalComponent} from "../propose-change-modal/propose-change-modal.component";
 import {SafePipeHtml} from "../safe-pipe-html/safe.pipe";
 import {FriendRequestsPage} from "../friend-requests/friend-requests.page";
+import {EventsPage} from "../events/events.page";
+import {MapComponent} from "../map/map.component";
+import {AnnounceEventModalComponent} from "../announce-event-modal/announce-event-modal.component";
+import {Tab4Page} from "../tab4/tab4.page";
 
 @NgModule({
   declarations: [AppComponent
@@ -51,6 +55,7 @@ import {FriendRequestsPage} from "../friend-requests/friend-requests.page";
     , Tab1Page
     , Tab2Page
     , Tab3Page
+    , Tab4Page
     , EditPostModalComponent
     , ShowPostModalComponent
     , CreatePostModalComponent
@@ -63,7 +68,10 @@ import {FriendRequestsPage} from "../friend-requests/friend-requests.page";
     , PostsPage
     , UserPostsPage
     , SleepersPage
-    ,FriendRequestsPage
+    , FriendRequestsPage
+    , EventsPage
+    , MapComponent
+    , AnnounceEventModalComponent
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],

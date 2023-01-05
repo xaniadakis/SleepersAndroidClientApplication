@@ -32,7 +32,7 @@ export class ForgotPasswordResponse {
   message: string;
 }
 
-export class FriendRequestDto{
+export class FriendRequestDto {
   id: bigint;
 
   fromUser: UiUserDto;
@@ -40,19 +40,19 @@ export class FriendRequestDto{
   toUser: UiUserDto;
 }
 
-export class AddFriendResponse{
+export class AddFriendResponse {
   message: string;
   friendId: bigint;
   status: FriendRequestStatusEnum;
 }
 
-export enum FriendRequestStatusEnum{
-  SENT,
-  PENDING,
-  FAILED
+export enum FriendRequestStatusEnum {
+  SENT = "SENT",
+  PENDING = "PENDING",
+  FAILED = "FAILED"
 }
 
-export class UnfriendResponse{
+export class UnfriendResponse {
   message: string;
   unfriendId: bigint;
 }

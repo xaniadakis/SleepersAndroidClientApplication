@@ -9,15 +9,18 @@ import {PostType} from "../../dto/post-type";
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
-  placeIcon = './assets/place4.png';
+  placeIcon = './assets/place.png';
   carIcon = './assets/carIcon2.png';
-  peopleIcon = './assets/people3.png';
+  peopleIcon = './assets/Outlawz-nobg.png';
+  tripIcon = './assets/map.png';
+
   width = "30px";
   height = "30px";
 
   artType: PostType = PostType.ART;
   carType: PostType = PostType.CAR;
   storyType: PostType = PostType.STORY;
+  tripType: PostType = PostType.TRIP;
 
   @ViewChild(RouterOutlet) outlet: RouterOutlet;
 
@@ -35,12 +38,13 @@ export class TabsPage {
   }
 
   changedTab(postType: PostType) {
-    const current: PostType = PostType[localStorage.getItem("postType") as PostType];
-    if(postType==current)
-      this.sharedService.pleaseScrollToTop();
-    else {
-      localStorage.setItem("postType", postType)
-      console.log("just changed tab to: " + postType)
-    }
+    // const current: PostType = PostType[localStorage.getItem("postType") as PostType];
+    // if (postType == current) {
+    this.sharedService.refreshed(postType);
+    // }
+    // else {
+    localStorage.setItem("postType", postType)
+    console.log("just changed tab to: " + postType)
+    // }
   }
 }

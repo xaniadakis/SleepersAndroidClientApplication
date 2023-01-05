@@ -23,7 +23,8 @@
       "dom"
     ],
     "useDefineForClassFields": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*.ts",

@@ -280,7 +280,7 @@ ion-row {
 //}
 
 ///////////////////////////////////////////////////////////
-#postbutton {
+#postbutton, #announcebutton{
   position: relative;
   display: inline-block;
   //margin:20px;
@@ -290,7 +290,7 @@ ion-row {
   //padding-bottom: 5px;
 }
 
-#postbutton a {
+#postbutton a, #announcebutton a {
   color: white;
   font-family: Helvetica, sans-serif;
   font-weight: bold;
@@ -315,7 +315,7 @@ ion-row {
   border-radius: 2.5px;
 }
 
-#postbutton a:active {
+#postbutton a:active, #announcebutton a:active {
   top: 5px;
   background-color: #DA0037;
 
@@ -324,7 +324,7 @@ ion-row {
   box-shadow: inset 0 0.5px 0 #FFE5C4, inset 0 -1.5px 0 #6d001c;
 }
 
-#postbutton:after {
+#postbutton:after, #announcebutton:after{
   content: "";
   height: 100%;
   width: 100%;
@@ -398,4 +398,58 @@ ion-row {
   -moz-border-radius: 2.5px;
   border-radius: 2.5px;
 }
+
+
+////////////////////////////////////////
+
+@mixin animation-name($name){
+  animation-name: $name;
+  -webkit-animation-name: $name;
+  -moz-animation-name: $name;
+  -ms-animation-name: $name;
+}
+
+@mixin animation-duration($duration){
+  animation-duration: $duration;
+  -webkit-animation-duration: $duration;
+  -moz-animation-duration: $duration;
+  -ms-animation-duration: $duration;
+}
+
+@mixin animation-timing-function($func){
+  animation-timing-function: $func;
+  -webkit-animation-timing-function: $func;
+  -moz-animation-timing-function: $func;
+  -ms-animation-timing-function: $func;
+}
+
+@mixin animation($name, $duration, $timing-func){
+  @include animation-name($name);
+  @include animation-duration($duration);
+  @include animation-timing-function($timing-func);
+}
+
+@keyframes spin{
+  to { transform: rotate(360deg) }
+}
+
+.lilfresh{
+  border: none;
+  background-color: transparent;
+  outline: 0;
+  //width: 100px;
+  //height: 100px;
+
+  svg{
+    color: #446CB3;
+    //font-size: 30px;
+    cursor: pointer;
+  }
+
+  svg.spin-animation{
+    @include animation(spin, 0.5s, ease-in);
+  }
+}
+
+
 
