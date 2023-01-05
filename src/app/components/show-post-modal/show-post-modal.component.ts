@@ -9,6 +9,10 @@ import {PostService} from "../../service/post.service";
 import {PostType} from "../../dto/post-type";
 import {CreateCommentResponse} from "../../dto/create-post-response";
 import {SharedService} from "../../service/shared.service";
+import {ModalService} from "../../service/modal.service";
+import {catchError} from "rxjs/operators";
+import {throwError} from "rxjs";
+import {UiPostDto} from "../../dto/ui-post-dto";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -22,14 +26,17 @@ export class ShowPostModalComponent {
   comments: SimpleCommentDto[];
   likes: SimpleReactionDto[];
 
-  @Input("image") image: string | ArrayBuffer | null;
+  @Input("image") image: string;
   @Input("image") text: string;
   @Input("id") id: bigint;
   @Input("type") type: PostType;
+  @Input("owner") owner: string;
+  youtubeVideoId: string;
 
   userId: string | null = localStorage.getItem("userId");
   profilePic: string = GlobalConstants.APIURL + "/file/image?filename=" + localStorage.getItem('profilePic');
-
+  username: string | null = localStorage.getItem("name");
+  isMyPost: boolean;
   comment = {
     commentText: ''
   };
@@ -38,14 +45,56 @@ export class ShowPostModalComponent {
     , private toastService: ToastService
     , private postService: PostService
     , private sharedService: SharedService
-    , private platform: Platform) {
+    , private platform: Platform
+    , public modalService: ModalService) {
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
       return this.modalCtrl.dismiss(null, 'cancel');
     })
   }
 
   ngOnInit() {
+    this.isMyPost = this.equalsSecure(this.owner);
     this.getPostComments();
+
+    // this.sharedService.onStoryEditOrReact.subscribe({
+    //   next: (postId: bigint) => {
+    //     this.getPost(postId)
+    //       .then(refinedPost => {
+    //         this.text = refinedPost.text;
+    //         this.image = refinedPost.image;
+    //         this.youtubeVideoId = refinedPost.youtubeVideoId;
+    //       });
+    //   }
+    // });
+  }
+
+  // async getPost(postId: bigint): Promise<UiPostDto> {
+  //   // this.fetching = true;
+  //   console.log("fetching post: " + postId);
+  //   return new Promise((resolve, reject) => {
+  //     this.postService.findPost(postId)
+  //       .pipe(catchError(err => {
+  //         // this.fetching = false;
+  //         // this.toastService.presentToastWithDuration("bottom",
+  //         //   "Error while fetching post: " + postId,
+  //         //   1500);
+  //         console.log("Error while fetching post: " + postId);
+  //         return throwError(err);
+  //       }))
+  //       .subscribe(data => {
+  //         console.log("SUCCESS: " + data.message);
+  //         resolve(data.postDto);
+  //       });
+  //   });
+  // }
+
+  equalsSecure(owner: string) {
+    let bool = (owner == this.username);
+    if (bool)
+      console.log("This post is yours.");
+    else
+      console.log("This post aint yours.[" + owner + "]=[" + this.username + "]");
+    return bool;
   }
 
   private getPostComments() {
@@ -93,5 +142,29 @@ export class ShowPostModalComponent {
     else
       return true;
     // console.log("image: '"+string+"' = "+value);
+  }
+
+  deletePost(postId: bigint) {
+    if (this.userId == null) {
+      return
+    }
+    this.postService.deletePost(postId)
+      .pipe(catchError(err => {
+        this.toastService.presentToastWithDuration("bottom",
+          "Error while deleting post: " + err,
+          1500);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        console.log("SUCCESS: " + data.message);
+        console.log(data);
+        // this.ngOnInit();
+        this.sharedService.deleted(this.type, postId);
+      });
+    this.cancel();
+  }
+
+  print() {
+    console.log("dragged");
   }
 }

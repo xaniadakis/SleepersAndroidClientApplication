@@ -162,12 +162,20 @@ ion-card {
 //}
 
 #delete-post-button {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 7px;
+  margin-bottom: -3.5px;
   float: top;
   background-color: #DA0037 !important;
   height: 50%;
 }
 
 #edit-post-button {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 7px;
+  margin-bottom: -3.5px;
   background-color: darkslategrey !important;
   float: bottom;
 }
@@ -280,3 +288,7 @@ pre {
 
 /////////////
 
+ion-content {
+  --background: #0d0d0d !important;
+  --background-color: #0d0d0d !important;
+}

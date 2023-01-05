@@ -81,11 +81,11 @@ export class ModalService {
     const {data, role} = await modal.onWillDismiss();
   }
 
-  async openPostModal(postId: bigint, postImage: string, postText: string, postType: PostType) {
+  async openPostModal(postId: bigint, postImage: string, postText: string, postType: PostType, owner: string) {
     console.log("imma show comments");
     const modal = await this.modalCtrl.create({
       component: ShowPostModalComponent,
-      componentProps: {id: postId, image: postImage, text: postText, type: postType},
+      componentProps: {id: postId, image: postImage, text: postText, type: postType, owner: owner},
       initialBreakpoint: 1,
       backdropBreakpoint: 1,
       backdropDismiss: false,

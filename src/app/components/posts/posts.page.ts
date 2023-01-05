@@ -52,14 +52,27 @@ export class PostsPage implements OnInit {
     , private popoverCtrl: PopoverController) {
   }
 
+
+
   ngOnInit() {
     this.pageNumber = 0;
     this.posts.splice(0, this.posts.length)
     this.getAllPosts(this.pageNumber, this.pageLimit);
+    // this.scrollToTop(500);
     if (this.postType == PostType.CAR || this.postType == PostType.ALL) {
+      this.sharedService.onCarDelete.subscribe({
+        next: (postId: bigint) => {
+          let deletedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+          if (deletedPost == undefined)
+            return;
+          let postIndex = this.posts.indexOf(deletedPost); // 👉️
+          if (postIndex > -1)
+            this.posts.splice(postIndex, 1);
+        }
+      });
       this.sharedService.onCarRefresh.subscribe({
         next: (value: boolean) => {
-          // this.scrollToTop(700);
+          this.scrollToTop(600);
           this.pageNumber = 0;
           this.posts.splice(0, this.posts.length)
           this.getAllPosts(this.pageNumber, this.pageLimit)
@@ -86,9 +99,19 @@ export class PostsPage implements OnInit {
       });
     }
     if (this.postType == PostType.ART || this.postType == PostType.ALL) {
+      this.sharedService.onArtDelete.subscribe({
+        next: (postId: bigint) => {
+          let deletedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+          if (deletedPost == undefined)
+            return;
+          let postIndex = this.posts.indexOf(deletedPost); // 👉️
+          if (postIndex > -1)
+            this.posts.splice(postIndex, 1);
+        }
+      });
       this.sharedService.onArtRefresh.subscribe({
         next: (value: boolean) => {
-          // this.scrollToTop(700);
+          this.scrollToTop(600);
           this.pageNumber = 0;
           this.posts.splice(0, this.posts.length)
           this.getAllPosts(this.pageNumber, this.pageLimit)
@@ -115,9 +138,19 @@ export class PostsPage implements OnInit {
       });
     }
     if (this.postType == PostType.STORY || this.postType == PostType.ALL) {
+      this.sharedService.onStoryDelete.subscribe({
+        next: (postId: bigint) => {
+          let deletedPost: UiPostDto | undefined = this.posts.find(uiPostDto => uiPostDto.id === postId);
+          if (deletedPost == undefined)
+            return;
+          let postIndex = this.posts.indexOf(deletedPost); // 👉️
+          if (postIndex > -1)
+            this.posts.splice(postIndex, 1);
+        }
+      });
       this.sharedService.onStoryRefresh.subscribe({
         next: (value: boolean) => {
-          // this.scrollToTop(700);
+          this.scrollToTop(600);
           this.pageNumber = 0;
           this.posts.splice(0, this.posts.length)
           this.getAllPosts(this.pageNumber, this.pageLimit)
@@ -349,5 +382,18 @@ export class PostsPage implements OnInit {
       return true;
     else
       return false;
+  }
+
+  itemStyle(postIndex: number) {
+    return "--animation-order: "+(postIndex % this.pageLimit);
+  }
+
+  printScroll(str:string) {
+    console.log(str);
+  }
+
+  equalsSecure(owner: string) {
+    // console.log("you tryina open this shit ha?")
+    return owner == this.username;
   }
 }
