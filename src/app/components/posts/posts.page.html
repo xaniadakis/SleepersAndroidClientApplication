@@ -6,13 +6,13 @@
     <!--    </ion-item>-->
   </div>
   <ng-template #showContentBlock style="background: #0d0d0d;">
-    <ion-list style="background: #0d0d0d;" *ngFor="let post of posts; index as postIndex; trackBy:trackByArtNo">
+    <ion-list style="background: #0d0d0d; margin-bottom: -15px;" *ngFor="let post of posts; index as postIndex; trackBy:trackByArtNo">
 <!--      <ion-item-sliding>-->
         <ion-item [style]="itemStyle(postIndex)" lines="none" class="a-post ion-no-padding ion-no-margin"
                   (dblclick)="likeIt(post.id)">
           <ion-card class="ion-no-padding">
             <ion-card-header (click)="goToProfilePage(post.ownerId)">
-              <ion-card-subtitle type="dark">
+              <ion-card-subtitle type="dark" style="margin-top: -7px; margin-bottom: -5px">
                 <div class="ion-float-start">
                   <ion-chip id="post-owner-avatar">
                     <ion-avatar>
@@ -22,9 +22,9 @@
                     <ion-label><b>{{post.owner}}</b></ion-label>
                   </ion-chip>
                 </div>
-                <div class="ion-float-end" style="text-align: right">
+                <div class="ion-float-end" style="text-align: right; margin-right: -10px">
                   <ion-chip>
-                    <ion-label>{{post.postedAt}}</ion-label>
+                    <ion-label>{{generalUtils.getDate(post.postedAt)}}</ion-label>
                   </ion-chip>
                 </div>
               </ion-card-subtitle>
@@ -55,7 +55,7 @@
                     </div>
                   </ion-col>
                   <ion-col
-                    (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType, post.owner)">
+                    (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType, post.owner, post.ownerProfilePic)">
 <!--                    <ion-button class="transparent-button ion-no-padding ion-no-margin "-->
 <!--                                icon-left-->
 <!--                    >-->
@@ -105,7 +105,7 @@
                       &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getReactionsDesc(post.reactionsSize)}}</b>
                     </div>
                   </ion-col>
-                  <ion-col (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType, post.owner)">
+                  <ion-col (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType, post.owner, post.ownerProfilePic)">
 <!--                    <ion-button class="transparent-button ion-no-padding ion-no-margin "-->
 <!--                                icon-left-->
 <!--                    >-->

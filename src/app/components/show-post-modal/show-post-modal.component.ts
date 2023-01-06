@@ -13,6 +13,7 @@ import {ModalService} from "../../service/modal.service";
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {UiPostDto} from "../../dto/ui-post-dto";
+import GeneralUtils from "../../util/general.utils";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -31,6 +32,7 @@ export class ShowPostModalComponent {
   @Input("id") id: bigint;
   @Input("type") type: PostType;
   @Input("owner") owner: string;
+  @Input("ownerProfilePic") ownerProfilePic: string;
   youtubeVideoId: string;
 
   userId: string | null = localStorage.getItem("userId");
@@ -46,7 +48,8 @@ export class ShowPostModalComponent {
     , private postService: PostService
     , private sharedService: SharedService
     , private platform: Platform
-    , public modalService: ModalService) {
+    , public modalService: ModalService,
+    public generalUtils: GeneralUtils) {
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
       return this.modalCtrl.dismiss(null, 'cancel');
     })
@@ -88,6 +91,10 @@ export class ShowPostModalComponent {
   //   });
   // }
 
+  itemStyle(commentIndex: number) {
+    return "--animation-order: " + commentIndex;
+  }
+
   equalsSecure(owner: string) {
     let bool = (owner == this.username);
     if (bool)
@@ -105,24 +112,29 @@ export class ShowPostModalComponent {
 
       console.log(this.comments);
       this.comments.sort(function (a, b) {
-        return new Date(b.commentedAt).getTime() - new Date(a.commentedAt).getTime();
+        return new Date(a.commentedAt).getTime() - new Date(b.commentedAt).getTime();
       });
     });
   }
 
   addComment(form: NgForm) {
-    if (this.userId == null) {
-      return;
+    let comment = form.controls["commentText"].value;
+    if(this.notEmpty(comment)) {
+      if (this.userId == null) {
+        return;
+      }
+      this.postService.saveComment(this.id, form.controls["commentText"].value).subscribe(data => {
+        const response: CreateCommentResponse = data;
+        // alert(response)
+        form.reset()
+        setTimeout(() => {
+          this.sharedService.editedOrReacted(this.type, this.id);
+        }, 300);
+        this.ngOnInit();
+      });
+    } else {
+      this.toastService.presentToastWithDuration("bottom", "no comment", 200)
     }
-    this.postService.saveComment(this.id, form.controls["commentText"].value).subscribe(data => {
-      const response: CreateCommentResponse = data;
-      // alert(response)
-      form.reset()
-      setTimeout(() => {
-        this.sharedService.editedOrReacted(this.type, this.id);
-      }, 300);
-      this.ngOnInit();
-    });
   }
 
   cancel() {
@@ -167,4 +179,6 @@ export class ShowPostModalComponent {
   print() {
     console.log("dragged");
   }
+
+
 }

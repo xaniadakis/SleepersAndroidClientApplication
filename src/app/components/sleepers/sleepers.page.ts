@@ -154,16 +154,16 @@ export class SleepersPage {
     switch (true) {
       case (diffMins < 5):
         return "<ion-badge style=\"margin-right: 10px\" color=\"success\">active</ion-badge>";
-        break;
       case (diffMins < 60):
         return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + diffMins + " minutes</ion-badge>";
-        break;
       case (diffMins < 1500):
         return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + this.diffHoursFromMinutes(diffMins) + " hours</ion-badge>";
-        break;
+      case (diffMins < 10080):
+        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + this.diffDaysFromMinutes(diffMins) + " days</ion-badge>";
+      case (diffMins > 10080):
+        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + this.diffWeeksFromMinutes(diffMins) + " weeks</ion-badge>";
       default:
-        return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">active before " + this.diffDaysFromMinutes(diffMins) + " days</ion-badge>";
-        break;
+        return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">offline</ion-badge>";
     }
   }
 
@@ -181,6 +181,10 @@ export class SleepersPage {
 
   diffDaysFromMinutes(diffMinutes: number) {
     return Math.round(diffMinutes / (60 * 24));
+  }
+
+  diffWeeksFromMinutes(diffMinutes: number) {
+    return Math.round(diffMinutes / (60 * 24 * 7));
   }
 
   getBadgeColor(lastActedAt: string): string {

@@ -18,6 +18,7 @@ export class PostCommentsDto {
 
 export class SimpleCommentDto {
   owner: string;
+  ownerProfilePic: string;
   text: string;
   commentedAt: string;
 }

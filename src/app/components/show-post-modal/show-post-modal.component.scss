@@ -15,19 +15,89 @@
   --padding-bottom: 0px;
 }
 
-.commentator {
+.impostorImage{
+  width: 50px;
+  height: 50px;
+  border: 1px #DA0037 solid;
+  min-width: 50px;
+  margin-left: 8px;
+  //margin-right: 5px;
+}
+
+.impostor {
+  font-weight: bolder;
+  margin-top: 5px;
+  width: 100%;
   color: whitesmoke;
-  font-size: 16px
+  font-size: 12px;
+  margin-left: 0;
+  float: left;
+}
+
+.postText {
+  font-weight: bold;
+  max-width: 70%;
+  color: gray;
+  font-size: 12px;
+  margin-right: 10px;
+  margin-top: 1.5px;
+  margin-left: 0;
+  //font-style: italic;
+  //margin-left: 10px;
+}
+
+.commentator {
+  width: 100%;
+  color: whitesmoke;
+  font-size: 11px;
+  margin-left: 2px;
+  float: left;
+}
+
+.newCommentator{
+  width: 100%;
+  font-weight: bold;
+  color: whitesmoke;
+  font-size: 12px;
+  margin-left: 2px;
+  float: left;
 }
 
 .comment {
+  width: 100%;
   color: gray;
+  font-size: 11px;
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-left: 2px;
   //font-style: italic;
-  margin-left: 12px;
+  //margin-left: 10px;
 }
 
 .new-comment {
   color: lightslategray;
   box-shadow: inset -2px -2px 3.5px rgba(100, 100, 100, 0.5),
   inset 1.5px 1.5px 3px rgba(10, 10, 10, 0.7);
+}
+
+.date {
+  width: fit-content;
+  color: whitesmoke;
+  font-size: 10px;
+  float: right;
+  margin-right: 15px;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+ion-item.a-comment {
+  //animation: 0.5s ease-out 0s 1 slideInFromLeft;
+  animation: slideInFromLeft 200ms calc(var(--animation-order) * 200ms) both ease-in;
 }

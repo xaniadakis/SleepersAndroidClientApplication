@@ -47,6 +47,7 @@ import {EventsPage} from "../events/events.page";
 import {MapComponent} from "../map/map.component";
 import {AnnounceEventModalComponent} from "../announce-event-modal/announce-event-modal.component";
 import {Tab4Page} from "../tab4/tab4.page";
+import GeneralUtils from "../../util/general.utils";
 
 @NgModule({
   declarations: [AppComponent
@@ -107,7 +108,8 @@ import {Tab4Page} from "../tab4/tab4.page";
     UserService,
     FormBuilder,
     Camera,
-    CordovaFile
+    CordovaFile,
+    GeneralUtils
     // CdkVirtualScrollViewport,
     // LogUpdateService,
     // CheckForUpdateService

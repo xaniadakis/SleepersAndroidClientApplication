@@ -312,7 +312,7 @@ ion-avatar {
 
 ion-item.a-post {
   //animation: 0.5s ease-out 0s 1 slideInFromLeft;
-  animation: slideInFromLeft 700ms calc(var(--animation-order) * 900ms) both ease-in;
+  animation: slideInFromLeft 700ms calc(var(--animation-order) * 700ms) both ease-in;
 
   background: #0d0d0d;
   margin-left: auto;

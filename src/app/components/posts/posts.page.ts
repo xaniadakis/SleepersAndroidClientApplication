@@ -14,6 +14,7 @@ import {ReactResponse} from "../../dto/create-post-response";
 import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 import {catchError} from "rxjs/operators";
+import GeneralUtils from "../../util/general.utils";
 
 @Component({
   selector: 'app-posts',
@@ -49,9 +50,9 @@ export class PostsPage implements OnInit {
     , public postService: PostService
     , public modalService: ModalService
     , private sharedService: SharedService
-    , private popoverCtrl: PopoverController) {
+    , private popoverCtrl: PopoverController
+    , public generalUtils: GeneralUtils) {
   }
-
 
 
   ngOnInit() {
@@ -385,10 +386,10 @@ export class PostsPage implements OnInit {
   }
 
   itemStyle(postIndex: number) {
-    return "--animation-order: "+(postIndex % this.pageLimit);
+    return "--animation-order: " + (postIndex % this.pageLimit);
   }
 
-  printScroll(str:string) {
+  printScroll(str: string) {
     console.log(str);
   }
 
