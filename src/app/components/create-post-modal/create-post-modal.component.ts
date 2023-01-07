@@ -15,6 +15,8 @@ import {Capacitor} from '@capacitor/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
+import {Camera as CapCamera, CameraResultType, GalleryPhotos} from '@capacitor/camera';
+import {CameraSource} from "@capacitor/camera/dist/esm/definitions";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -45,7 +47,7 @@ export class CreatePostModalComponent {
   hidden: boolean = true;
   youtubeVideoId: string | null = null;
   imageUploaded: File;
-  imgResult: string | null;
+  imgResult: string | undefined | null;
   youtubeThumbnail: string | null;
   uploadImage: boolean = false;
   safeImg: SafeUrl;
@@ -182,7 +184,7 @@ export class CreatePostModalComponent {
         this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
         reject();
       }
-
+      if(this.imgResult)
       this.postService.savePostV2(text, this.imgResult, this.youtubeVideoId, this.postType, this.uploadImage)
         .pipe(catchError(err => {
           this.toastService.presentToastWithDuration("bottom",
@@ -199,6 +201,81 @@ export class CreatePostModalComponent {
         });
     });
   }
+
+  takePicture = async () => {
+    const image = await CapCamera.getPhoto({
+      quality: 50,
+      source: CameraSource.Camera,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      width: 1500,
+      height: 2000
+    });
+
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    this.imgResult = image.dataUrl;
+    console.log("THIS: "+image.dataUrl)
+  };
+
+  takePictures = async () => {
+    const images: GalleryPhotos = await CapCamera.pickImages({
+      quality: 50,
+      width: 1500,
+      height: 2000,
+      limit: 5
+    });
+
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    let url = images.photos[0].webPath.replace('blob:', '');
+    console.log("fetchin from: "+url);
+    // @ts-ignore
+    let blob: Blob = await fetch(url)
+      .then(response => {
+        console.log("STATUS: "+response.status); // 200
+        console.log("TEXT: "+response.statusText); // OK
+        return response.blob();
+      })
+      .then(async (data) => {
+        console.log("IN");
+        console.log("blob: "+data); // pass your blob/file info here
+        console.log("blob type: "+data.type); // pass your blob/file info here
+        console.log("blob size: "+data.size); // pass your blob/file info here
+        let image = window.URL.createObjectURL(data);
+        console.log("image: "+image); // pass your blob/file info here
+        console.log("image length: "+image.length); // pass your blob/file info here
+        console.log("image toString: "+image.toString()); // pass your blob/file info here
+
+        this.imgResult = image;
+        this.uploadImage = true;
+        console.log("OUT");
+      })
+      .catch(error => {
+        console.log("error: "+error); // OK
+      });
+    console.log("THIS2: "+url);
+  };
+
+  convertBlobToBase64 = async (blob: Blob) => { // blob data
+    return await this.blobToBase64(blob);
+  }
+
+  blobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onload = () => {
+      console.log("SUCcESS");
+      resolve(reader.result)};
+    reader.onerror = error => {
+      console.log("FAIL");
+      reject(error);
+    };
+  });
 
   async takePictureInstantlyDataUri() {
     const options: CameraOptions = {
@@ -312,7 +389,6 @@ export class CreatePostModalComponent {
       this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
     });
   }
-
 
   takePictureInstantlyFileUri() {
     const options: CameraOptions = {
