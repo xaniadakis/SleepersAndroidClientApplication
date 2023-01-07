@@ -99,5 +99,5 @@
 
 ion-item.a-comment {
   //animation: 0.5s ease-out 0s 1 slideInFromLeft;
-  animation: slideInFromLeft 200ms calc(var(--animation-order) * 200ms) both ease-in;
+  animation: slideInFromLeft 200ms calc(var(--animation-order) * 100ms) both ease-in;
 }

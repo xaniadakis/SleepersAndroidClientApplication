@@ -7,6 +7,7 @@ import {UiEventDto} from "../../dto/ui-post-dto";
 import {GlobalConstants} from "../../util/global-constants";
 import {UserService} from "../../service/user.service";
 import {ToastService} from "../../service/toast.service";
+import GeneralUtils from "../../util/general.utils";
 
 @Component({
   selector: 'app-events',
@@ -92,9 +93,7 @@ export class EventsPage {
   constructor(private router: Router,
               private sharedService: SharedService,
               private toastService: ToastService) {
-    this.sharedService.hideEditButtonForALilWhile(true);
-    this.sharedService.hidePostButtonForALilWhile(true);
-    this.sharedService.imOnEventsTab(true);
+    this.sharedService.checkingEvents(true);
   }
 
   ngOnInit(): void {
@@ -105,11 +104,8 @@ export class EventsPage {
   }
 
   goBack() {
-    this.sharedService.imOnEventsTab(false);
-    setTimeout(() => {
-      this.sharedService.hidePostButtonForALilWhile(false);
-    }, 200);
-    this.router.navigateByUrl('/home/tabs/tab3');
+    this.sharedService.checkingPosts(true);
+    GeneralUtils.goBack(this.router);
   }
 
 

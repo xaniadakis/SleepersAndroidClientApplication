@@ -16,6 +16,7 @@ export class PostService {
   private getAllPostsOfUserUrl: string;
   private getPostUrl: string;
   private getPostCommentsUrl: string;
+  private getLastPostCommentsUrl: string;
   private getPostReactionsUrl: string;
   private savePostUrl: string;
   private savePostV2Url: string;
@@ -39,6 +40,7 @@ export class PostService {
     this.commentPostUrl = GlobalConstants.APIURL + '/post/comment/';
     this.reactPostUrl = GlobalConstants.APIURL + '/post/react/';
     this.getPostCommentsUrl = GlobalConstants.APIURL + '/post/comments/';
+    this.getLastPostCommentsUrl = GlobalConstants.APIURL + '/post/lastComments/';
     this.getPostReactionsUrl = GlobalConstants.APIURL + '/post/reactions/';
     this.getImageUrl = GlobalConstants.APIURL + "/file/image?filename=";
     this.proposeChangeUrl = GlobalConstants.APIURL + "/post/changeProposal/";
@@ -60,6 +62,11 @@ export class PostService {
   public findAllComments(postId: bigint): Observable<GetCommentsResponse> {
     const reqParams = "?postId=" + postId.toString();
     return this.http.get<GetCommentsResponse>(this.getPostCommentsUrl + reqParams);
+  }
+
+  public findLastComments(postId: bigint, fromDate: string): Observable<GetCommentsResponse> {
+    const reqParams = "?postId=" + postId.toString() + "&commentedAt=" + fromDate;
+    return this.http.get<GetCommentsResponse>(this.getLastPostCommentsUrl + reqParams);
   }
 
   public findAllReactions(postId: bigint): Observable<GetReactionsResponse> {

@@ -38,7 +38,7 @@
           <!--          GO TO PROFILE     -->
           <ion-row class="info-row">
             <ion-card class="card info-card">
-              <div *ngIf="loggedIn && !onProfileTab as value else goToPosts">
+              <div *ngIf="loggedIn && !onMyProfileTab && !onSbsProfileTab as value else goToPosts">
                 <ion-item lines="none" color="#2471A3" style="color: #2471A3; margin-left: -1.6px"
                           [routerLink]="['/home/profile', '0', '0']"
                           routerLinkActive="active">
@@ -272,36 +272,33 @@
           </ion-menu-toggle>
         </ion-buttons>
         <ion-buttons *ngIf="loggedIn" slot="end">
-          <div *ngIf="!onProfileTab else showEditProfileButton;">
+          <div *ngIf="onPostsTab">
             <div ontouchstart="">
               <div id="postbutton" (click)="modalService.openCreatePostModal()">
                 <a style="color: #1e1e00;">Post</a>
               </div>
             </div>
           </div>
-          <ng-template #showEditProfileButton>
-            <div *ngIf="!onFriendosProfileTab else showAnnounceProfileButton" ontouchstart="">
-              <div id="editbutton" (click)="editProfile()">
-                <a style="color: #1e1e00;">Edit</a>
-              </div>
+          <div *ngIf="onMyProfileTab" ontouchstart="">
+            <div id="editbutton" (click)="editProfile()">
+              <a style="color: #1e1e00;">Edit</a>
             </div>
-          </ng-template>
-          <ng-template #showAnnounceProfileButton>
-            <div *ngIf="onEventsTab else showRefreshButton" ontouchstart="">
-              <div id="announcebutton" (click)="modalService.openAnnounceEventModal()">
-                <a style="color: #1e1e00;">Announce</a>
-              </div>
+          </div>
+          <div *ngIf="onEventsTab" ontouchstart="">
+            <div id="announcebutton" (click)="modalService.openAnnounceEventModal()">
+              <a style="color: #1e1e00;">Announce</a>
             </div>
-          </ng-template>
-          <ng-template #showRefreshButton>
-            <button class="lilfresh" id="my-btn" (click)="animate()" style="padding-right: 10px">
+          </div>
+          <div *ngIf="onOtherTab" ontouchstart="">
+          <button class="lilfresh" id="my-btn" (click)="animate()" style="padding-right: 10px">
               <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" preserveAspectRatio="xMidYMid meet"
                    viewBox="0 0 2048 2048">
                 <path fill="#da0037"
                       d="M1297 38q166 45 304 140t237 226t155 289t55 331q0 141-36 272t-103 245t-160 207t-208 160t-245 103t-272 37q-141 0-272-36t-245-103t-207-160t-160-208t-103-244t-37-273q0-140 37-272t105-248t167-212t221-164H256V0h512v512H640V215q-117 56-211 140T267 545T164 773t-36 251q0 123 32 237t90 214t141 182t181 140t214 91t238 32q123 0 237-32t214-90t182-141t140-181t91-214t32-238q0-150-48-289t-136-253t-207-197t-266-124l34-123z"/>
               </svg>
             </button>
-          </ng-template>
+          </div>
+
         </ion-buttons>
 
         <!--        <ion-fab horizontal="end" vertical="center">-->

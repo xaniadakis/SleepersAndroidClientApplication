@@ -6,7 +6,7 @@
       <div class="header ion-no-padding ion-no-margin">
         <div class="avatar">
           <img class="profilepic" [src]="(imageApi + userDetails.profilePic)" alt="">
-          <label *ngIf="!hiddenEditButton" (click)="compressFile()" class="custom-file-upload">
+          <label *ngIf="!hiddenEditButton" (click)="uploadFromGalleryDataUri()" class="custom-file-upload">
             <i class="fa fa-cloud-upload"></i>
             <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" preserveAspectRatio="xMidYMid meet"
                  viewBox="0 0 24 24">

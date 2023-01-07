@@ -5,9 +5,12 @@ import {PostType} from "../dto/post-type";
 @Injectable()
 export class SharedService {
   public onChange: EventEmitter<Boolean> = new EventEmitter<Boolean>();
-  public onProfileTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
-  public onAFriendsProfileTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+
+  public onPostsTabsNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onMyProfileNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onSbsProfileNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onEventsTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onOtherTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   public editProfile: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
@@ -63,16 +66,24 @@ export class SharedService {
     this.onChange.emit(value);
   }
 
-  public imOnEventsTab(value: boolean) {
+  public checkingEvents(value: boolean) {
     this.onEventsTab.emit(value);
   }
 
-  public hidePostButtonForALilWhile(value: boolean) {
-    this.onProfileTab.emit(value);
+  public checkingPosts(value: boolean) {
+    this.onPostsTabsNow.emit(value);
   }
 
-  public hideEditButtonForALilWhile(value: boolean) {
-    this.onAFriendsProfileTab.emit(value);
+  public checkingMyProfile(value: boolean) {
+    this.onMyProfileNow.emit(value);
+  }
+
+  public checkingSbsProfile(value: boolean) {
+    this.onSbsProfileNow.emit(value);
+  }
+
+  public checkingOtherSection(value: boolean) {
+    this.onOtherTab.emit(value);
   }
 
   public immaEditProfile(value: boolean) {

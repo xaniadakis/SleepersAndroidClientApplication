@@ -14,20 +14,21 @@ export default class GeneralUtils {
       return true;
   }
 
-  goBack(router: Router){
+  public static goBack(router: Router){
     let postType: PostType = PostType[localStorage.getItem("postType") as PostType]
+    console.log("IMMA GO BACK TO: "+postType);
     switch (postType) {
       case PostType.ART:
         router.navigateByUrl('/home/tabs/tab1');
         break;
       case PostType.CAR:
-        router.navigateByUrl('/home/tabs/tab3');
+        router.navigateByUrl('/home/tabs/tab2');
         break;
       case PostType.STORY:
-        router.navigateByUrl('/home/tabs/tab2');
+        router.navigateByUrl('/home/tabs/tab3');
         break;
       default:
-        router.navigateByUrl('/home/tabs/tab2');
+        router.navigateByUrl('/home/tabs/tab3');
         break;
     }
   }
@@ -83,4 +84,5 @@ export default class GeneralUtils {
   diffWeeksFromMinutes(diffMinutes: number) {
     return Math.round(diffMinutes / (60 * 24 * 7));
   }
+
 }

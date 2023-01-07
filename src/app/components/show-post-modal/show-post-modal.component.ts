@@ -49,7 +49,7 @@ export class ShowPostModalComponent {
     , private sharedService: SharedService
     , private platform: Platform
     , public modalService: ModalService,
-    public generalUtils: GeneralUtils) {
+              public generalUtils: GeneralUtils) {
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
       return this.modalCtrl.dismiss(null, 'cancel');
     })
@@ -100,7 +100,7 @@ export class ShowPostModalComponent {
     if (bool)
       console.log("This post is yours.");
     else
-      console.log("This post aint yours.[" + owner + "]=[" + this.username + "]");
+      console.log("This post aint yours.[" + owner + "]/=[" + this.username + "]");
     return bool;
   }
 
@@ -108,18 +108,53 @@ export class ShowPostModalComponent {
     if (this.userId == null)
       return
     this.postService.findAllComments(this.id).subscribe(data => {
+      // data.postCommentsDto.comments.forEach(comment => {this.comments.add(comment); console.log(comment.commentedAt)})
       this.comments = data.postCommentsDto.comments;
-
-      console.log(this.comments);
       this.comments.sort(function (a, b) {
         return new Date(a.commentedAt).getTime() - new Date(b.commentedAt).getTime();
       });
     });
   }
 
+  getLastValue(set: Set<SimpleCommentDto>): SimpleCommentDto{
+    let value;
+    for(value of set);
+    // @ts-ignore
+    return value;
+  }
+
+  private getLastComments() {
+    if (this.userId == null)
+      return
+    if(this.comments.length>0) {
+      let lastItem: SimpleCommentDto = this.comments[this.comments.length-1];
+      console.log("LENGTH: "+this.comments.length);
+      console.log(this.comments);
+      console.log("LAST: "+lastItem.text);
+      // let lastChar: number = parseInt(lastCommentAt.slice(- 1))+1;
+      this.postService.findLastComments(this.id, lastItem.commentedAt)
+        .pipe(catchError(err => {
+          console.log("error while fetching last comments");
+          return throwError(err);
+        }))
+        .subscribe(data => {
+          // console.log("YESSSSSSSS!!")
+          // console.log("fetched " + data.postCommentsDto.comments.length + " new comments")
+          data.postCommentsDto.comments.sort(function (a, b) {
+            return new Date(a.commentedAt).getTime() - new Date(b.commentedAt).getTime();
+          });
+          data.postCommentsDto.comments.forEach(comment => this.comments.push(comment))
+          console.log(this.comments);
+        });
+    }
+    else {
+      // console.log("LOSS: "+this.comments.length);
+      this.getPostComments()};
+  }
+
   addComment(form: NgForm) {
     let comment = form.controls["commentText"].value;
-    if(this.notEmpty(comment)) {
+    if (this.notEmpty(comment)) {
       if (this.userId == null) {
         return;
       }
@@ -130,7 +165,7 @@ export class ShowPostModalComponent {
         setTimeout(() => {
           this.sharedService.editedOrReacted(this.type, this.id);
         }, 300);
-        this.ngOnInit();
+        this.getLastComments();
       });
     } else {
       this.toastService.presentToastWithDuration("bottom", "no comment", 200)

@@ -1,0 +1,122 @@
+<ion-content slot="fixed">
+  <div *ngIf="fetching; else showContentBlock">
+    <ion-spinner class="loadingCenter" style="transform: scale(5);" name="bubbles"></ion-spinner>
+  </div>
+  <ng-template #showContentBlock style="background: #0d0d0d;">
+    <ion-list style="background: #0d0d0d; margin-bottom: -15px;" *ngFor="let post of posts; index as postIndex; trackBy:trackByArtNo">
+        <ion-item [style]="itemStyle(postIndex)" lines="none" class="a-post ion-no-padding ion-no-margin"
+                  (dblclick)="likeIt(post.id)">
+          <ion-card class="ion-no-padding">
+            <ion-card-header (click)="goToProfilePage(post.ownerId)">
+              <ion-card-subtitle type="dark" style="margin-top: -7px; margin-bottom: -5px">
+                <div class="ion-float-start">
+                  <ion-chip id="post-owner-avatar">
+                    <ion-avatar>
+                      <img alt="avatar" src="{{(imageApi+post.ownerProfilePic)}}"/>
+                      <ion-badge [color]="setBadge(post.ownerLastActedAt)">&nbsp;</ion-badge>
+                    </ion-avatar>
+                    <ion-label><b>{{post.owner}}</b></ion-label>
+                  </ion-chip>
+                </div>
+                <div class="ion-float-end" style="text-align: right; margin-right: -10px">
+                  <ion-chip>
+                    <ion-label>{{generalUtils.getDate(post.postedAt)}}</ion-label>
+                  </ion-chip>
+                </div>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <div class="a-post-image" *ngIf="notEmpty(post.image) else showSimpleBlock">
+              <swiper [loop]="true" class="mySwiper" [navigation]="false" [slidesPerView]="1" [centeredSlides]="true" [spaceBetween]="0"
+                      [pagination]="{ type: 'bullets' }">
+                <ng-template swiperSlide *ngFor="let slide of slides$ | async; index as i">
+                  <ion-img [src]="slide"></ion-img>
+                </ng-template>
+              </swiper>
+
+              <img id="post-image" alt="ey where my pic at yo" src="{{imageApi+post.image}}"/>
+              <div class="a-post-text">
+                <ion-card-content style="margin-top: -4.5px; margin-bottom: -10px; margin-right: 5px;"
+                                  *ngIf="notEmpty(post.text)">
+                  <pre text-wrap class="ion-no-padding" style="background-color: rgba(0,0,0,0.5); width: fit-content; max-width: 84vw;
+                  color: whitesmoke; margin: 5px; padding: 3px 8px; border-radius: 15px">{{post.text}}</pre>
+                </ion-card-content>
+                <ion-row style="width: 100vw;">
+                  <ion-col (click)="showReactions($event, post.id);"
+                           (press)="showReactors($event, post.id);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                           preserveAspectRatio="xMidYMid meet"
+                           viewBox="0 0 24 24">
+                        <path fill="#DA0037"
+                              d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z"/>
+                      </svg>
+                    <div style="font-size: smaller; padding-bottom: 7px;" class="ion-text-center">
+                      &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getReactionsDesc(post.reactionsSize)}}</b>
+                    </div>
+                  </ion-col>
+                  <ion-col
+                    (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType, post.owner, post.ownerProfilePic)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                           preserveAspectRatio="xMidYMid meet"
+                           viewBox="0 0 24 24">
+                        <g transform="translate(24 0) scale(-1 1)">
+                          <path fill="white"
+                                d="M7 14h10q.425 0 .712-.288Q18 13.425 18 13t-.288-.713Q17.425 12 17 12H7q-.425 0-.713.287Q6 12.575 6 13t.287.712Q6.575 14 7 14Zm0-3h10q.425 0 .712-.288Q18 10.425 18 10t-.288-.713Q17.425 9 17 9H7q-.425 0-.713.287Q6 9.575 6 10t.287.712Q6.575 11 7 11Zm0-3h10q.425 0 .712-.287Q18 7.425 18 7t-.288-.713Q17.425 6 17 6H7q-.425 0-.713.287Q6 6.575 6 7t.287.713Q6.575 8 7 8Zm13.3 12.3L18 18H4q-.825 0-1.412-.587Q2 16.825 2 16V4q0-.825.588-1.413Q3.175 2 4 2h16q.825 0 1.413.587Q22 3.175 22 4v15.575q0 .675-.612.937q-.613.263-1.088-.212Z"/>
+                        </g>
+                      </svg>
+                    <div style="font-size: smaller; padding-bottom: 7px;" class="ion-text-center">
+                      &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getCommentsDesc(post.commentsSize)}}</b>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </div>
+            </div>
+            <ng-template #showSimpleBlock>
+              <div *ngIf="notEmpty(post.youtubeVideoId)">
+                <iframe style="width: 100vw; height: 30vh;" [src]="(youtubeEmbedApi+post.youtubeVideoId) | safe"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                </iframe>
+              </div>
+              <div>
+                <ion-card-content style="margin-top: -4.5px; margin-right: 5px;"
+                                  *ngIf="notEmpty(post.text)">
+                  <pre text-wrap class="ion-no-padding" style="max-width: 84vw; color: whitesmoke; margin: 5px;">{{post.text}}</pre>
+                </ion-card-content>
+                <ion-row style="width: 100vw">
+                  <ion-col (click)="showReactions($event, post.id);"
+                           (press)="showReactors($event, post.id);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                           preserveAspectRatio="xMidYMid meet"
+                           viewBox="0 0 24 24">
+                        <path fill="#DA0037"
+                              d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z"/>
+                      </svg>
+                    <div style="font-size: smaller; padding-bottom: 7px;" class="ion-text-center">
+                      &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getReactionsDesc(post.reactionsSize)}}</b>
+                    </div>
+                  </ion-col>
+                  <ion-col (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType, post.owner, post.ownerProfilePic)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+                           preserveAspectRatio="xMidYMid meet"
+                           viewBox="0 0 24 24">
+                        <g transform="translate(24 0) scale(-1 1)">
+                          <path fill="white"
+                                d="M7 14h10q.425 0 .712-.288Q18 13.425 18 13t-.288-.713Q17.425 12 17 12H7q-.425 0-.713.287Q6 12.575 6 13t.287.712Q6.575 14 7 14Zm0-3h10q.425 0 .712-.288Q18 10.425 18 10t-.288-.713Q17.425 9 17 9H7q-.425 0-.713.287Q6 9.575 6 10t.287.712Q6.575 11 7 11Zm0-3h10q.425 0 .712-.287Q18 7.425 18 7t-.288-.713Q17.425 6 17 6H7q-.425 0-.713.287Q6 6.575 6 7t.287.713Q6.575 8 7 8Zm13.3 12.3L18 18H4q-.825 0-1.412-.587Q2 16.825 2 16V4q0-.825.588-1.413Q3.175 2 4 2h16q.825 0 1.413.587Q22 3.175 22 4v15.575q0 .675-.612.937q-.613.263-1.088-.212Z"/>
+                        </g>
+                      </svg>
+                    <div style="font-size: smaller; padding-bottom: 7px;" class="ion-text-center">
+                      &nbsp;&nbsp;&nbsp;&nbsp;<b>{{getCommentsDesc(post.commentsSize)}}</b>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </div>
+            </ng-template>
+          </ion-card>
+        </ion-item>
+    </ion-list>
+    <ion-infinite-scroll style="background: #0d0d0d; color: grey;" (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ng-template>
+</ion-content>

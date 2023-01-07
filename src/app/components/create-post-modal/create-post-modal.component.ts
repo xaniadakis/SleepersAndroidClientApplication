@@ -275,6 +275,45 @@ export class CreatePostModalComponent {
     });
   }
 
+  async uploadPicturesFromGalleryDataUri() {
+    const options: CameraOptions = {
+      quality: 50,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Optimizing this lil picture',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
+    this.camera.getPicture(options).then(async (imageData) => {
+      loading.present();
+      console.log('image data => [', imageData + "]");
+      this.imgResult = 'data:image/jpeg;base64,' + imageData;
+      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      this.uploadImage = true;
+      // let filename = new Date().valueOf().toString() + ".jpg";
+      // this.imageUploaded = this.dataURItoBlob(this.imgResult, filename);
+      // console.log("I GAVE: " + filename);
+      // console.log("I GOT: " + this.imageUploaded.type.toString());
+      // console.log("IMAGE NAME: " + this.imageUploaded.name.toString());
+      // console.log("IMAGE SIZE: " + this.imageUploaded.size);
+      // console.log(JSON.stringify(this.imageUploaded));
+      loading.dismiss();
+    }, (err) => {
+      loading.dismiss();
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
+    });
+  }
+
+
   takePictureInstantlyFileUri() {
     const options: CameraOptions = {
       quality: 50,

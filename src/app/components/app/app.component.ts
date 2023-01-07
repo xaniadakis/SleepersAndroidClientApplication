@@ -17,6 +17,9 @@ import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {UserService} from "../../service/user.service";
 import {PushNotificationsService} from "../../service/push-notifications.service";
+import SwiperCore, { Autoplay, Keyboard, Pagination, Scrollbar, Zoom } from 'swiper';
+
+SwiperCore.use([Autoplay, Keyboard, Pagination, Scrollbar, Zoom]);
 
 @Component({
   selector: 'app-root',
@@ -34,9 +37,11 @@ export class AppComponent {
   loggedIn: boolean;
   currentVersion: string;
   private sharedServiceSubscription: Subscription;
-  onProfileTab: boolean = false;
-  onFriendosProfileTab: boolean = false;
+  onSbsProfileTab: boolean = false;
+  onMyProfileTab: boolean = false;
+  onPostsTab: boolean = true;
   onEventsTab: boolean = false;
+  onOtherTab: boolean = false;
 
   constructor(
     private platform: Platform,
@@ -85,22 +90,44 @@ export class AppComponent {
         this.toggleLoggedIn(event);
       }
     })
-    this.sharedServiceSubscription = this.sharedService.onProfileTab.subscribe({
+    this.sharedServiceSubscription = this.sharedService.onPostsTabsNow.subscribe({
       next: (event: boolean) => {
-        console.log(`Received message onProfileTab #${event}`);
-        this.onProfileTab = event
+        console.log(`Received message onEventsTab #${event}`);
+        if(event)
+          this.onOtherTab = this.onEventsTab = this.onMyProfileTab = false;
+        this.onPostsTab = event;
       }
     })
-    this.sharedServiceSubscription = this.sharedService.onAFriendsProfileTab.subscribe({
+    this.sharedServiceSubscription = this.sharedService.onMyProfileNow.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message onProfileTab #${event}`);
+        if(event)
+          this.onEventsTab = this.onPostsTab = this.onOtherTab = this.onSbsProfileTab = false;
+        this.onMyProfileTab = event;
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onSbsProfileNow.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message onProfileTab #${event}`);
+        if(event)
+          this.onEventsTab = this.onPostsTab = this.onOtherTab = this.onMyProfileTab = false;
+        this.onSbsProfileTab = event;
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onOtherTab.subscribe({
       next: (event: boolean) => {
         console.log(`Received message onFriendosProfileTab #${event}`);
-        this.onFriendosProfileTab = event
+        if(event)
+          this.onEventsTab = this.onPostsTab = this.onMyProfileTab = this.onSbsProfileTab =false;
+        this.onOtherTab = event;
       }
     })
     this.sharedServiceSubscription = this.sharedService.onEventsTab.subscribe({
       next: (event: boolean) => {
         console.log(`Received message onEventsTab #${event}`);
-        this.onEventsTab = event
+        if(event)
+          this.onOtherTab = this.onPostsTab = this.onMyProfileTab = this.onSbsProfileTab = false;
+        this.onEventsTab = event;
       }
     })
   }
@@ -282,8 +309,8 @@ export class AppComponent {
   }
 
   goFromProfileToTimeline() {
-    this.onProfileTab = false;
-    this.sharedService.hideEditButtonForALilWhile(false);
+    this.onEventsTab = this.onMyProfileTab = this.onOtherTab = false;
+    this.onPostsTab = true;
     this.router.navigateByUrl('/home/tabs/tab3');
   }
 

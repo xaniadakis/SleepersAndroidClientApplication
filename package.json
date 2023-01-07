@@ -64,7 +64,8 @@
     "node-fetch": "^2.0.0",
     "rxjs": "^7.6.0",
     "s": "^1.0.0",
-    "sockjs-client": "^1.6.1"
+    "sockjs-client": "^1.6.1",
+    "swiper": "^8.4.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.0.0",

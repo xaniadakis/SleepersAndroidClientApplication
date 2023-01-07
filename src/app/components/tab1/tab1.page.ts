@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {PostType} from "../../dto/post-type";
+import {SharedService} from "../../service/shared.service";
 
 @Component({
   selector: 'app-tab1',
@@ -27,9 +28,10 @@ export class Tab1Page {
     "\n" +
     "      Or does it explode?";
 
-  constructor() {
+  constructor(private sharedService: SharedService) {
   }
 
   ngOnInit() {
+    this.sharedService.checkingPosts(true);
   }
 }

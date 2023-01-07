@@ -3,6 +3,7 @@ import {PostType} from "../../dto/post-type";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Platform} from "@ionic/angular";
 import {SharedService} from "../../service/shared.service";
+import GeneralUtils from "src/app/util/general.utils"
 
 @Component({
   selector: 'app-tab1',
@@ -23,7 +24,7 @@ export class UserPostsPage {
               private platform: Platform,
               private sharedService: SharedService) {
     let userIdString = this.route.snapshot.paramMap.get('userId');
-
+    this.sharedService.checkingOtherSection(true);
     if (userIdString != null)
       this.userId = BigInt(userIdString);
 
@@ -48,11 +49,13 @@ export class UserPostsPage {
     //     this.sharedService.hideEditButtonForALilWhile(true);
     //   }, 100);
     // }
-    if (this.backToSleepersList)
+    if (this.backToSleepersList) {
+      this.sharedService.checkingOtherSection(true);
       this.router.navigateByUrl('/home/sleepers');
+    }
     else {
-      this.sharedService.hidePostButtonForALilWhile(false);
-      this.router.navigateByUrl('/home/tabs/tab3');
+      this.sharedService.checkingPosts(true);
+      GeneralUtils.goBack(this.router);
     }
   }
 }

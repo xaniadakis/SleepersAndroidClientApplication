@@ -48,6 +48,8 @@ import {MapComponent} from "../map/map.component";
 import {AnnounceEventModalComponent} from "../announce-event-modal/announce-event-modal.component";
 import {Tab4Page} from "../tab4/tab4.page";
 import GeneralUtils from "../../util/general.utils";
+import { SwiperModule } from 'swiper/angular';
+import {TripsPage} from "../trips/trips.page";
 
 @NgModule({
   declarations: [AppComponent
@@ -67,6 +69,7 @@ import GeneralUtils from "../../util/general.utils";
     , SafePipe
     , SafePipeHtml
     , PostsPage
+    , TripsPage
     , UserPostsPage
     , SleepersPage
     , FriendRequestsPage
@@ -81,7 +84,9 @@ import GeneralUtils from "../../util/general.utils";
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    HammerModule, ReactiveFormsModule,
+    HammerModule,
+    ReactiveFormsModule,
+    SwiperModule
     // ScrollingModule,
   ],
   providers: [

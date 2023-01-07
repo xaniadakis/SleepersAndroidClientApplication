@@ -12,7 +12,8 @@ import {UserDetailsDto} from "../../dto/get-user-details-response";
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {PostType} from "../../dto/post-type";
-
+import GeneralUtils from "src/app/util/general.utils"
+import {Camera, CameraOptions} from "@awesome-cordova-plugins/camera/ngx";
 
 @Component({
   selector: 'app-home-profile',
@@ -74,7 +75,8 @@ export class ProfilePage implements OnInit {
               private toastService: ToastService,
               private loadingCtrl: LoadingController,
               private userService: UserService,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private camera: Camera
   ) {
     let userIdString = this.route.snapshot.paramMap.get('userId');
     if (userIdString != null)
@@ -82,11 +84,11 @@ export class ProfilePage implements OnInit {
 
     if (userIdString != "0" && userIdString != this.myUserId) {
       this.hiddenEditButton = true;
-      this.sharedService.hideEditButtonForALilWhile(true);
+      this.sharedService.checkingSbsProfile(true);
     } else {
       if (this.myUserId != null)
         this.userId = BigInt(this.myUserId);
-      this.sharedService.hideEditButtonForALilWhile(false);
+      this.sharedService.checkingMyProfile(true);
     }
     let naviedFromUsersList = this.route.snapshot.paramMap.get('naviedFromUsersList');
     if (naviedFromUsersList == "1")
@@ -108,94 +110,56 @@ export class ProfilePage implements OnInit {
         this.setEditMode(event);
       }
     })
-    this.sharedService.hidePostButtonForALilWhile(true);
     console.log("imma retrieve those user details");
     this.retrieveUserDetails(this.userId);
     console.log("did ma best");
-    console.log('Initializing PostsPage for: ' + this.userDetails.username);
+    console.log('Initializing TripsPage for: ' + this.userDetails.username);
   }
 
   goBack() {
     if (!this.backToSleepersList) {
-      if (this.hiddenEditButton)
-        this.sharedService.hideEditButtonForALilWhile(false);
-      this.sharedService.hidePostButtonForALilWhile(false);
-      this.router.navigateByUrl('/home/tabs/tab3');
+      this.sharedService.checkingPosts(true);
+      GeneralUtils.goBack(this.router);
     } else {
-      if (!this.hiddenEditButton)
-        this.sharedService.hideEditButtonForALilWhile(true);
+      this.sharedService.checkingOtherSection(true);
       this.router.navigateByUrl('/home/sleepers');
     }
   }
 
-  compressFile() {
-
-    this.ngxImageCompressService.uploadFile()
-      .then(async ({image, fileName, orientation}) => {
-          const loading = await this.loadingCtrl.create({
-            spinner: 'bubbles',
-            message: 'Optimizing this lil picture',
-            duration: 10000,
-            cssClass: 'custom-loading',
-          });
-
-          await loading.present();
-          // .then(({image, orientation}) => {
-          // this.imgResultBeforeCompression = image;
-          let oldSize = this.ngxImageCompressService.byteCount(image) / 1000000;
-
-          console.log("Size in bytes of the uploaded image: " + fileName + " was:", oldSize, 'MB');
-          if (oldSize > 0.6) {
-            console.log("imma compress this one..")
-            this.ngxImageCompressService
-              .compressFile(image, orientation, 50, 40) // 50% ratio, 50% quality
-              .then(
-                (compressedImage) => {
-                  this.imgResult = compressedImage;
-                  let newSize = this.ngxImageCompressService.byteCount(compressedImage) / 1000000;
-                  this.toastService.presentToastWithDuration("bottom", "Compressed this one from " + oldSize + "MB down to " + newSize + "MB", 1200)
-                  // window.alert("old size: "+oldSize+" mb, new size: "+newSize+" mb");
-                  console.log("Size in bytes after compression is now:", this.ngxImageCompressService.byteCount(compressedImage) / 1000000, 'MB');
-                  // console.log(compressedImage)
-                  this.imageUploaded = this.dataURItoBlob(compressedImage, fileName);
-                  this.userService.changeProfilePic(this.imageUploaded).subscribe(data => {
-                    const jsonResponse: ProfilePicChangeResponse = data;
-                    console.log(jsonResponse)
-                    localStorage.setItem('profilePic', jsonResponse.profilePic);
-                    location.reload()
-                    this.router.navigateByUrl('/home/profile')
-                  });
-                  loading.dismiss()
-                  // this.imageUploaded = new File([this.imgResult], fileName);
-                }
-              );
-          } else {
-            this.imgResult = image;
-            console.log("aint compressadoing this one..")
-            this.imageUploaded = this.dataURItoBlob(image, fileName);
-            this.userService.changeProfilePic(this.imageUploaded).subscribe(data => {
-              const jsonResponse: ProfilePicChangeResponse = data;
-              console.log(jsonResponse)
-              localStorage.setItem('profilePic', jsonResponse.profilePic);
-              location.reload()
-              this.router.navigateByUrl('/home/profile')
-            });
-            await loading.dismiss()
-          }
-        }
-      );
-  }
-
-  dataURItoBlob(dataURI: string, fileName: string) {
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for (var i = 0; i < binary.length; i++) {
-      array.push(binary.charCodeAt(i));
+  async uploadFromGalleryDataUri() {
+    const options: CameraOptions = {
+      quality: 50,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 1500,
+      targetHeight: 2000,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
     }
-    let type = 'image/' + fileName.split('.').pop();
-    console.log("type: " + type);
-    return new File([new Uint8Array(array)], fileName, {
-      type: type
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Optimizing this lil picture',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
+    this.camera.getPicture(options).then(async (imageData) => {
+      loading.present();
+      console.log('image data => [', imageData + "]");
+      this.imgResult = 'data:image/jpeg;base64,' + imageData;
+      console.log("IMAGE LENGTH: " + this.imgResult.length);
+      this.userService.changeProfilePicV2(this.imgResult).subscribe(data => {
+        const jsonResponse: ProfilePicChangeResponse = data;
+        console.log(jsonResponse)
+        localStorage.setItem('profilePic', jsonResponse.profilePic);
+        location.reload()
+        this.router.navigateByUrl('/home/profile')
+      });
+      loading.dismiss();
+    }, (err) => {
+      loading.dismiss();
+      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
     });
   }
 
@@ -323,8 +287,67 @@ export class ProfilePage implements OnInit {
   }
 
   goToUserPosts() {
-    this.sharedService.hideEditButtonForALilWhile(true);
+    // this.sharedService.hideEditButtonForALilWhile(true);
+    this.sharedService.checkingOtherSection(true);
     var i = this.backToSleepersList ? 1 : 0;
     this.router.navigateByUrl('/home/userPosts/' + this.userId + "/" + i);
   }
+
+  // compressFile() {
+  //   this.ngxImageCompressService.uploadFile()
+  //     .then(async ({image, fileName, orientation}) => {
+  //         const loading = await this.loadingCtrl.create({
+  //           spinner: 'bubbles',
+  //           message: 'Optimizing this lil picture',
+  //           duration: 10000,
+  //           cssClass: 'custom-loading',
+  //         });
+  //
+  //         await loading.present();
+  //         // .then(({image, orientation}) => {
+  //         // this.imgResultBeforeCompression = image;
+  //         let oldSize = this.ngxImageCompressService.byteCount(image) / 1000000;
+  //
+  //         console.log("Size in bytes of the uploaded image: " + fileName + " was:", oldSize, 'MB');
+  //         if (oldSize > 0.6) {
+  //           console.log("imma compress this one..")
+  //           this.ngxImageCompressService
+  //             .compressFile(image, orientation, 50, 40) // 50% ratio, 50% quality
+  //             .then(
+  //               (compressedImage) => {
+  //                 this.imgResult = compressedImage;
+  //                 let newSize = this.ngxImageCompressService.byteCount(compressedImage) / 1000000;
+  //                 this.toastService.presentToastWithDuration("bottom", "Compressed this one from " + oldSize + "MB down to " + newSize + "MB", 1200)
+  //                 // window.alert("old size: "+oldSize+" mb, new size: "+newSize+" mb");
+  //                 console.log("Size in bytes after compression is now:", this.ngxImageCompressService.byteCount(compressedImage) / 1000000, 'MB');
+  //                 // console.log(compressedImage)
+  //                 this.imageUploaded = this.dataURItoBlob(compressedImage, fileName);
+  //                 this.userService.changeProfilePic(this.imageUploaded).subscribe(data => {
+  //                   const jsonResponse: ProfilePicChangeResponse = data;
+  //                   console.log(jsonResponse)
+  //                   localStorage.setItem('profilePic', jsonResponse.profilePic);
+  //                   location.reload()
+  //                   this.router.navigateByUrl('/home/profile')
+  //                 });
+  //                 loading.dismiss()
+  //                 // this.imageUploaded = new File([this.imgResult], fileName);
+  //               }
+  //             );
+  //         } else {
+  //           this.imgResult = image;
+  //           console.log("aint compressadoing this one..")
+  //           this.imageUploaded = this.dataURItoBlob(image, fileName);
+  //           this.userService.changeProfilePic(this.imageUploaded).subscribe(data => {
+  //             const jsonResponse: ProfilePicChangeResponse = data;
+  //             console.log(jsonResponse)
+  //             localStorage.setItem('profilePic', jsonResponse.profilePic);
+  //             location.reload()
+  //             this.router.navigateByUrl('/home/profile')
+  //           });
+  //           await loading.dismiss()
+  //         }
+  //       }
+  //     );
+  // }
+
 }

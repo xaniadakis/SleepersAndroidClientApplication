@@ -9,6 +9,7 @@ import {UserService} from "../../service/user.service";
 import {FriendRequestDto} from "../../dto/get-user-details-response";
 import {GlobalConstants} from "../../util/global-constants";
 import {ToastService} from "../../service/toast.service";
+import GeneralUtils from "../../util/general.utils";
 
 @Component({
   selector: 'app-tab1',
@@ -44,9 +45,7 @@ export class FriendRequestsPage {
 
     if (this.myUserIdString != null)
       this.myUserId = BigInt(this.myUserIdString);
-    this.sharedService.hideEditButtonForALilWhile(true);
-    this.sharedService.hidePostButtonForALilWhile(true);
-    this.sharedService.imOnEventsTab(false);
+    this.sharedService.checkingOtherSection(true);
   }
 
   ngOnInit() {
@@ -85,8 +84,8 @@ export class FriendRequestsPage {
   }
 
   goBack() {
-    this.sharedService.hidePostButtonForALilWhile(false);
-    this.router.navigateByUrl('/home/tabs/tab3');
+    this.sharedService.checkingPosts(true);
+    GeneralUtils.goBack(this.router);
   }
 
   // goToProfilePage(id: bigint) {

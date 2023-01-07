@@ -19,6 +19,7 @@ import {Observable} from "rxjs";
 export class UserService {
 
   private changeProfilePicUrl: string;
+  private changeProfilePicV2Url: string;
   private getAllUsersUrl: string;
   private logoutUrl: string;
   private checkIfUserExistsUrl: string;
@@ -38,6 +39,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     this.changeProfilePicUrl = GlobalConstants.APIURL + "/user/changeProfilePic";
+    this.changeProfilePicV2Url = GlobalConstants.APIURL + "/user/v2/changeProfilePic";
     this.logoutUrl = GlobalConstants.APIURL + "/user/logout";
     this.sendFcmTokenUrl = GlobalConstants.APIURL + "/user/push";
     this.checkIfUserExistsUrl = GlobalConstants.APIURL + "/user/existsUsername";
@@ -59,6 +61,12 @@ export class UserService {
     var formData: FormData = new FormData()
     formData.append("profilePic", image)
     return this.http.post<ProfilePicChangeResponse>(this.changeProfilePicUrl, formData);
+  }
+
+  public changeProfilePicV2(image: string) {
+    var formData: FormData = new FormData()
+    formData.append("profilePic", image)
+    return this.http.post<ProfilePicChangeResponse>(this.changeProfilePicV2Url, formData);
   }
 
   public sendFcmToken(token: string) {

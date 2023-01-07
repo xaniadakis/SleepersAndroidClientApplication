@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
 import {PostType} from "../../dto/post-type";
+import {SharedService} from "../../service/shared.service";
+import { Swiper } from 'swiper';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-tab3',
@@ -9,12 +12,15 @@ import {PostType} from "../../dto/post-type";
 export class Tab4Page {
 
   postPlaceholder: string = "Whatz crackalackin pimpalimpin?";
-  postType: PostType = PostType.STORY;
+  postType: PostType = PostType.TRIP;
   nonUserPosts: bigint = BigInt(-1);
 
-  constructor() {
+  constructor(private sharedService: SharedService) {
   }
 
   ngOnInit() {
+    this.sharedService.checkingPosts(true);
   }
+
+
 }
