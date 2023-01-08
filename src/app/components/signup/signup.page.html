@@ -18,7 +18,7 @@
       <ion-label position="floating">Username</ion-label>
       <ion-input type="text" name="username" class="form-control" [(ngModel)]="signup.username" #username="ngModel"
                  [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="4"
-                 maxlength="9"></ion-input>
+                 maxlength="9" white (keyup)="noSpaces($event)"></ion-input>
       <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
         <div *ngIf="username.errors?.required">Username is required</div>
       </div>
@@ -26,7 +26,7 @@
     <ion-item lines="full">
       <ion-label position="floating">Email</ion-label>
       <ion-input type="text" name="email" class="form-control" [(ngModel)]="signup.email" #email="ngModel"
-                 [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" required email></ion-input>
+                 [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" (keyup)="noSpaces($event)" required="true" email ></ion-input>
       <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
         <div *ngIf="email.errors?.required">Email is required</div>
         <div *ngIf="email.errors?.email">Email must be a valid email address</div>

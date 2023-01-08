@@ -162,18 +162,21 @@ export class CreatePostModalComponent {
     this.youtubeVideoId = null;
   }
 
-  createPost(form: NgForm) {
-    const text = form.controls["text"].value;
-    if (((text == null || text == '') && !this.uploadImage && this.youtubeVideoId == null) || (this.postType == null)) {
-      this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
-      return;
-    }
+  createPost(form: NgForm): Promise<bigint> {
+    return new Promise((resolve, reject) => {
+      const text = form.controls["text"].value;
+      if (((text == null || text == '') && !this.uploadImage && this.youtubeVideoId == null) || (this.postType == null)) {
+        this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
+        reject();
+      }
 
-    this.postService.savePost(text, this.imageUploaded, this.youtubeVideoId, this.postType, this.uploadImage).subscribe(data => {
-      // const response: CreateCommentResponse = data;
-      form.reset();
-      this.hidden = true;
-      this.imageSrc = null;
+      this.postService.savePost(text, this.imageUploaded, this.youtubeVideoId, this.postType, this.uploadImage).subscribe(data => {
+        // const response: CreateCommentResponse = data;
+        form.reset();
+        this.hidden = true;
+        this.imageSrc = null;
+        resolve(data.newPostId);
+      });
     });
   }
 
@@ -184,21 +187,21 @@ export class CreatePostModalComponent {
         this.toastService.presentToast("top", "Bud this was an empty post, imma pretend this never happened.");
         reject();
       }
-      if(this.imgResult)
-      this.postService.savePostV2(text, this.imgResult, this.youtubeVideoId, this.postType, this.uploadImage)
-        .pipe(catchError(err => {
-          this.toastService.presentToastWithDuration("bottom",
-            "Error while saving post: " + err,
-            1500);
-          return throwError(err);
-        }))
-        .subscribe(data => {
-          console.log("SUCCESS: " + data.message);
-          form.reset();
-          this.hidden = true;
-          this.imageSrc = null;
-          resolve(data.newPostId);
-        });
+      if (this.imgResult)
+        this.postService.savePostV2(text, this.imgResult, this.youtubeVideoId, this.postType, this.uploadImage)
+          .pipe(catchError(err => {
+            this.toastService.presentToastWithDuration("bottom",
+              "Error while saving post: " + err,
+              1500);
+            return throwError(err);
+          }))
+          .subscribe(data => {
+            console.log("SUCCESS: " + data.message);
+            form.reset();
+            this.hidden = true;
+            this.imageSrc = null;
+            resolve(data.newPostId);
+          });
     });
   }
 
@@ -217,7 +220,7 @@ export class CreatePostModalComponent {
     // passed to the Filesystem API to read the raw data of the image,
     // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
     this.imgResult = image.dataUrl;
-    console.log("THIS: "+image.dataUrl)
+    console.log("THIS: " + image.dataUrl)
   };
 
   takePictures = async () => {
@@ -233,32 +236,27 @@ export class CreatePostModalComponent {
     // passed to the Filesystem API to read the raw data of the image,
     // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
     let url = images.photos[0].webPath.replace('blob:', '');
-    console.log("fetchin from: "+url);
+    console.log("fetchin from: " + url);
     // @ts-ignore
     let blob: Blob = await fetch(url)
       .then(response => {
-        console.log("STATUS: "+response.status); // 200
-        console.log("TEXT: "+response.statusText); // OK
+        console.log("STATUS: " + response.status); // 200
+        console.log("TEXT: " + response.statusText); // OK
         return response.blob();
       })
       .then(async (data) => {
         console.log("IN");
-        console.log("blob: "+data); // pass your blob/file info here
-        console.log("blob type: "+data.type); // pass your blob/file info here
-        console.log("blob size: "+data.size); // pass your blob/file info here
-        let image = window.URL.createObjectURL(data);
-        console.log("image: "+image); // pass your blob/file info here
-        console.log("image length: "+image.length); // pass your blob/file info here
-        console.log("image toString: "+image.toString()); // pass your blob/file info here
-
-        this.imgResult = image;
+        console.log("blob: " + data); // pass your blob/file info here
+        console.log("blob type: " + data.type); // pass your blob/file info here
+        console.log("blob size: " + data.size); // pass your blob/file info here
         this.uploadImage = true;
+        this.imageUploaded = new File([data], Date.now() + Math.random() + ".jpeg");
         console.log("OUT");
       })
       .catch(error => {
-        console.log("error: "+error); // OK
+        console.log("error: " + error); // OK
       });
-    console.log("THIS2: "+url);
+    console.log("THIS2: " + url);
   };
 
   convertBlobToBase64 = async (blob: Blob) => { // blob data
@@ -270,7 +268,8 @@ export class CreatePostModalComponent {
     reader.readAsDataURL(blob);
     reader.onload = () => {
       console.log("SUCcESS");
-      resolve(reader.result)};
+      resolve(reader.result)
+    };
     reader.onerror = error => {
       console.log("FAIL");
       reject(error);
@@ -315,44 +314,6 @@ export class CreatePostModalComponent {
   }
 
   async uploadFromGalleryDataUri() {
-    const options: CameraOptions = {
-      quality: 50,
-      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      targetWidth: 1500,
-      targetHeight: 2000,
-      correctOrientation: true,
-      saveToPhotoAlbum: true
-    }
-    const loading = await this.loadingCtrl.create({
-      spinner: 'bubbles',
-      message: 'Optimizing this lil picture',
-      duration: 10000,
-      cssClass: 'custom-loading',
-    });
-    this.camera.getPicture(options).then(async (imageData) => {
-      loading.present();
-      console.log('image data => [', imageData + "]");
-      this.imgResult = 'data:image/jpeg;base64,' + imageData;
-      console.log("IMAGE LENGTH: " + this.imgResult.length);
-      this.uploadImage = true;
-      // let filename = new Date().valueOf().toString() + ".jpg";
-      // this.imageUploaded = this.dataURItoBlob(this.imgResult, filename);
-      // console.log("I GAVE: " + filename);
-      // console.log("I GOT: " + this.imageUploaded.type.toString());
-      // console.log("IMAGE NAME: " + this.imageUploaded.name.toString());
-      // console.log("IMAGE SIZE: " + this.imageUploaded.size);
-      // console.log(JSON.stringify(this.imageUploaded));
-      loading.dismiss();
-    }, (err) => {
-      loading.dismiss();
-      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
-    });
-  }
-
-  async uploadPicturesFromGalleryDataUri() {
     const options: CameraOptions = {
       quality: 50,
       sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,

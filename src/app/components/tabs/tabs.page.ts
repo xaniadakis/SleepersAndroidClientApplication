@@ -2,6 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {ActivationStart, Router, RouterOutlet} from "@angular/router";
 import {SharedService} from "../../service/shared.service";
 import {PostType} from "../../dto/post-type";
+import {ModalService} from "../../service/modal.service";
 
 @Component({
   selector: 'app-tabs',
@@ -12,7 +13,7 @@ export class TabsPage {
   placeIcon = './assets/place.png';
   carIcon = './assets/carIcon2.png';
   peopleIcon = './assets/Outlawz-nobg.png';
-  tripIcon = './assets/map.png';
+  tripIcon = './assets/map-pin2.png';
 
   width = "30px";
   height = "30px";
@@ -26,7 +27,8 @@ export class TabsPage {
 
   constructor(
     private router: Router,
-    public sharedService: SharedService
+    public sharedService: SharedService,
+    public modalService: ModalService
   ) {
   }
 

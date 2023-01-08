@@ -1,0 +1,25 @@
+{
+  "menu": {
+    "welcome": "Καλωσήρθες",
+    "goToProfile": "Δες το προφίλ σου",
+    "goToTimeline": "Πήγαινε με στο χρονολόγιο",
+    "checkSleepers": "Τσέκαρε τους Sleepers",
+    "checkFriendRequests": "Αιτήματα φιλίας",
+    "events": "Γεγονότα",
+    "reportABug": "Ανέφερε κάποιο σφάλμα",
+    "signOut": "Αποσυνδέσου",
+    "checkForUpdates": "Έλεγξε για ενημέρωση",
+    "reloadTaco": "Ξαναφόρτωσε το Taco",
+    "notifications": "Ειδοποιήσεις",
+    "language": "Γλώσσα"
+  },
+  "buttons": {
+    "edit": "Αλλαγή",
+    "post": "Ανάρτησε",
+    "announce": "Ανακοίνωσε"
+  },
+  "titles": {
+    "announceAnEvent": "Ανακοίνωσε γεγονός",
+    "createAPost": "Νέα ανάρτηση"
+  }
+}

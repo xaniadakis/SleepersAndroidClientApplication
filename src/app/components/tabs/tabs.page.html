@@ -1,18 +1,27 @@
-<ion-tabs>
+<ion-tabs class="tabados">
 
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar class="tabados" slot="bottom">
     <ion-tab-button [routerLink]="['/home/tabs/tab1']" routerLinkActive="active" (click)="changedTab(artType)">
-      <ion-img style="width: 70px; height: 70px; padding-bottom: 12px;" [src]="placeIcon"></ion-img>
+      <ion-img style="width: 60px; height: 60px; margin-bottom: 20px" [src]="placeIcon"></ion-img>
       <!--      <ion-label>Tab 1</ion-label>-->
     </ion-tab-button>
     <ion-tab-button [routerLink]="['/home/tabs/tab3']" routerLinkActive="active" (click)="changedTab(storyType)">
       <ion-img style="width: 70px; height: 50px; padding-bottom: 0px;" [src]="peopleIcon"></ion-img>
     </ion-tab-button>
-    <ion-tab-button [routerLink]="['/home/tabs/tab4']" routerLinkActive="active" (click)="changedTab(tripType)">
-      <ion-img style="width: 80px; height: 80px; padding-bottom: 0px; margin-right: -5px" [src]="tripIcon"></ion-img>
+    <ion-tab-button (click)="modalService.openCreatePostModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" preserveAspectRatio="xMidYMid meet"
+           viewBox="0 0 24 24">
+        <path fill="#DA0037"
+              d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10S17.523 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+      </svg>
     </ion-tab-button>
+    <ion-tab-button [routerLink]="['/home/tabs/tab4']" routerLinkActive="active" (click)="changedTab(tripType)">
+      <ion-img style="width: 40px; height: 70px; padding-bottom: 0px; margin-left: 1px" [src]="tripIcon"></ion-img>
+    </ion-tab-button>
+
     <ion-tab-button [routerLink]="['/home/tabs/tab2']" routerLinkActive="active" (click)="changedTab(carType)">
-      <ion-img style="width: 80px; height: 180px; padding-bottom: 5px; padding-left: -10px; padding-right: -10px" [src]="carIcon"></ion-img>
+      <ion-img style="width: 80px; height: 180px; padding-bottom: 5px; margin-left: -5px; margin-right: 1px; margin-bottom: 7px"
+               [src]="carIcon"></ion-img>
     </ion-tab-button>
 
   </ion-tab-bar>

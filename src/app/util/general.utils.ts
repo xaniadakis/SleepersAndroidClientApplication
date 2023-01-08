@@ -85,4 +85,14 @@ export default class GeneralUtils {
     return Math.round(diffMinutes / (60 * 24 * 7));
   }
 
+
+  // @ts-ignore
+  static noSpaces(event: KeyboardEvent) {
+    let newValue = (<HTMLIonInputElement>event.target)?.value;
+    let regExp = new RegExp("\\s", "g");
+    if (regExp.test(<string>newValue)) {
+      // @ts-ignore
+      event.target.value = newValue.slice(0, -1);
+    }
+  }
 }

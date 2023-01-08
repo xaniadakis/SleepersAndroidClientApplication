@@ -11,7 +11,7 @@
         <ion-item [style]="itemStyle(postIndex)" lines="none" class="a-post ion-no-padding ion-no-margin"
                   (dblclick)="likeIt(post.id)">
           <ion-card class="ion-no-padding">
-            <ion-card-header (click)="goToProfilePage(post.ownerId)">
+            <ion-card-header class="red-border" (click)="goToProfilePage(post.ownerId)">
               <ion-card-subtitle type="dark" style="margin-top: -7px; margin-bottom: -5px">
                 <div class="ion-float-start">
                   <ion-chip id="post-owner-avatar">
@@ -29,7 +29,7 @@
                 </div>
               </ion-card-subtitle>
             </ion-card-header>
-            <div class="a-post-image" *ngIf="notEmpty(post.image) else showSimpleBlock">
+            <div class="red-border a-post-image" *ngIf="notEmpty(post.image) else showSimpleBlock">
 <!--                 (click)="modalService.openPostModal(post.id, post.image, post.text, this.postType)"-->
               <img id="post-image" alt="ey where my pic at yo" src="{{imageApi+post.image}}"/>
               <div class="a-post-text">

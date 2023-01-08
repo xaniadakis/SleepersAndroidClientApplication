@@ -15,3 +15,8 @@ export class ProposeChangeResponse {
   message: string;
   changeProposalId: bigint;
 }
+
+export class NotificationIntentionDto {
+  message: string;
+  intention: boolean;
+}

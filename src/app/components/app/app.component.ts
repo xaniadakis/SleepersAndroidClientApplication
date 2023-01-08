@@ -5,7 +5,7 @@ import {SignOutResponse} from "../../dto/sign-out-response";
 import {GlobalConstants} from "../../util/global-constants";
 import {ProfilePicChangeResponse} from "../../dto/profile-pic-change-response";
 import {SharedService} from "../../service/shared.service";
-import {Subscription} from "rxjs";
+import {Subscription, throwError} from "rxjs";
 import {ModalService} from "../../service/modal.service";
 import {PostType} from "../../dto/post-type";
 // import {AppUpdate} from "@ionic-native/app-update/ngx";
@@ -18,6 +18,8 @@ import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {UserService} from "../../service/user.service";
 import {PushNotificationsService} from "../../service/push-notifications.service";
 import SwiperCore, { Autoplay, Keyboard, Pagination, Scrollbar, Zoom } from 'swiper';
+import {catchError} from "rxjs/operators";
+import {TranslateConfigService} from "../../service/translate-config.service";
 
 SwiperCore.use([Autoplay, Keyboard, Pagination, Scrollbar, Zoom]);
 
@@ -42,6 +44,9 @@ export class AppComponent {
   onPostsTab: boolean = true;
   onEventsTab: boolean = false;
   onOtherTab: boolean = false;
+  receiveNotifications: boolean;
+  currentLanguageIsEnglish: boolean = true;
+
 
   constructor(
     private platform: Platform,
@@ -52,7 +57,8 @@ export class AppComponent {
     public modalService: ModalService,
     private clipboard: Clipboard,
     private userService: UserService,
-    private pushNotificationsService: PushNotificationsService
+    private pushNotificationsService: PushNotificationsService,
+    private translateConfigService: TranslateConfigService
   ) {
     if (localStorage.getItem("userId") == null)
       this.loggedIn = false;
@@ -63,6 +69,10 @@ export class AppComponent {
     }
     this.pushNotificationsService.initPush();
 
+  }
+
+  changeDefaultLanguage(langType: string){
+    this.translateConfigService.changeLanguage(langType);
   }
 
   ngOnInit() {
@@ -84,6 +94,16 @@ export class AppComponent {
       //   });
       //
     });
+    this.userService.receiveNotificationsIntention()
+      .pipe(catchError(err => {
+        this.receiveNotifications = false;
+        console.log("error while getting notification intention: "+err);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        this.receiveNotifications = data.intention;
+        console.log("receiveNotificationsIntention: "+data.message+", "+this.receiveNotifications)
+      });
     this.sharedServiceSubscription = this.sharedService.onChange.subscribe({
       next: (event: boolean) => {
         console.log(`Received message onChange #${event}`);
@@ -351,4 +371,22 @@ export class AppComponent {
     }, 500);
     this.sharedService.refreshed(PostType.SLEEPERS);
   }
+
+  clickedCheckBox() {
+    // localStorage.getItem()
+    this.receiveNotifications = !this.receiveNotifications;
+    console.log("receiveNotifications: "+this.receiveNotifications);
+    this.userService.setNotificationsIntention(this.receiveNotifications)
+      .pipe(catchError(err => {
+        this.receiveNotifications = false;
+        console.log("error while settin notification intention: "+err);
+        return throwError(err);
+      }))
+      .subscribe(data => {
+        this.receiveNotifications = data.intention;
+        console.log("setNotificationsIntention: "+data.message+", "+this.receiveNotifications)
+      });
+  }
+
+
 }

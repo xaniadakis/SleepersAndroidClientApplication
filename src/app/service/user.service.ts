@@ -14,6 +14,7 @@ import {
 } from "../dto/get-user-details-response";
 import {ModifyPostResponse} from "../dto/modify-post-response";
 import {Observable} from "rxjs";
+import {NotificationIntentionDto} from "../dto/create-post-response";
 
 @Injectable()
 export class UserService {
@@ -25,6 +26,8 @@ export class UserService {
   private checkIfUserExistsUrl: string;
   private checkIfUserExistsUrlWithMail: string;
   private sendFcmTokenUrl: string;
+  private receiveNotificationsIntentionUrl: string;
+  private setNotificationsIntentionUrl: string;
   private getUserDetailsUrl: string;
   private modifyUserDetailsUrl: string;
   private forgotPasswordUrl: string;
@@ -42,6 +45,8 @@ export class UserService {
     this.changeProfilePicV2Url = GlobalConstants.APIURL + "/user/v2/changeProfilePic";
     this.logoutUrl = GlobalConstants.APIURL + "/user/logout";
     this.sendFcmTokenUrl = GlobalConstants.APIURL + "/user/push";
+    this.receiveNotificationsIntentionUrl = GlobalConstants.APIURL + "/user/pushIntention";
+    this.setNotificationsIntentionUrl = GlobalConstants.APIURL + "/user/setPushIntention";
     this.checkIfUserExistsUrl = GlobalConstants.APIURL + "/user/existsUsername";
     this.checkIfUserExistsUrlWithMail = GlobalConstants.APIURL + "/user/existsMail";
     this.getAllUsersUrl = GlobalConstants.APIURL + "/user/";
@@ -73,6 +78,14 @@ export class UserService {
     var formData: FormData = new FormData()
     formData.append("string", token)
     return this.http.post<String>(this.sendFcmTokenUrl, formData);
+  }
+
+  public receiveNotificationsIntention() {
+    return this.http.get<NotificationIntentionDto>(this.receiveNotificationsIntentionUrl);
+  }
+
+  public setNotificationsIntention(intent: boolean) {
+    return this.http.get<NotificationIntentionDto>(this.setNotificationsIntentionUrl + "?intention=" + intent);
   }
 
   public logOut() {

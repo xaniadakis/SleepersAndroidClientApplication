@@ -7,15 +7,16 @@ import {IonicModule} from '@ionic/angular';
 import {SignupPageRoutingModule} from './signup-routing.module';
 
 import {SignupPage} from './signup.page';
+import {DisallowSpacesDirective} from "../../util/no-spaces.directive";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SignupPageRoutingModule
+    SignupPageRoutingModule,
   ],
-  declarations: [SignupPage]
+  declarations: [SignupPage, DisallowSpacesDirective]
 })
 export class SignupPageModule {
 }

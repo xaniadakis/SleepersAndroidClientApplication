@@ -48,8 +48,14 @@ import {MapComponent} from "../map/map.component";
 import {AnnounceEventModalComponent} from "../announce-event-modal/announce-event-modal.component";
 import {Tab4Page} from "../tab4/tab4.page";
 import GeneralUtils from "../../util/general.utils";
-import { SwiperModule } from 'swiper/angular';
+import {SwiperModule} from 'swiper/angular';
 import {TripsPage} from "../trips/trips.page";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+
+export function rootLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [AppComponent
@@ -86,7 +92,14 @@ import {TripsPage} from "../trips/trips.page";
     HttpClientModule,
     HammerModule,
     ReactiveFormsModule,
-    SwiperModule
+    SwiperModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: rootLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
     // ScrollingModule,
   ],
   providers: [

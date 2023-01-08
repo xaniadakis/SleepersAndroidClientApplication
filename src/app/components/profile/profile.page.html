@@ -49,7 +49,8 @@
                            src="../assets/turtlelogo.jpg" alt="logo"></ion-img>
                 </ion-avatar>
                 <ion-label class="white" position="stacked">nickname</ion-label>
-                <ion-input [clearInput]="true" placeholder="change your nickname" [value]="userDetails.username"
+                <ion-input type="text" (keyup)="noSpaces($event)" [clearInput]="true" placeholder="change your nickname"
+                           [value]="userDetails.username"
                            name="nickname" class="form-control" formControlName="nickname"
                            [minlength]="usernameMinlength" maxlength="9"
                            (ionChange)="checkIfUserExists($event)"></ion-input>
@@ -101,7 +102,8 @@
                   </svg>
                 </ion-avatar>
                 <ion-label class="white" position="stacked">email address</ion-label>
-                <ion-input [clearInput]="true" placeholder="change your email address" [value]="userDetails.email"
+                <ion-input type="text" (keyup)="noSpaces($event)" [clearInput]="true"
+                           placeholder="change your email address" [value]="userDetails.email"
                            type="email" name="email" class="form-control" formControlName="email"
                            (ionChange)="checkIfUserExistsWithMail($event)"
                 ></ion-input>

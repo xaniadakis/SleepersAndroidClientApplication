@@ -332,7 +332,7 @@ ion-item.a-post {
 
 .a-post-image {
   width: 100vw;
-  min-height: 20vh;
+  min-height: 10vh;
   animation: fadeIn ease 4.5s;
   -webkit-animation: fadeIn ease 4.5s;
   -moz-animation: fadeIn ease 4.5s;
@@ -342,7 +342,7 @@ ion-item.a-post {
   position: relative;
 }
 
-.a-post-text{
+.a-post-text {
   position: absolute;
   bottom: 0;
 }
@@ -398,10 +398,16 @@ ion-content {
 }
 
 pre {
-  white-space: pre-wrap;       /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: pre-wrap; /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
   //white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
   overflow: auto;
+}
+
+.red-border {
+  border-top: 0.1px solid rgba(218, 0, 55, 0.2);
+  border-bottom: 0.1px solid rgba(218, 0, 55, 0.2);
+  border-radius: 5px;
 }

@@ -1,0 +1,25 @@
+{
+  "menu": {
+    "welcome": "Welcome",
+    "goToProfile": "Go to your profile",
+    "goToTimeline": "Go to the timeline",
+    "checkSleepers": "Check the Sleepers",
+    "checkFriendRequests": "Friend Requests",
+    "events": "Events",
+    "reportABug": "Report a bug",
+    "signOut": "Sign Out",
+    "checkForUpdates": "Check for Updates",
+    "reloadTaco": "Reload Taco",
+    "notifications": "Notifications",
+    "language": "Language"
+  },
+  "buttons": {
+    "edit": "Edit",
+    "post": "Post",
+    "announce": "Announce"
+  },
+  "titles": {
+    "announceAnEvent": "Announce an Event",
+    "createAPost": "Create a Post"
+  }
+}

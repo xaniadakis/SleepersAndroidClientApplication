@@ -171,7 +171,8 @@ export class ProfilePage implements OnInit {
     this.shortUsername = null;
     this.validUsername = null;
     if (username.trim().length >= this.usernameMinlength) {
-      this.userService.checkIfUserExists(username).subscribe(data => {
+      this.userService.checkIfUserExists(username)
+        .subscribe(data => {
         this.validUsername = !data;
         this.checkedUsername = true;
         this.checkingUsernameValidity = false;
@@ -293,6 +294,15 @@ export class ProfilePage implements OnInit {
     this.router.navigateByUrl('/home/userPosts/' + this.userId + "/" + i);
   }
 
+  // @ts-ignore
+  noSpaces(event: KeyboardEvent) {
+    let newValue = (<HTMLIonInputElement>event.target)?.value;
+    let regExp = new RegExp("\\s", "g");
+    if (regExp.test(<string>newValue)) {
+      // @ts-ignore
+      event.target.value = newValue.slice(0, -1);
+    }
+  }
   // compressFile() {
   //   this.ngxImageCompressService.uploadFile()
   //     .then(async ({image, fileName, orientation}) => {

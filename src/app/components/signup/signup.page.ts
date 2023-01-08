@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ToastController} from "@ionic/angular";
-import {Router} from "@angular/router";
+import {Event, Router} from "@angular/router";
 import jwt_decode from "jwt-decode";
 import {NgForm} from '@angular/forms';
 import {Http} from '@capacitor-community/http';
@@ -8,6 +8,7 @@ import {SignUpResponse} from "../../dto/sign-up-response";
 import {JwtTokenPayload} from "../../dto/jwt-token";
 import {GlobalConstants} from "../../util/global-constants";
 import {SharedService} from "../../service/shared.service";
+import GeneralUtils from "../../util/general.utils";
 
 async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
   const toast = await toastController.create({
@@ -174,5 +175,15 @@ export class SignupPage implements OnInit {
     if (GlobalConstants.DEBUG)
       presentToast(myToastController, "middle", "Sending request to " + GlobalConstants.APIURL + "/user/signup" + requestParams);
     xhr.send(formData);
+  }
+
+  // @ts-ignore
+  noSpaces(event: KeyboardEvent) {
+    let newValue = (<HTMLIonInputElement>event.target)?.value;
+    let regExp = new RegExp("\\s", "g");
+    if (regExp.test(<string>newValue)) {
+      // @ts-ignore
+      event.target.value = newValue.slice(0, -1);
+    }
   }
 }
