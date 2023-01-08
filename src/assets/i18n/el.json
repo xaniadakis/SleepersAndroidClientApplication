@@ -13,6 +13,37 @@
     "notifications": "Ειδοποιήσεις",
     "language": "Γλώσσα"
   },
+  "welcome": {
+    "signup": "Εγγράψου",
+    "or": "ή",
+    "alreadyAUser?": "Έχεις ήδη εγγραφεί?",
+    "login": "Συνδέσου",
+    "forgotPassword": "Ξέχασα τον κωδικό μου"
+  },
+  "signup": {
+    "username": "Όνομα χρήστη",
+    "usernameIsRequired": "Απαιτείται όνομα χρήστη",
+    "email": "Ταχυδρομική διεύθυνση",
+    "emailIsRequired": "Απαιτείται ταχυδρομική διεύθυνση",
+    "emailInvalid": "Μη έγκυρη ταχυδρομική διεύθυνση",
+    "password": "Κωδικός Πρόσβασης",
+    "passwordIsRequired": "Απαιτείται κωδικός πρόσβασης",
+    "passwordInvalid": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες",
+    "retypePassword": "Πληκτρολογήστε ξανά τον κωδικό",
+    "confirmPasswordIsRequired": "Απαιτείται επιβεβαίωση του κωδικού",
+    "passwordsDontMatch": "Οι κωδικοί πρόσβασης δεν ταιριάζουν",
+    "uploadPhoto": "Ανέβασε φωτογραφία",
+    "signUp": "Εγγράψου"
+  },
+  "login": {
+    "username": "Όνομα χρήστη",
+    "usernameIsRequired": "Απαιτείται όνομα χρήστη",
+    "password": "Κωδικός Πρόσβασης",
+    "passwordIsRequired": "Απαιτείται κωδικός πρόσβασης",
+    "passwordInvalid": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 4 χαρακτήρες",
+    "signIn": "Συνδέσου",
+    "forgotPassword?": "Ξέχασες τον κωδικό σου?"
+  },
   "buttons": {
     "edit": "Αλλαγή",
     "post": "Ανάρτησε",

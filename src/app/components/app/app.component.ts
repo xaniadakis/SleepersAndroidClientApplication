@@ -47,7 +47,6 @@ export class AppComponent {
   receiveNotifications: boolean;
   currentLanguageIsEnglish: boolean = true;
 
-
   constructor(
     private platform: Platform,
     private toastService: ToastService,

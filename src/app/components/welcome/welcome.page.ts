@@ -10,7 +10,8 @@ import {Router} from "@angular/router";
 export class WelcomePage implements OnInit {
 
   constructor(
-    private toastController: ToastController, private router: Router
+    private toastController: ToastController,
+    private router: Router
   ) {
   }
 

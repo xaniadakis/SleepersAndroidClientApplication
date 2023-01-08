@@ -279,10 +279,10 @@
               &nbsp;&nbsp;&nbsp;menu.language
             </ion-label>
             <div class="switch">
-              <input name="switch" id="one" type="radio" [checked]="currentLanguageIsEnglish" (click)="changeDefaultLanguage('en')"/>
+              <input name="switch" id="one" type="radio" (click)="changeDefaultLanguage('el')"/>
               <label for="one" class="switch__label"><img style="width: 40px; height: 20px;"
                                                           src="assets/icons/greeko.png"></label>
-              <input name="switch" id="two" type="radio" (click)="changeDefaultLanguage('el')"/>
+              <input name="switch" id="two" type="radio" [checked]="currentLanguageIsEnglish" (click)="changeDefaultLanguage('en')"/>
               <label for="two" class="switch__label"><img style="width: 40px; height: 20px;"
                                                           src="assets/icons/englo.png"></label>
               <div class="switch__indicator"></div>

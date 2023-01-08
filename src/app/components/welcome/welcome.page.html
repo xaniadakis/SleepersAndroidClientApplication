@@ -9,15 +9,15 @@
     <ion-row>
       <ion-col align-self-center>
         <ion-button
-          (click)="navigateToUrl('/signup')" expand="block" color="primary">Register
+          (click)="navigateToUrl('/signup')" expand="block" color="primary" translate>welcome.signup
         </ion-button>
         <hr class="solid" data-content="or">
-        <span class="center">Already a user?</span>
+        <span class="center" translate>welcome.alreadyAUser?</span>
         <ion-button
-          (click)="navigateToUrl('/login')" expand="block" color="danger">Sign In
+          (click)="navigateToUrl('/login')" expand="block" color="danger" translate>welcome.login
         </ion-button>
         <ion-button
-          (click)="navigateToUrl('/forgot-password')" expand="block" color="warning">Forgot Password
+          (click)="navigateToUrl('/forgot-password')" expand="block" color="warning" translate>welcome.forgotPassword
         </ion-button>
         <!--        <a class="center" [routerLink]="['/forgot-password']" class="small-text">Forgot Password?</a>-->
       </ion-col>

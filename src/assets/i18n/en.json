@@ -13,6 +13,37 @@
     "notifications": "Notifications",
     "language": "Language"
   },
+  "welcome": {
+    "signup": "Sign Up",
+    "or": "or",
+    "alreadyAUser?": "Already a user?",
+    "login": "Sign In",
+    "forgotPassword": "Forgot Password"
+  },
+  "signup": {
+    "username": "Username",
+    "usernameIsRequired": "Username is required",
+    "email": "Email",
+    "emailIsRequired": "Email is required",
+    "emailInvalid": "Email must be a valid email address",
+    "password": "Password",
+    "passwordIsRequired": "Password is required",
+    "passwordInvalid": "Password must be at least 6 characters",
+    "retypePassword": "Retype password",
+    "confirmPasswordIsRequired": "Confirm Password is required",
+    "passwordsDontMatch": "Passwords must match",
+    "uploadPhoto": "Upload photo",
+    "signUp": "Sign Up"
+  },
+  "login": {
+    "username": "Username",
+    "usernameIsRequired": "Username is required",
+    "password": "Password",
+    "passwordIsRequired": "Password is required",
+    "passwordInvalid": "Password must be at least 4 characters",
+    "signIn": "Sign In",
+    "forgotPassword?": "Forgot Password?"
+  },
   "buttons": {
     "edit": "Edit",
     "post": "Post",
