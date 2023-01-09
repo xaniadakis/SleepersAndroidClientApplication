@@ -52,6 +52,7 @@ import {SwiperModule} from 'swiper/angular';
 import {TripsPage} from "../trips/trips.page";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {SignupPage} from "../signup/signup.page";
 
 export function rootLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -82,6 +83,7 @@ export function rootLoaderFactory(http: HttpClient) {
     , EventsPage
     , MapComponent
     , AnnounceEventModalComponent
+    // , SignupPage
     // , MustMatchDirective
     // , LoginPage, SignupPage, WelcomePage
   ],

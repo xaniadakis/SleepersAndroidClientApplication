@@ -8,7 +8,7 @@ import {
   ForgotPasswordResponse,
   FriendRequestDto,
   GetUserDetailsResponse,
-  GetUsersResponse,
+  GetUsersResponse, HandleFriendRequestResponse,
   UiUserDto,
   UnfriendResponse
 } from "../dto/get-user-details-response";
@@ -24,7 +24,9 @@ export class UserService {
   private getAllUsersUrl: string;
   private logoutUrl: string;
   private checkIfUserExistsUrl: string;
-  private checkIfUserExistsUrlWithMail: string;
+  private checkIfUserExistsWithMailUrl: string;
+  private checkIfUserExistsUnauthUrl: string;
+  private checkIfUserExistsWithMailUnauthUrl: string;
   private sendFcmTokenUrl: string;
   private receiveNotificationsIntentionUrl: string;
   private setNotificationsIntentionUrl: string;
@@ -48,7 +50,9 @@ export class UserService {
     this.receiveNotificationsIntentionUrl = GlobalConstants.APIURL + "/user/pushIntention";
     this.setNotificationsIntentionUrl = GlobalConstants.APIURL + "/user/setPushIntention";
     this.checkIfUserExistsUrl = GlobalConstants.APIURL + "/user/existsUsername";
-    this.checkIfUserExistsUrlWithMail = GlobalConstants.APIURL + "/user/existsMail";
+    this.checkIfUserExistsWithMailUrl = GlobalConstants.APIURL + "/user/existsMail";
+    this.checkIfUserExistsUnauthUrl = GlobalConstants.APIURL + "/user/v2/existsUsername";
+    this.checkIfUserExistsWithMailUnauthUrl = GlobalConstants.APIURL + "/user/v2/existsMail";
     this.getAllUsersUrl = GlobalConstants.APIURL + "/user/";
     this.getUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
     this.modifyUserDetailsUrl = GlobalConstants.APIURL + "/user/details";
@@ -105,7 +109,15 @@ export class UserService {
   }
 
   checkIfUserExistsWithMail(mail: any) {
-    return this.http.get<boolean>(this.checkIfUserExistsUrlWithMail + "?mail=" + mail);
+    return this.http.get<boolean>(this.checkIfUserExistsWithMailUrl + "?mail=" + mail);
+  }
+
+  public checkIfUserExistsUnauth(username: string) {
+    return this.http.get<boolean>(this.checkIfUserExistsUnauthUrl + "?username=" + username);
+  }
+
+  checkIfUserExistsWithMailUnauth(mail: any) {
+    return this.http.get<boolean>(this.checkIfUserExistsWithMailUnauthUrl + "?mail=" + mail);
   }
 
   retrieveUserDetails(userId: bigint): Observable<GetUserDetailsResponse> {
@@ -120,8 +132,8 @@ export class UserService {
     return this.http.get<UnfriendResponse>(this.unfriendUrl + "?friendId=" + userId);
   }
 
-  getFriendRequests(): Observable<Set<FriendRequestDto>> {
-    return this.http.get<Set<FriendRequestDto>>(this.friendRequestsUrl);
+  getFriendRequests(): Observable<FriendRequestDto[]> {
+    return this.http.get<FriendRequestDto[]>(this.friendRequestsUrl);
   }
 
   getFriends(): Observable<UiUserDto[]> {
@@ -132,10 +144,10 @@ export class UserService {
     return this.http.get<UiUserDto[]>(this.nonFriendsUrl);
   }
 
-  handleFriendRequest(friendRequestId: bigint, accept: boolean): Observable<String> {
+  handleFriendRequest(friendRequestId: bigint, accept: boolean): Observable<HandleFriendRequestResponse> {
     let uri = this.handleFriendRequestUrl + "?id=" + friendRequestId + "&accept=" + accept;
     console.log(uri)
-    return this.http.get<String>(uri);
+    return this.http.get<HandleFriendRequestResponse>(uri);
   }
 
   modifyUserDetails(email: string,

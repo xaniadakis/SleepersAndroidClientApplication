@@ -7,7 +7,9 @@ export enum PostType {
   TRIP = "TRIP",
   ALL = "ALL",
   SLEEPERS = "SLEEPERS",
-  FRIEND_REQUESTS = "FRIEND_REQUESTS"
+  FRIEND_REQUESTS = "FRIEND_REQUESTS",
+  PROFILE = "PROFILE",
+  USER_POSTS = "USER_POSTS"
 }
 
 export class Video {

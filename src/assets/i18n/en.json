@@ -1,6 +1,7 @@
 {
   "menu": {
     "welcome": "Welcome",
+    "welcomeUser": "\uD835\uDE52\uD835\uDE5A\uD835\uDE61\uD835\uDE58\uD835\uDE64\uD835\uDE62\uD835\uDE5A {{user}}",
     "goToProfile": "Go to your profile",
     "goToTimeline": "Go to the timeline",
     "checkSleepers": "Check the Sleepers",
@@ -21,11 +22,21 @@
     "forgotPassword": "Forgot Password"
   },
   "signup": {
+    "nickname": "Νickname",
+    "nicknameShort": "Νickname be too short",
+    "nicknameOwned": "Νickname is already owned",
+    "nicknameValid": "Νickname be valid",
     "username": "Username",
     "usernameIsRequired": "Username is required",
     "email": "Email",
     "emailIsRequired": "Email is required",
     "emailInvalid": "Email must be a valid email address",
+    "emailOwned": "mail is already owned",
+    "emailValid": "mail be valid",
+    "nicknamePlaceholder": "change your nickname",
+    "emailPlaceholder": "change your email address",
+    "password1Placeholder": "type a password",
+    "password2Placeholder": "retype the password",
     "password": "Password",
     "passwordIsRequired": "Password is required",
     "passwordInvalid": "Password must be at least 6 characters",
@@ -71,6 +82,7 @@
   "sleepers": {
     "active": "active",
     "offline": "offline",
+    "activeBefore": "active before ",
     "activeBefore1minute": "active before one minute",
     "activeBefore1hour": "active before one hour",
     "activeBefore1day": "active before one day",
@@ -90,6 +102,59 @@
     "edit": "Edit",
     "post": "Post",
     "announce": "Announce"
+  },
+  "profile": {
+    "nickname": "nickname",
+    "nicknameShort": "nickname be too short",
+    "nicknameOwned": "nickname is already owned",
+    "nicknameValid": "nickname be valid",
+    "emailAddress": "email address",
+    "emailInvalid": "Email must be a valid email address",
+    "emailOwned": "mail is already owned",
+    "emailValid": "mail be valid",
+    "fullName": "full name",
+    "newPassword": "new password",
+    "oldPassword": "old password",
+    "myQuote": "my quote",
+    "myHobby": "my hobby",
+    "myOccupation": "my occupation",
+    "checkPosts": "Check posts",
+    "cancel": "cancel",
+    "submit": "submit",
+    "back": "Back",
+    "nicknamePlaceholder": "change your nickname",
+    "emailPlaceholder": "change your email address",
+    "fullNamePlaceholder": "type your first and last name",
+    "newPasswordPlaceholder": "change your password",
+    "oldPasswordPlaceholder": "gimme your old password",
+    "myQuotePlaceholder": "type a quote that you like nowadays",
+    "myHobbyPlaceholder": "let the buddies know what is of interest to youse",
+    "myOccupationPlaceholder": "type your occupation"
+  },
+  "createPost": {
+    "createPost": "Create Post",
+    "cancel": "Cancel",
+    "inputPlaceholder": "Write something..",
+    "enterLink": "Enter your link",
+    "invalidLinkPrompt": "Gimme a valid link lil mate",
+    "compressingPicture": "Optimizing this lil picture",
+    "youtubeVideoLink": "YouTube video link"
+  },
+  "proposeChange": {
+    "proposeChange": "Propose a change",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "compressingPicture": "Optimizing this lil picture",
+    "inputPlaceholder": "Report a bug or propose a new feature to the developer .."
+  },
+  "editPost": {
+    "editPost": "Edit Post",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "enterLink": "Enter your link",
+    "invalidLinkPrompt": "Gimme a valid link lil mate",
+    "compressingPicture": "Optimizing this lil picture",
+    "youtubeVideoLink": "YouTube video link"
   },
   "titles": {
     "announceAnEvent": "Announce an Event",

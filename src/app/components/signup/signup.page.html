@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="center">
-  <form #form="ngForm" (ngSubmit)="onSignup(form)" #f="ngForm">
+  <form [formGroup]="signUp" (ngSubmit)="onSignup(signUp)" #f="ngForm">
     <!--    <ion-item lines="full">-->
     <!--      <ion-label position="floating">First name</ion-label>-->
     <!--      <ion-input type="text" required></ion-input>-->
@@ -14,43 +14,172 @@
     <!--      <ion-label position="floating">Last name</ion-label>-->
     <!--      <ion-input type="text" required></ion-input>-->
     <!--    </ion-item>-->
+
+
+<!--    <ion-item lines="full">-->
+<!--      <ion-label position="floating" translate>signup.username</ion-label>-->
+<!--      <ion-input type="text" name="username" class="form-control" [(ngModel)]="signup.username" #username="ngModel"-->
+<!--                 [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="4"-->
+<!--                 maxlength="9" white (keyup)="noSpaces($event)"></ion-input>-->
+<!--      <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">-->
+<!--        <div *ngIf="username.errors?.required" translate>signup.usernameIsRequired</div>-->
+<!--      </div>-->
+<!--    </ion-item>-->
+<!--    <ion-item lines="full">-->
+<!--      <ion-label position="floating" translate>signup.email</ion-label>-->
+<!--      <ion-input type="text" name="email" class="form-control" [(ngModel)]="signup.email" #email="ngModel"-->
+<!--                 [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" (keyup)="noSpaces($event)" required="true" email ></ion-input>-->
+<!--      <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">-->
+<!--        <div *ngIf="email.errors?.required" translate>signup.emailIsRequired</div>-->
+<!--        <div *ngIf="email.errors?.email" translate>signup.emailInvalid</div>-->
+<!--      </div>-->
+<!--    </ion-item>-->
+
     <ion-item lines="full">
-      <ion-label position="floating" translate>signup.username</ion-label>
-      <ion-input type="text" name="username" class="form-control" [(ngModel)]="signup.username" #username="ngModel"
-                 [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="4"
-                 maxlength="9" white (keyup)="noSpaces($event)"></ion-input>
-      <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
-        <div *ngIf="username.errors?.required" translate>signup.usernameIsRequired</div>
+      <ion-avatar slot="start">
+        <ion-img style="width: 2.5em; height: 2.5em;"
+                 fill="clear"
+                 src="../assets/turtlelogo.jpg" alt="logo"></ion-img>
+      </ion-avatar>
+      <ion-label position="floating" translate>signup.nickname</ion-label>
+      <ion-input type="text" (keyup)="noSpaces($event)" [clearInput]="true" [placeholder]="nicknamePlaceholder"
+                 name="nickname" class="form-control" formControlName="nickname"
+                 [minlength]="usernameMinlength" required="true" minlength="4" maxlength="9"
+                 (ionChange)="checkIfUserExistsUnauth($event)"></ion-input>
+
+      <ion-avatar *ngIf="validUsername && startedCheckingUsernameValidity else invalidUsernameBlock"
+                  slot="end">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+             preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="#2AAA8A"
+                d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4ZM12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4Q8.65 4 6.325 6.325Q4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/>
+        </svg>
+      </ion-avatar>
+      <ng-template #invalidUsernameBlock>
+        <ion-avatar *ngIf="startedCheckingUsernameValidity" slot="end">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+               preserveAspectRatio="xMidYMid meet"
+               viewBox="0 0 256 256">
+            <circle cx="128" cy="128" r="96" fill="#DA0037" opacity=".2"/>
+            <path fill="#DA0037"
+                  d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24Zm0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88Z"/>
+            <path fill="#DA0037"
+                  d="M165.7 90.3a8.1 8.1 0 0 0-11.4 0L128 116.7l-26.3-26.4a8.1 8.1 0 0 0-11.4 11.4l26.4 26.3l-26.4 26.3a8.1 8.1 0 0 0 0 11.4a8.2 8.2 0 0 0 11.4 0l26.3-26.4l26.3 26.4a8.2 8.2 0 0 0 11.4 0a8.1 8.1 0 0 0 0-11.4L139.3 128l26.4-26.3a8.1 8.1 0 0 0 0-11.4Z"/>
+          </svg>
+        </ion-avatar>
+      </ng-template>
+
+      <div *ngIf="!checkingUsernameValidity">
+        <div *ngIf="checkedUsername && (!validUsername || shortUsername) else userNameValidBlock"
+             class="invalid-feedback">
+          <div *ngIf="shortUsername else ownedUsername" translate>signup.nicknameShort</div>
+          <ng-template #ownedUsername>
+            <div *ngIf="!validUsername" translate>signup.nicknameOwned</div>
+          </ng-template>
+        </div>
+        <ng-template #userNameValidBlock>
+          <div *ngIf="validUsername" style="color: #2dd36f; font-size: smaller" translate>signup.nicknameValid</div>
+        </ng-template>
       </div>
     </ion-item>
+
     <ion-item lines="full">
-      <ion-label position="floating" translate>signup.email</ion-label>
-      <ion-input type="text" name="email" class="form-control" [(ngModel)]="signup.email" #email="ngModel"
-                 [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" (keyup)="noSpaces($event)" required="true" email ></ion-input>
-      <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
-        <div *ngIf="email.errors?.required" translate>signup.emailIsRequired</div>
-        <div *ngIf="email.errors?.email" translate>signup.emailInvalid</div>
+      <ion-avatar slot="start">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+             preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="currentColor"
+                d="M12 22q-2.05 0-3.875-.788q-1.825-.787-3.187-2.15q-1.363-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.887q.787-1.813 2.15-3.175Q6.3 3.575 8.125 2.787Q9.95 2 12 2q2.075 0 3.887.787q1.813.788 3.175 2.151q1.363 1.362 2.15 3.175Q22 9.925 22 12v1.45q0 1.475-1.012 2.512Q19.975 17 18.5 17q-.9 0-1.675-.4t-1.275-1.05q-.675.675-1.587 1.063Q13.05 17 12 17q-2.075 0-3.537-1.463Q7 14.075 7 12t1.463-3.538Q9.925 7 12 7t3.538 1.462Q17 9.925 17 12v1.45q0 .725.45 1.137q.45.413 1.05.413q.6 0 1.05-.413q.45-.412.45-1.137V12q0-3.275-2.363-5.638Q15.275 4 12 4Q8.725 4 6.362 6.362Q4 8.725 4 12t2.362 5.637Q8.725 20 12 20h4q.425 0 .712.288q.288.287.288.712t-.288.712Q16.425 22 16 22Zm0-7q1.25 0 2.125-.875T15 12q0-1.25-.875-2.125T12 9q-1.25 0-2.125.875T9 12q0 1.25.875 2.125T12 15Z"/>
+        </svg>
+      </ion-avatar>
+      <ion-label  position="floating" translate>signup.email</ion-label>
+      <ion-input type="text" (keyup)="noSpaces($event)" [clearInput]="true"
+                 [placeholder]="emailPlaceholder"
+                 type="email" name="email" class="form-control" formControlName="email" required="true"
+                 (ionChange)="checkIfUserExistsWithMailUnauth($event)"
+      ></ion-input>
+
+      <ion-avatar *ngIf="validMailAddress && startedCheckingMailValidity else invalidMailBlock" slot="end">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+             preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="#2AAA8A"
+                d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4ZM12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4Q8.65 4 6.325 6.325Q4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/>
+        </svg>
+      </ion-avatar>
+      <ng-template #invalidMailBlock>
+        <ion-avatar *ngIf="startedCheckingMailValidity" slot="end">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em"
+               preserveAspectRatio="xMidYMid meet"
+               viewBox="0 0 256 256">
+            <circle cx="128" cy="128" r="96" fill="#DA0037" opacity=".2"/>
+            <path fill="#DA0037"
+                  d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24Zm0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88Z"/>
+            <path fill="#DA0037"
+                  d="M165.7 90.3a8.1 8.1 0 0 0-11.4 0L128 116.7l-26.3-26.4a8.1 8.1 0 0 0-11.4 11.4l26.4 26.3l-26.4 26.3a8.1 8.1 0 0 0 0 11.4a8.2 8.2 0 0 0 11.4 0l26.3-26.4l26.3 26.4a8.2 8.2 0 0 0 11.4 0a8.1 8.1 0 0 0 0-11.4L139.3 128l26.4-26.3a8.1 8.1 0 0 0 0-11.4Z"/>
+          </svg>
+        </ion-avatar>
+      </ng-template>
+
+      <!--              <div *ngIf="!checkingMailValidity">-->
+      <!--                <div-->
+      <!--                  *ngIf="checkedMailAddress && (!validMailAddress  || shortMailAddress) as value else mailAddressValidBlock"-->
+      <!--                  class="invalid-feedback">-->
+      <!--                  <div *ngIf="(email.errors?.email || shortMailAddress) else ownedMailAddress">email must be a valid email address-->
+      <!--                  </div>-->
+      <!--                  <ng-template #ownedMailAddress>-->
+      <!--                    <div *ngIf="!validMailAddress">mail is already owned</div>-->
+      <!--                  </ng-template>-->
+      <!--                </div>-->
+      <!--                <ng-template #mailAddressValidBlock>-->
+      <!--                  <div *ngIf="validMailAddress" style="color: #2dd36f; font-size: smaller">mail be valid</div>-->
+      <!--                </ng-template>-->
+      <!--              </div>-->
+      <div *ngIf="!checkingMailValidity">
+        <div *ngIf="checkedMailAddress && (!validMailAddress || shortMailAddress) else mailValidBlock"
+             class="invalid-feedback">
+          <div *ngIf="(shortMailAddress) else ownedMailAddress" translate>signup.emailInvalid
+          </div>
+          <ng-template #ownedMailAddress>
+            <div *ngIf="!validMailAddress" translate>signup.emailOwned</div>
+          </ng-template>
+        </div>
+        <ng-template #mailValidBlock>
+          <div *ngIf="validMailAddress" style="color: #2dd36f; font-size: smaller" translate>signup.emailValid</div>
+        </ng-template>
       </div>
     </ion-item>
+
     <ion-item lines="full">
+      <ion-avatar slot="start">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+             preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="currentColor"
+                d="M18 8h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h2V7a6 6 0 1 1 12 0v1zm-2 0V7a4 4 0 1 0-8 0v1h8zm-5 6v2h2v-2h-2zm-4 0v2h2v-2H7zm8 0v2h2v-2h-2z"/>
+        </svg>
+      </ion-avatar>
       <ion-label position="floating" translate>signup.password</ion-label>
-      <ion-input type="password" name="password1" class="form-control" [(ngModel)]="signup.password1"
-                 #password1="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password1.invalid }" required
-                 minlength="6"></ion-input>
-      <div *ngIf="f.submitted && password1.invalid" class="invalid-feedback">
-        <div *ngIf="password1.errors?.required" translate>signup.passwordIsRequired</div>
-        <div *ngIf="password1.errors?.minlength" translate>signup.passwordInvalid</div>
-      </div>
+      <ion-input type="password" name="password1" class="form-control" formControlName="password1"
+                 class="form-control" required minlength="6" [placeholder]="password1Placeholder"></ion-input>
+<!--      <div *ngIf="f.submitted && password1.invalid" class="invalid-feedback">-->
+<!--        <div *ngIf="password1.errors?.required" translate>signup.passwordIsRequired</div>-->
+<!--        <div *ngIf="password1.errors?.minlength" translate>signup.passwordInvalid</div>-->
+<!--      </div>-->
     </ion-item>
     <ion-item lines="full">
+      <ion-avatar slot="start">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"
+             preserveAspectRatio="xMidYMid meet"
+             viewBox="0 0 24 24">
+          <path fill="currentColor"
+                d="M22 18v4h-4v-3h-3v-3h-3l-2.26-2.26c-.55.17-1.13.26-1.74.26a6 6 0 0 1-6-6a6 6 0 0 1 6-6a6 6 0 0 1 6 6c0 .61-.09 1.19-.26 1.74L22 18M7 5a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2Z"/>
+        </svg>
+      </ion-avatar>
       <ion-label position="floating" translate>signup.retypePassword</ion-label>
-      <ion-input type="password" name="password2" class="form-control" [(ngModel)]="signup.password2"
-                 #password2="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password2.invalid }"
-                 required></ion-input>
-      <div *ngIf="f.submitted && password2.invalid" class="invalid-feedback">
-        <div *ngIf="password2.errors?.required" translate>signup.confirmPasswordIsRequired</div>
-        <div *ngIf="password2.errors?.mustMatch" translate>signup.passwordsDontMatch</div>
-      </div>
+      <ion-input type="password" name="password2" class="form-control" formControlName="password2"
+                 class="form-control" required minlength="6" [placeholder]="password2Placeholder"></ion-input>
     </ion-item>
     <ion-row>
       <ion-col>

@@ -9,10 +9,10 @@ import getVideoId from 'get-video-id';
 import {ToastService} from "../../service/toast.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Camera, CameraOptions} from '@awesome-cordova-plugins/camera/ngx';
-import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {SafeUrl} from '@angular/platform-browser';
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -45,6 +45,7 @@ export class ProposeChangeModalComponent {
   youtubeThumbnail: string | null;
   uploadImage: boolean = false;
   safeImg: SafeUrl;
+  inputPlaceholder: string;
 
   constructor(private modalCtrl: ModalController
     , private postService: PostService
@@ -55,9 +56,9 @@ export class ProposeChangeModalComponent {
     , public ngxImageCompressService: NgxImageCompressService
     , private loadingCtrl: LoadingController
     , private camera: Camera
-    , private file: CordovaFile
-    , private sanitizer: DomSanitizer
+    , private translate: TranslateService
   ) {
+    this.inputPlaceholder = this.translate.instant('proposeChange.inputPlaceholder')
   }
 
   async ngOnInit() {

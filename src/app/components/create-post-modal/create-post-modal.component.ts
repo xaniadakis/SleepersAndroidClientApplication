@@ -10,13 +10,12 @@ import getVideoId from 'get-video-id';
 import {ToastService} from "../../service/toast.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Camera, CameraOptions} from '@awesome-cordova-plugins/camera/ngx';
-import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
-import {Capacitor} from '@capacitor/core';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {SafeUrl} from '@angular/platform-browser';
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {Camera as CapCamera, CameraResultType, GalleryPhotos} from '@capacitor/camera';
 import {CameraSource} from "@capacitor/camera/dist/esm/definitions";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -43,6 +42,7 @@ export class CreatePostModalComponent {
   @Input("postType") postType: PostType;
 
   loading: HTMLIonLoadingElement;
+  loadingPost: HTMLIonLoadingElement;
   imageSrc: string | ArrayBuffer | null;
   hidden: boolean = true;
   youtubeVideoId: string | null = null;
@@ -51,6 +51,7 @@ export class CreatePostModalComponent {
   youtubeThumbnail: string | null;
   uploadImage: boolean = false;
   safeImg: SafeUrl;
+  inputPlaceholder: string;
 
   constructor(private modalCtrl: ModalController
     , private postService: PostService
@@ -61,9 +62,11 @@ export class CreatePostModalComponent {
     , public ngxImageCompressService: NgxImageCompressService
     , private loadingCtrl: LoadingController
     , private camera: Camera
-    , private file: CordovaFile
-    , private sanitizer: DomSanitizer
+    // , private file: CordovaFile
+    // , private sanitizer: DomSanitizer
+    , private translate: TranslateService
   ) {
+    this.inputPlaceholder = this.translate.instant('createPost.inputPlaceholder')
   }
 
   async ngOnInit() {
@@ -78,11 +81,17 @@ export class CreatePostModalComponent {
       duration: 10000,
       cssClass: 'custom-loading',
     });
+    this.loadingPost = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Posting..',
+      duration: 10000,
+      cssClass: 'custom-loading',
+    });
   }
 
   async presentAlert() {
     const alert = await this.alertController.create({
-      header: 'Enter your link',
+      header: this.translate.instant('editPost.enterLink'),
       buttons: [
         {
           text: 'OK',
@@ -90,7 +99,7 @@ export class CreatePostModalComponent {
             this.youtubeVideoId = getVideoId(data.url).id;
             this.imgResult = null;
             if (this.youtubeVideoId == null)
-              this.toastService.presentToast("middle", "Gimme a valid link lil mate");
+              this.toastService.presentToast("middle", this.translate.instant('editPost.invalidLinkPrompt'));
             else {
               this.uploadImage = false;
               this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
@@ -101,7 +110,7 @@ export class CreatePostModalComponent {
       inputs: [
         {
           name: 'url',
-          placeholder: 'Youtube video link',
+          placeholder: this.translate.instant('editPost.youtubeVideoLink'),
           attributes: {
             minLength: 5
           }
@@ -115,18 +124,21 @@ export class CreatePostModalComponent {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
 
-  confirm(form: NgForm) {
+  async confirm(form: NgForm) {
+    await this.loadingPost.present();
     this.createPostV2(form)
-      .catch(error => {
-        console.log("error: " + error)
+      .catch(async error => {
+        console.log("error: " + error);
+        await this.loadingPost.dismiss();
       })
-      .then((postId: bigint | void) => {
+      .then(async (postId: bigint | void) => {
         if (postId != null)
           setTimeout(() => {
             this.sharedService.posted(this.postType, postId);
             console.log("notified em about whats comin: " + this.postType)
           }, 300)
         else console.log("error")
+        await this.loadingPost.dismiss();
       });
     return this.modalCtrl.dismiss(this.name, 'confirm');
   }
@@ -351,46 +363,46 @@ export class CreatePostModalComponent {
     });
   }
 
-  takePictureInstantlyFileUri() {
-    const options: CameraOptions = {
-      quality: 50,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      targetWidth: 1500,
-      targetHeight: 2000,
-      correctOrientation: true,
-      saveToPhotoAlbum: true
-    }
-
-    this.camera.getPicture(options).then(async (imageData) => {
-      const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
-      const path = imageData.substring(0, imageData.lastIndexOf('/') + 1);
-      const image = path + filename;
-      console.log("image: " + image);
-
-      this.imgResult = Capacitor.convertFileSrc(image);
-      console.log("resolvedImg: " + this.imgResult);
-
-      this.safeImg = this.sanitizer.bypassSecurityTrustUrl(this.imgResult);
-      this.uploadImage = true;
-      console.log("BEFORE");
-      // this.fileUriToFile(imageData, filename)
-      //   .then((value) => {
-      //     console.log("IM IIIIINN YOOOOOOO!: " + value);
-      //     this.imageUploaded = value;
-      //     console.log("IM IIIIINN YOOOOOOO2!: " + this.imageUploaded);
-      //   })
-      //   .catch((error) => {
-      //     console.log("IM IIIIINN ERROR!: " + error);
-      //   });
-      this.imageDataToBlob(imageData)
-
-      console.log("AFTER");
-    }, (err) => {
-      this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
-    });
-  }
+  // takePictureInstantlyFileUri() {
+  //   const options: CameraOptions = {
+  //     quality: 50,
+  //     destinationType: this.camera.DestinationType.FILE_URI,
+  //     encodingType: this.camera.EncodingType.JPEG,
+  //     mediaType: this.camera.MediaType.PICTURE,
+  //     targetWidth: 1500,
+  //     targetHeight: 2000,
+  //     correctOrientation: true,
+  //     saveToPhotoAlbum: true
+  //   }
+  //
+  //   this.camera.getPicture(options).then(async (imageData) => {
+  //     const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
+  //     const path = imageData.substring(0, imageData.lastIndexOf('/') + 1);
+  //     const image = path + filename;
+  //     console.log("image: " + image);
+  //
+  //     this.imgResult = Capacitor.convertFileSrc(image);
+  //     console.log("resolvedImg: " + this.imgResult);
+  //
+  //     this.safeImg = this.sanitizer.bypassSecurityTrustUrl(this.imgResult);
+  //     this.uploadImage = true;
+  //     console.log("BEFORE");
+  //     // this.fileUriToFile(imageData, filename)
+  //     //   .then((value) => {
+  //     //     console.log("IM IIIIINN YOOOOOOO!: " + value);
+  //     //     this.imageUploaded = value;
+  //     //     console.log("IM IIIIINN YOOOOOOO2!: " + this.imageUploaded);
+  //     //   })
+  //     //   .catch((error) => {
+  //     //     console.log("IM IIIIINN ERROR!: " + error);
+  //     //   });
+  //     this.imageDataToBlob(imageData)
+  //
+  //     console.log("AFTER");
+  //   }, (err) => {
+  //     this.toastService.presentToast("bottom", "Some error occuradoed: " + err);
+  //   });
+  // }
 
   imageDataToBlob(imageData: any) {
     let xhr = new XMLHttpRequest();

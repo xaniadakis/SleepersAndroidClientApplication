@@ -24,7 +24,7 @@ export class UserPostsPage {
               private platform: Platform,
               private sharedService: SharedService) {
     let userIdString = this.route.snapshot.paramMap.get('userId');
-    this.sharedService.checkingOtherSection(true);
+    this.sharedService.checkingOtherSection(true, PostType.USER_POSTS);
     if (userIdString != null)
       this.userId = BigInt(userIdString);
 
@@ -50,7 +50,7 @@ export class UserPostsPage {
     //   }, 100);
     // }
     if (this.backToSleepersList) {
-      this.sharedService.checkingOtherSection(true);
+      this.sharedService.checkingOtherSection(true, PostType.SLEEPERS);
       this.router.navigateByUrl('/home/sleepers');
     }
     else {

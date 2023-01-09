@@ -16,6 +16,7 @@ import {ShowReactionsComponent} from "../show-reactions/show-reactions.component
 import {catchError} from "rxjs/operators";
 import GeneralUtils from "../../util/general.utils";
 import {TranslateService} from "@ngx-translate/core";
+import {SwiperOptions} from "swiper";
 
 @Component({
   selector: 'app-trips',
@@ -58,6 +59,19 @@ export class TripsPage implements OnInit {
     , public translate: TranslateService) {
   }
 
+  config: SwiperOptions = {
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      type: 'bullets'
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
+    spaceBetween: 0,
+    zoom: true
+  };
 
   ngOnInit() {
     this.pageNumber = 0;
@@ -107,6 +121,11 @@ export class TripsPage implements OnInit {
     );
   }
 
+  stringToArray(arrayString: string): string[]{
+    const array: string[] = arrayString.split(",");
+    console.log(array);
+    return array;
+  }
 
   scrollToTop(fastButHowFast: number) {
     this.content.scrollToTop(fastButHowFast);

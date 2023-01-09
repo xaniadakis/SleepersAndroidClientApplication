@@ -10,7 +10,7 @@ export class SharedService {
   public onMyProfileNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onSbsProfileNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onEventsTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
-  public onOtherTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onOtherTab: EventEmitter<PostType> = new EventEmitter<PostType>();
 
   public editProfile: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
@@ -86,8 +86,22 @@ export class SharedService {
     this.onSbsProfileNow.emit(value);
   }
 
-  public checkingOtherSection(value: boolean) {
-    this.onOtherTab.emit(value);
+  public checkingOtherSection(value: boolean, type: PostType) {
+    switch (type) {
+      case PostType.SLEEPERS:
+        this.onOtherTab.emit(type);
+        break
+      case PostType.FRIEND_REQUESTS:
+        this.onOtherTab.emit(type);
+        break
+      case PostType.USER_POSTS:
+        this.onOtherTab.emit(type);
+        break
+      case PostType.PROFILE:
+      default:
+        this.onOtherTab.emit(type);
+        break
+    }
   }
 
   public immaEditProfile(value: boolean) {

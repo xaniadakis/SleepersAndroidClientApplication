@@ -26,7 +26,7 @@ export class FriendRequestsPage {
   fetching: boolean = true;
   imageApi: string = GlobalConstants.APIURL + "/file/image?filename=";
 
-  friendRequests: Set<FriendRequestDto> = new Set();
+  friendRequests: FriendRequestDto[];
   pageNumber = 0;
   pageLimit = 15;
 
@@ -45,7 +45,7 @@ export class FriendRequestsPage {
 
     if (this.myUserIdString != null)
       this.myUserId = BigInt(this.myUserIdString);
-    this.sharedService.checkingOtherSection(true);
+    this.sharedService.checkingOtherSection(true, PostType.FRIEND_REQUESTS);
   }
 
   ngOnInit() {
@@ -54,7 +54,7 @@ export class FriendRequestsPage {
       next: (value: boolean) => {
         console.log("refreshin sleepers");
         this.noRequests = false;
-        this.friendRequests = new Set<FriendRequestDto>();
+        this.friendRequests;
         this.getFriendRequests();
       }
     });
@@ -69,7 +69,7 @@ export class FriendRequestsPage {
       }))
       .subscribe(data => {
         console.log(data)
-        if (data.size == 0)
+        if (data.length == 0)
           this.noRequests = true
         else
           this.friendRequests = data
@@ -122,27 +122,51 @@ export class FriendRequestsPage {
       return false;
   }
 
-  acceptRequest(id: bigint) {
-    this.userService.handleFriendRequest(id, true)
+  async acceptRequest(id: bigint) {
+    await this.userService.handleFriendRequest(id, true)
       .pipe(catchError(err => {
         console.log(err);
         return throwError(err);
       }))
       .subscribe(data => {
-        console.log(data);
-        this.ngOnInit();
+        console.log(data.message);
+        this.toastService.presentToastWithDuration("middle",data.message,1000)
+        // for (const fr of this.friendRequests) {
+        //   if (fr.id === data.friendId) {
+        //     this.friendRequests.delete(fr);
+        //     break;
+        //   }
+        // }
+        let friendRequestDto: FriendRequestDto | undefined = this.friendRequests.find(FriendRequestDto => FriendRequestDto.id === data.friendId);
+        if (friendRequestDto == undefined)
+          return;
+        let friendRequestDtoIndex = this.friendRequests.indexOf(friendRequestDto); // 👉️
+        if (friendRequestDtoIndex > -1)
+          this.friendRequests.splice(friendRequestDtoIndex, 1);
       });
   }
 
-  rejectRequest(id: bigint) {
-    this.userService.handleFriendRequest(id, false)
+  async rejectRequest(id: bigint) {
+    await this.userService.handleFriendRequest(id, false)
       .pipe(catchError(err => {
         console.log(err);
         return throwError(err);
       }))
       .subscribe(data => {
-        console.log(data);
-        this.ngOnInit();
+        console.log(data.message);
+        this.toastService.presentToastWithDuration("middle",data.message,1000)
+        // for (const fr of this.friendRequests) {
+        //   if (fr.id === data.friendId) {
+        //     this.friendRequests.delete(fr);
+        //     break;
+        //   }
+        // }
+        let friendRequestDto: FriendRequestDto | undefined = this.friendRequests.find(FriendRequestDto => FriendRequestDto.id === data.friendId);
+        if (friendRequestDto == undefined)
+          return;
+        let friendRequestDtoIndex = this.friendRequests.indexOf(friendRequestDto); // 👉️
+        if (friendRequestDtoIndex > -1)
+          this.friendRequests.splice(friendRequestDtoIndex, 1);
       });
   }
 }

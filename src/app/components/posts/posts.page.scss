@@ -345,6 +345,7 @@ ion-item.a-post {
 .a-post-text {
   position: absolute;
   bottom: 0;
+  z-index: 999999999;
 }
 
 @keyframes fadeIn {

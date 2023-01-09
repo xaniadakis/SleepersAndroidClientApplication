@@ -49,10 +49,18 @@ export class AddFriendResponse {
 export enum FriendRequestStatusEnum {
   SENT = "SENT",
   PENDING = "PENDING",
-  FAILED = "FAILED"
+  FAILED = "FAILED",
+  ALREADY_FRIENDS = "ALREADY_FRIENDS"
+
 }
 
 export class UnfriendResponse {
   message: string;
   unfriendId: bigint;
+}
+
+export class HandleFriendRequestResponse {
+  friendId: bigint;
+  message: string;
+
 }

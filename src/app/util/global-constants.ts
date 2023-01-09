@@ -5,3 +5,7 @@ export class GlobalConstants {
 
   public static DEBUG: boolean = false;
 }
+// <swiper [loop]="true" class="mySwiper" [navigation]="false" [slidesPerView]="1" [centeredSlides]="true" [spaceBetween]="0"
+//   [pagination]="{ type: 'bullets' }">
+// <img swiperSlide *ngFor="let img of stringToArray(post.image)" [src]="imageApi+post.image" alt="error while fetching" />
+//   </swiper>

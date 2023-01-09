@@ -13,6 +13,7 @@ import {Camera, CameraOptions} from "@awesome-cordova-plugins/camera/ngx";
 import {File as CordovaFile} from '@awesome-cordova-plugins/file/ngx';
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -52,6 +53,7 @@ export class EditPostModalComponent {
     , private loadingCtrl: LoadingController
     , private camera: Camera
     , private file: CordovaFile
+    , private translate: TranslateService
   ) {
   }
 
@@ -141,7 +143,7 @@ export class EditPostModalComponent {
       .then(async ({image, fileName, orientation}) => {
           const loading = await this.loadingCtrl.create({
             spinner: 'bubbles',
-            message: 'Optimizing this lil picture',
+            message: this.translate.instant('editPost.compressingPicture'),
             duration: 10000,
             cssClass: 'custom-loading',
           });
@@ -216,7 +218,7 @@ export class EditPostModalComponent {
 
   async presentAlert() {
     const alert = await this.alertController.create({
-      header: 'Enter your link',
+      header: this.translate.instant('editPost.enterLink'),
       buttons: [
         {
           text: 'OK',
@@ -224,7 +226,7 @@ export class EditPostModalComponent {
             this.youtubeVideoId = getVideoId(data.url).id;
             this.imgResult = null;
             if (this.youtubeVideoId == null)
-              this.toastService.presentToast("middle", "Gimme a valid link lil mate");
+              this.toastService.presentToast("middle", this.translate.instant('editPost.invalidLinkPrompt'));
             else {
               this.uploadImage = false;
               this.youtubeThumbnail = "http://img.youtube.com/vi/" + this.youtubeVideoId + "/0.jpg"
@@ -235,7 +237,7 @@ export class EditPostModalComponent {
       inputs: [
         {
           name: 'url',
-          placeholder: 'Youtube video link',
+          placeholder: this.translate.instant('editPost.youtubeVideoLink'),
           attributes: {
             minLength: 5
           }
@@ -315,7 +317,7 @@ export class EditPostModalComponent {
     }
     const loading = await this.loadingCtrl.create({
       spinner: 'bubbles',
-      message: 'Optimizing this lil picture',
+      message: this.translate.instant('editPost.compressingPicture'),
       duration: 10000,
       cssClass: 'custom-loading',
     });
@@ -346,7 +348,7 @@ export class EditPostModalComponent {
     }
     const loading = await this.loadingCtrl.create({
       spinner: 'bubbles',
-      message: 'Optimizing this lil picture',
+      message: this.translate.instant('editPost.compressingPicture'),
       duration: 10000,
       cssClass: 'custom-loading',
     });

@@ -1,5 +1,6 @@
 {
   "menu": {
+    "welcomeUser": "Καλωσήρθες {{user}}",
     "welcome": "Καλωσήρθες",
     "goToProfile": "Δες το προφίλ σου",
     "goToTimeline": "Πήγαινε με στο χρονολόγιο",
@@ -22,10 +23,20 @@
   },
   "signup": {
     "username": "Όνομα χρήστη",
+    "nickname": "Όνομα χρήστη",
+    "nicknameShort": "Το όνομα χρήστη είναι πολύ μικρό",
+    "nicknameOwned": "Αυτό το όνομα χρήστη υπάρχει ήδη",
+    "nicknameValid": "Έγκυρο όνομα χρήστη",
     "usernameIsRequired": "Απαιτείται όνομα χρήστη",
     "email": "Διεύθυνση ηλεκτρονικού ταχυδρομείου",
     "emailIsRequired": "Απαιτείται διεύθυνση ηλεκτρονικού ταχυδρομείου",
     "emailInvalid": "Μη έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου",
+    "emailOwned": "αυτή η διεύθυνση ηλεκτρονικού ταχυδρομείου υπάρχει ήδη",
+    "emailValid": "έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου",
+    "nicknamePlaceholder": "πληκτρολόγησε το ψευδώνυμο σου",
+    "emailPlaceholder": "πληκτρολόγησε την διεύθυνση του ηλεκτρονικού ταχυδρομείου σου",
+    "password1Placeholder": "όρισε τον κωδικό πρόσβασης σου",
+    "password2Placeholder": "πληκτρολόγησε ξανά τον κωδικό",
     "password": "Κωδικός Πρόσβασης",
     "passwordIsRequired": "Απαιτείται κωδικός πρόσβασης",
     "passwordInvalid": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες",
@@ -65,7 +76,7 @@
     "buddyHasReacted": "ένας αδερφός αντέδρασε",
     "nobuddyHasReacted": "καμία αντίδραση ακόμα",
     "already1Comment": "κάποιος σχολίασε",
-    "alreadyNComments": "{{n}} σχόλια ήδη",
+    "alreadyNComments": "{{n}} σχόλια",
     "noComments": "κανένα σχόλιο ακόμη"
   },
   "sleepers": {
@@ -85,7 +96,56 @@
     "stories": "丨丂ㄒㄖ卩丨乇丂",
     "art": "ㄒ乇乂几卄",
     "trips": "ㄒ卂乂丨ᗪ丨卂",
-    "wheels": "ㄒ尺ㄖ乂ㄖ丨"
+    "wheels": "ㄒ卩ㄖ乂ㄖ丨"
+  },
+  "profile": {
+    "nickname": "ψευδώνυμο",
+    "nicknameShort": "πολύ μικρό ψευδώνυμο",
+    "nicknameOwned": "αυτό το ψευδώνυμο υπάρχει ήδη",
+    "nicknameValid": "έγκυρο ψευδώνυμο",
+    "emailAddress": "διεύθυνση ηλεκτρονικού ταχυδρομείου",
+    "emailInvalid": "μη έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου",
+    "emailOwned": "αυτή η διεύθυνση ηλεκτρονικού ταχυδρομείου υπάρχει ήδη",
+    "emailValid": "έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου",
+    "fullName": "πλήρες όνομα",
+    "newPassword": "νέος κωδικός",
+    "oldPassword": "παλιός κωδικός",
+    "myQuote": "το απόσπασμά μου",
+    "myHobby": "το χόμπι μου",
+    "myOccupation": "το επάγγελμά μου",
+    "checkPosts": "Τσέκαρε αναρτήσεις",
+    "cancel": "ακύρωση",
+    "submit": "υποβολή",
+    "back": "Πίσω",
+    "nicknamePlaceholder": "άλλαξε το ψευδώνυμο σου",
+    "emailPlaceholder": "άλλαξε τη διεύθυνση ηλεκτρονικού ταχυδρομείου σου",
+    "fullNamePlaceholder": "πληκτρολόγησε το όνομα και το επίθετό σου",
+    "newPasswordPlaceholder": "άλλαξε τον κωδικό σου",
+    "oldPasswordPlaceholder": "δώσε μου τον παλιό σου κωδικό",
+    "myQuotePlaceholder": "δώσε ένα quote που σου αρέσει",
+    "myHobbyPlaceholder": "δώσε το χόμπι σου",
+    "myOccupationPlaceholder": "πληκτρολόγησε το επάγγελμά σου"
+  },
+  "createPost": {
+    "createPost": "Νέα Ανάρτηση",
+    "cancel": "Ακύρωση",
+    "inputPlaceholder": "Γράψε κάτι..",
+    "youtubeVideoLink": "Σύνδεσμος YouTube video"
+  },
+  "proposeChange": {
+    "proposeChange": "Πρότεινε μια αλλαγή",
+    "cancel": "Ακύρωση",
+    "compressingPicture": "Βελτιστοποιώ την φωτογραφία",
+    "inputPlaceholder": "Ανάφερε ένα σφάλμα ή πρότεινε μια νέα δυνατότητα στον προγραμματιστή.."
+  },
+  "editPost": {
+    "editPost": "Επεξεργασία",
+    "cancel": "Ακύρωση",
+    "confirm": "Επιβεβαίωση",
+    "enterLink": "Επικόλλησε τον σύνδεσμο",
+    "invalidLinkPrompt": "Ο σύνδεσμος δεν είναι έγκυρος",
+    "compressingPicture": "Βελτιστοποιώ την φωτογραφία",
+    "youtubeVideoLink": "Σύνδεσμος YouTube video"
   },
   "buttons": {
     "edit": "Αλλαγή",

@@ -548,11 +548,11 @@ toolbar-container{
     position: absolute;
     top: -.5rem;
     left: 0;
-    background: blue;
+    background: #2471A3;
     border-radius: 50%;
     transition: transform 600ms cubic-bezier(.02,.94,.09,.97),
     background 300ms cubic-bezier(.17,.67,.14,1.03);
-    transform: translate3d(1rem,0,0);
+    transform: translate3d(0.55rem,0,0);
   }
 
   input#one:checked ~ .switch__indicator {

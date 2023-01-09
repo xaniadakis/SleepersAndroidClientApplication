@@ -46,22 +46,22 @@ export class SleepersPage {
 
     if (this.myUserIdString != null)
       this.myUserId = BigInt(this.myUserIdString);
-    this.sharedService.checkingOtherSection(true);
+    this.sharedService.checkingOtherSection(true, PostType.SLEEPERS);
   }
 
   ngOnInit() {
-    // this.getAllFriends();
-    // this.getNonFriends();
-    this.getAllUsers(this.pageNumber, this.pageLimit);
+    this.getAllFriends();
+    this.getNonFriends();
+    // this.getAllUsers(this.pageNumber, this.pageLimit);
     this.sharedService.onSleeperRefresh.subscribe({
       next: (value: boolean) => {
         console.log("refreshin sleepers");
-        this.pageNumber = 0;
-        // this.sleepers.splice(0, this.sleepers.length)
-        // this.friends.splice(0, this.friends.length)
-        // this.getAllFriends();
-        // this.getNonFriends();
-        this.getAllUsers(this.pageNumber, this.pageLimit);
+        // this.pageNumber = 0;
+        this.sleepers.splice(0, this.sleepers.length)
+        this.friends.splice(0, this.friends.length)
+        this.getAllFriends();
+        this.getNonFriends();
+        // this.getAllUsers(this.pageNumber, this.pageLimit);
       }
     });
   }
@@ -263,6 +263,8 @@ export class SleepersPage {
           this.toastService.presentToastWithDuration("middle", "Sent a friend request to " + friendName, 1500);
         else if (data.status == FriendRequestStatusEnum.PENDING)
           this.toastService.presentToastWithDuration("middle", "There is already a pending friend request to " + friendName, 1500);
+        else if (data.status == FriendRequestStatusEnum.ALREADY_FRIENDS)
+          this.toastService.presentToastWithDuration("middle", "You are already friends with " + friendName, 1500);
         else if (data.status == FriendRequestStatusEnum.FAILED)
           this.toastService.presentToastWithDuration("middle", "There was an error while sending a friend request towards " + friendName, 1500);
       });
@@ -276,6 +278,7 @@ export class SleepersPage {
       }))
       .subscribe(data => {
         console.log(data);
+        this.toastService.presentToastWithDuration("middle", "Lil " + friendName + " is no longer your buddy for now..", 1500);
         let deletedFriend: UiUserDto | undefined = this.friends.find(UiUserDto => UiUserDto.id === data.unfriendId);
         if (deletedFriend == undefined)
           return;
@@ -283,7 +286,6 @@ export class SleepersPage {
         if (friendIndex > -1)
           this.friends.splice(friendIndex, 1);
         this.sleepers.unshift(deletedFriend);
-        this.toastService.presentToastWithDuration("middle", "Lil " + friendName + " is no longer your buddy for now..", 1500);
       });
   }
 }

@@ -14,6 +14,7 @@ import {throwError} from "rxjs";
 import {PostType} from "../../dto/post-type";
 import GeneralUtils from "src/app/util/general.utils"
 import {Camera, CameraOptions} from "@awesome-cordova-plugins/camera/ngx";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-home-profile',
@@ -68,6 +69,16 @@ export class ProfilePage implements OnInit {
 
   backToSleepersList: boolean = false;
 
+  myOccupationPlaceholder: string = this.translate.instant('profile.myOccupationPlaceholder');
+  myHobbyPlaceholder: string = this.translate.instant('profile.myHobbyPlaceholder');
+  myQuotePlaceholder: string = this.translate.instant('profile.myQuotePlaceholder');
+  oldPasswordPlaceholder: string = this.translate.instant('profile.oldPasswordPlaceholder');
+  newPasswordPlaceholder: string = this.translate.instant('profile.newPasswordPlaceholder');
+  fullNamePlaceholder: string = this.translate.instant('profile.fullNamePlaceholder');
+  emailPlaceholder: string = this.translate.instant('profile.emailPlaceholder');
+  nicknamePlaceholder: string = this.translate.instant('profile.nicknamePlaceholder');
+  checkPostsButton: string = this.translate.instant('profile.checkPosts');
+
   constructor(private sharedService: SharedService,
               private router: Router,
               private platform: Platform,
@@ -76,7 +87,8 @@ export class ProfilePage implements OnInit {
               private loadingCtrl: LoadingController,
               private userService: UserService,
               private route: ActivatedRoute,
-              private camera: Camera
+              private camera: Camera,
+              private translate: TranslateService
   ) {
     let userIdString = this.route.snapshot.paramMap.get('userId');
     if (userIdString != null)
@@ -120,7 +132,7 @@ export class ProfilePage implements OnInit {
     if (!this.backToSleepersList) {
       GeneralUtils.goBack(this.router, this.sharedService);
     } else {
-      this.sharedService.checkingOtherSection(true);
+      this.sharedService.checkingOtherSection(true, PostType.PROFILE);
       this.router.navigateByUrl('/home/sleepers');
     }
   }
@@ -186,10 +198,6 @@ export class ProfilePage implements OnInit {
   }
 
   onEdit(form: FormGroup) {
-    if (true) {
-      console.log("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoo");
-      console.log(form);
-    }
     this.userService.modifyUserDetails(form.controls['email'].value,
       form.controls['nickname'].value,
       form.controls['fullName'].value,
@@ -288,7 +296,7 @@ export class ProfilePage implements OnInit {
 
   goToUserPosts() {
     // this.sharedService.hideEditButtonForALilWhile(true);
-    this.sharedService.checkingOtherSection(true);
+    this.sharedService.checkingOtherSection(true, PostType.USER_POSTS);
     var i = this.backToSleepersList ? 1 : 0;
     this.router.navigateByUrl('/home/userPosts/' + this.userId + "/" + i);
   }
@@ -358,5 +366,4 @@ export class ProfilePage implements OnInit {
   //       }
   //     );
   // }
-
 }

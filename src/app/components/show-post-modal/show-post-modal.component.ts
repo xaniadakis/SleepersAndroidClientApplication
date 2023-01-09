@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 
-import {ModalController, Platform} from '@ionic/angular';
+import {AlertController, ModalController, Platform} from '@ionic/angular';
 import {GlobalConstants} from "../../util/global-constants";
 import {ToastService} from "../../service/toast.service";
 import {SimpleCommentDto, SimpleReactionDto} from "../../dto/get-post-response";
@@ -15,6 +15,7 @@ import {throwError} from "rxjs";
 import {UiPostDto} from "../../dto/ui-post-dto";
 import GeneralUtils from "../../util/general.utils";
 import {TranslateService} from "@ngx-translate/core";
+import getVideoId from "get-video-id";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -51,11 +52,17 @@ export class ShowPostModalComponent {
     , private platform: Platform
     , public modalService: ModalService
     , public generalUtils: GeneralUtils
-    , public translate: TranslateService) {
+    , public translate: TranslateService
+  , private alertController: AlertController) {
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
       return this.modalCtrl.dismiss(null, 'cancel');
     })
   }
+
+  async presentAlert() {
+
+  }
+
 
   ngOnInit() {
     this.isMyPost = this.equalsSecure(this.owner);
@@ -194,24 +201,39 @@ export class ShowPostModalComponent {
     // console.log("image: '"+string+"' = "+value);
   }
 
-  deletePost(postId: bigint) {
+  async deletePost(postId: bigint) {
     if (this.userId == null) {
       return
     }
-    this.postService.deletePost(postId)
-      .pipe(catchError(err => {
-        this.toastService.presentToastWithDuration("bottom",
-          "Error while deleting post: " + err,
-          1500);
-        return throwError(err);
-      }))
-      .subscribe(data => {
-        console.log("SUCCESS: " + data.message);
-        console.log(data);
-        // this.ngOnInit();
-        this.sharedService.deleted(this.type, postId);
-      });
-    this.cancel();
+    const alert = await this.alertController.create({
+      subHeader: 'You sure you wanna delete this post?',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: data => {
+            this.postService.deletePost(postId)
+              .pipe(catchError(err => {
+                this.toastService.presentToastWithDuration("bottom",
+                  "Error while deleting post: " + err,
+                  1500);
+                return throwError(err);
+              }))
+              .subscribe(data => {
+                console.log("SUCCESS: " + data.message);
+                console.log(data);
+                // this.ngOnInit();
+                this.sharedService.deleted(this.type, postId);
+              });
+            this.cancel();
+          }
+        },
+        {
+          text: 'No'
+        }
+      ]
+    });
+    await alert.present();
+
   }
 
   print() {

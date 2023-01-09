@@ -2,13 +2,15 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {ToastController} from "@ionic/angular";
 import {Event, Router} from "@angular/router";
 import jwt_decode from "jwt-decode";
-import {NgForm} from '@angular/forms';
+import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
 import {Http} from '@capacitor-community/http';
 import {SignUpResponse} from "../../dto/sign-up-response";
 import {JwtTokenPayload} from "../../dto/jwt-token";
 import {GlobalConstants} from "../../util/global-constants";
 import {SharedService} from "../../service/shared.service";
 import GeneralUtils from "../../util/general.utils";
+import {UserService} from "../../service/user.service";
+import {TranslateService} from "@ngx-translate/core";
 
 async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
   const toast = await toastController.create({
@@ -53,7 +55,7 @@ function onLoginLoadProfilePicado(username: string, profilePicName: string) {
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss', "../welcome/welcome.page.scss", "../login/login.page.scss"],
 })
-export class SignupPage implements OnInit {
+export class SignupPage {
 
   signup = {
     email: '',
@@ -63,7 +65,11 @@ export class SignupPage implements OnInit {
     profilePic: ''
   };
 
-  constructor(private toastController: ToastController, private router: Router, private sharedService: SharedService) {
+  constructor(private toastController: ToastController,
+              private router: Router,
+              private sharedService: SharedService,
+              private userService: UserService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -74,9 +80,18 @@ export class SignupPage implements OnInit {
     console.log(event);
   }
 
-  onSignup(form: NgForm) {
+  onSignup(form: FormGroup) {
+    console.log("nickname: "+ form.controls["nickname"].value);
+    console.log("password1: "+ form.controls["password1"].value);
+    console.log("password2: "+ form.controls["password2"].value);
+    console.log("email: "+ form.controls["email"].value);
     if (form.valid)
       this.xhrSignUpRequest(form);
+    else{
+      console.log("invalid form");
+      console.log(form.controls["email"].errors);
+      console.log(form.controls["nickname"].errors);
+    }
   }
 
   private capacitorHttpSignUpRequest(form: NgForm) {
@@ -120,14 +135,14 @@ export class SignupPage implements OnInit {
       })
   }
 
-  private xhrSignUpRequest(form: NgForm) {
+  private xhrSignUpRequest(form: FormGroup) {
     // var raw = JSON.stringify({
     //   "username": form.controls["username"].value,
     //   "password1": form.controls["password1"].value,
     //   "password2": form.controls["password2"].value,
     //   "email": form.controls["email"].value
     // });
-    var requestParams: string = "?username=" + form.controls["username"].value +
+    var requestParams: string = "?username=" + form.controls["nickname"].value +
       "&password1=" + form.controls["password1"].value +
       "&password2=" + form.controls["password2"].value +
       "&email=" + form.controls["email"].value;
@@ -184,6 +199,81 @@ export class SignupPage implements OnInit {
     if (regExp.test(<string>newValue)) {
       // @ts-ignore
       event.target.value = newValue.slice(0, -1);
+    }
+  }
+
+  checkedUsername: boolean = false;
+  checkedMailAddress: boolean = false;
+
+  shortUsername: boolean | null = false;
+  validUsername: boolean | null = null;
+  checkingUsernameValidity: boolean = false;
+  startedCheckingUsernameValidity: boolean = false;
+
+  validMailAddress: boolean | null = null;
+  shortMailAddress: boolean | null = false;
+  checkingMailValidity: boolean = false;
+  startedCheckingMailValidity: boolean = false;
+  usernameMinlength: number = 3;
+
+  signUp: FormGroup = new FormBuilder().group({
+    email: '',
+    nickname: '',
+    password1: '',
+    password2: ''
+  });
+  nicknamePlaceholder: string = this.translate.instant('signup.nicknamePlaceholder');
+  emailPlaceholder: string = this.translate.instant('signup.emailPlaceholder');
+  password2Placeholder: string = this.translate.instant('signup.password1Placeholder');
+  password1Placeholder: string = this.translate.instant('signup.password2Placeholder');
+
+
+  checkIfUserExistsWithMailUnauth(event: any) {
+    // @ts-ignore
+    let mail = (event.target as HTMLInputElement).value;
+
+    console.log("checking mail: " + mail);
+    this.checkingMailValidity = true;
+    this.startedCheckingMailValidity = true;
+    this.shortMailAddress = null;
+    this.validMailAddress = null;
+    if (mail.trim().length >= 9) {
+      this.userService.checkIfUserExistsWithMailUnauth(mail).subscribe(data => {
+        console.log("got this exists: " + data);
+        this.validMailAddress = !data;
+        this.checkedMailAddress = true;
+        this.checkingMailValidity = false;
+        console.log("mail: " + mail + ", valid: " + this.validUsername)
+      });
+    } else {
+      this.shortMailAddress = true;
+      this.checkedMailAddress = true;
+      this.checkingMailValidity = false;
+      console.log("mail: " + mail + ", short: " + this.shortMailAddress)
+    }
+  }
+
+  checkIfUserExistsUnauth(event: any) {
+    // @ts-ignore
+    let username = (event.target as HTMLInputElement).value;
+    console.log("checking name: " + username);
+    this.startedCheckingUsernameValidity = true;
+    this.checkingUsernameValidity = true;
+    this.shortUsername = null;
+    this.validUsername = null;
+    if (username.trim().length >= this.usernameMinlength) {
+      this.userService.checkIfUserExistsUnauth(username)
+        .subscribe(data => {
+          this.validUsername = !data;
+          this.checkedUsername = true;
+          this.checkingUsernameValidity = false;
+          console.log("name: " + username + ", valid: " + this.validUsername)
+        });
+    } else {
+      this.shortUsername = true;
+      this.checkedUsername = true;
+      this.checkingUsernameValidity = false;
+      console.log("name: " + username + ", short: " + this.shortUsername)
     }
   }
 }

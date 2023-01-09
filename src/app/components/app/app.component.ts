@@ -20,6 +20,7 @@ import {PushNotificationsService} from "../../service/push-notifications.service
 import SwiperCore, {Autoplay, Keyboard, Pagination, Scrollbar, Zoom} from 'swiper';
 import {catchError} from "rxjs/operators";
 import {TranslateConfigService} from "../../service/translate-config.service";
+import GeneralUtils from "../../util/general.utils";
 
 SwiperCore.use([Autoplay, Keyboard, Pagination, Scrollbar, Zoom]);
 
@@ -48,8 +49,10 @@ export class AppComponent {
   onCarPostsTab: boolean = false;
   onEventsTab: boolean = false;
   onOtherTab: boolean = false;
-  receiveNotifications: boolean;
+  receiveNotifications: boolean = true;
   currentLanguageIsEnglish: boolean = true;
+  username: string | null = localStorage.getItem('name');
+  whatToRefresh: PostType = PostType.SLEEPERS;
 
   constructor(
     private platform: Platform,
@@ -132,8 +135,8 @@ export class AppComponent {
     })
     this.sharedServiceSubscription = this.sharedService.onPostsTabsNow.subscribe({
       next: (event: PostType) => {
-        console.log(`Received message onEventsTab #${event}`);
-        this.onOtherTab = this.onEventsTab = this.onMyProfileTab = false;
+        console.log(`Received message onPostsTabsNow #${event}`);
+        this.onOtherTab = this.onEventsTab = this.onMyProfileTab = this.onSbsProfileTab = false;
         this.onPostsTab = true;
         switch (event) {
           case PostType.CAR:
@@ -201,11 +204,11 @@ export class AppComponent {
       }
     })
     this.sharedServiceSubscription = this.sharedService.onOtherTab.subscribe({
-      next: (event: boolean) => {
+      next: (event: PostType) => {
         console.log(`Received message onFriendosProfileTab #${event}`);
-        if (event)
-          this.onEventsTab = this.onPostsTab = this.onMyProfileTab = this.onSbsProfileTab = false;
-        this.onOtherTab = event;
+        this.onEventsTab = this.onPostsTab = this.onMyProfileTab = this.onSbsProfileTab = false;
+        this.onOtherTab = true;
+        this.whatToRefresh = event;
       }
     })
     this.sharedServiceSubscription = this.sharedService.onEventsTab.subscribe({
@@ -397,7 +400,7 @@ export class AppComponent {
   goFromProfileToTimeline() {
     this.onEventsTab = this.onMyProfileTab = this.onOtherTab = false;
     this.onPostsTab = true;
-    this.router.navigateByUrl('/home/tabs/tab3');
+    GeneralUtils.goBack(this.router, this.sharedService);
   }
 
   editProfile() {
@@ -435,7 +438,7 @@ export class AppComponent {
       // @ts-ignore
       btn.children[0].classList.remove('spin-animation');
     }, 500);
-    this.sharedService.refreshed(PostType.SLEEPERS);
+    this.sharedService.refreshed(this.whatToRefresh);
   }
 
   clickedCheckBox() {
@@ -450,7 +453,7 @@ export class AppComponent {
         return throwError(err);
       }))
       .subscribe(data => {
-        this.receiveNotifications = data.intention;
+        this.receiveNotifications =  data.intention;
         console.log("setNotificationsIntention: " + data.message + ", " + this.receiveNotifications)
       });
   }
@@ -459,6 +462,7 @@ export class AppComponent {
     let currentNotificationsIntention: string | null = localStorage.getItem("receiveNotifications")
     if (currentNotificationsIntention == null)
       currentNotificationsIntention = JSON.stringify(true);
+    console.log("currentNotificationsIntention: "+currentNotificationsIntention)
     this.receiveNotifications = JSON.parse(currentNotificationsIntention);
   }
 
