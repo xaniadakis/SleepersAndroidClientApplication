@@ -14,6 +14,7 @@ import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {UiPostDto} from "../../dto/ui-post-dto";
 import GeneralUtils from "../../util/general.utils";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-edit-post-modal',
@@ -48,8 +49,9 @@ export class ShowPostModalComponent {
     , private postService: PostService
     , private sharedService: SharedService
     , private platform: Platform
-    , public modalService: ModalService,
-              public generalUtils: GeneralUtils) {
+    , public modalService: ModalService
+    , public generalUtils: GeneralUtils
+    , public translate: TranslateService) {
     this.platform.backButton.subscribeWithPriority(9999, (processNextHandler) => {
       return this.modalCtrl.dismiss(null, 'cancel');
     })
@@ -116,9 +118,9 @@ export class ShowPostModalComponent {
     });
   }
 
-  getLastValue(set: Set<SimpleCommentDto>): SimpleCommentDto{
+  getLastValue(set: Set<SimpleCommentDto>): SimpleCommentDto {
     let value;
-    for(value of set);
+    for (value of set) ;
     // @ts-ignore
     return value;
   }
@@ -126,11 +128,11 @@ export class ShowPostModalComponent {
   private getLastComments() {
     if (this.userId == null)
       return
-    if(this.comments.length>0) {
-      let lastItem: SimpleCommentDto = this.comments[this.comments.length-1];
-      console.log("LENGTH: "+this.comments.length);
+    if (this.comments.length > 0) {
+      let lastItem: SimpleCommentDto = this.comments[this.comments.length - 1];
+      console.log("LENGTH: " + this.comments.length);
       console.log(this.comments);
-      console.log("LAST: "+lastItem.text);
+      console.log("LAST: " + lastItem.text);
       // let lastChar: number = parseInt(lastCommentAt.slice(- 1))+1;
       this.postService.findLastComments(this.id, lastItem.commentedAt)
         .pipe(catchError(err => {
@@ -146,10 +148,11 @@ export class ShowPostModalComponent {
           data.postCommentsDto.comments.forEach(comment => this.comments.push(comment))
           console.log(this.comments);
         });
-    }
-    else {
+    } else {
       // console.log("LOSS: "+this.comments.length);
-      this.getPostComments()};
+      this.getPostComments()
+    }
+    ;
   }
 
   addComment(form: NgForm) {

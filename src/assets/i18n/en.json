@@ -44,6 +44,48 @@
     "signIn": "Sign In",
     "forgotPassword?": "Forgot Password?"
   },
+  "forgotPassword": {
+    "email": "Email",
+    "emailIsRequired": "Email is required",
+    "emailInvalid": "Email must be a valid email address",
+    "send": "Send",
+    "subtitle": "Please provide the email address that you used when you signed up for your Taco account."
+  },
+  "posts": {
+    "justNow": "just now",
+    "1minuteAgo": "one minute ago",
+    "1hourAgo": "one hour ago",
+    "1dayAgo": "one day ago",
+    "1weekAgo": "one week ago",
+    "minutesAgo": " minutes ago",
+    "hoursAgo": " hours ago",
+    "daysAgo": " days ago",
+    "weeksAgo": " weeks ago",
+    "buddiesHaveReacted": "{{n}} buddies have reacted",
+    "buddyHasReacted": "one buddy has reacted",
+    "nobuddyHasReacted": "nobuddy has reacted yet",
+    "already1Comment": "already one comment",
+    "alreadyNComments": "already {{n}} comments",
+    "noComments": "no comments yet"
+  },
+  "sleepers": {
+    "active": "active",
+    "offline": "offline",
+    "activeBefore1minute": "active before one minute",
+    "activeBefore1hour": "active before one hour",
+    "activeBefore1day": "active before one day",
+    "activeBefore1week": "active before one week",
+    "activeBeforeMinutes": "active before {{n}} minutes",
+    "activeBeforeHours": "active before {{n}} hours",
+    "activeBeforeDays": "active before {{n}} days",
+    "activeBeforeWeeks": "active before {{n}} weeks"
+  },
+  "tabs": {
+    "stories": "丂ㄒㄖ尺丨乇丂",
+    "art": "卂尺ㄒ",
+    "trips": "ㄒ尺丨卩丂",
+    "wheels": "山卄乇乇ㄥ丂"
+  },
   "buttons": {
     "edit": "Edit",
     "post": "Post",

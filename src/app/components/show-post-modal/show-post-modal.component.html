@@ -70,7 +70,7 @@
           <ion-grid>
             <div class="inline">
               <div class="commentator">{{comment.owner}}</div>
-              <div class="date ion-text-nowrap">{{generalUtils.getDate(comment.commentedAt)}}</div>
+              <div class="date ion-text-nowrap">{{generalUtils.getDate(comment.commentedAt, translate)}}</div>
             </div>
             <ion-row>
               <pre text-wrap class="comment">{{comment.text}}</pre>

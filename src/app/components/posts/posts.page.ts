@@ -15,6 +15,8 @@ import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 import {catchError} from "rxjs/operators";
 import GeneralUtils from "../../util/general.utils";
+import {TranslateConfigService} from "../../service/translate-config.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-posts',
@@ -51,7 +53,8 @@ export class PostsPage implements OnInit {
     , public modalService: ModalService
     , private sharedService: SharedService
     , private popoverCtrl: PopoverController
-    , public generalUtils: GeneralUtils) {
+    , public generalUtils: GeneralUtils
+    , public translate: TranslateService) {
   }
 
 
@@ -330,20 +333,20 @@ export class PostsPage implements OnInit {
 
   getReactionsDesc(num: number) {
     if (num > 1)
-      return num + " buddies have reacted";
+      return this.translate.instant('posts.buddiesHaveReacted', {n: num});
     if (num == 0)
-      return "nobuddy has reacted yet";
+      return this.translate.instant('posts.nobuddyHasReacted');
     else
-      return num + " buddy has reacted";
+      return this.translate.instant('posts.buddyHasReacted');
   }
 
   getCommentsDesc(num: number) {
     if (num > 1)
-      return "already " + num + " comments";
+      return this.translate.instant('posts.alreadyNComments', {n: num});
     if (num == 0)
-      return "no comments yet";
+      return this.translate.instant('posts.noComments');
     else
-      return "already " + num + " comment";
+      return this.translate.instant('posts.already1Comment');
   }
 
   trackByArtNo(index: number, post: UiPostDto): bigint {

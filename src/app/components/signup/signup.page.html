@@ -15,50 +15,50 @@
     <!--      <ion-input type="text" required></ion-input>-->
     <!--    </ion-item>-->
     <ion-item lines="full">
-      <ion-label position="floating">Username</ion-label>
+      <ion-label position="floating" translate>signup.username</ion-label>
       <ion-input type="text" name="username" class="form-control" [(ngModel)]="signup.username" #username="ngModel"
                  [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="4"
                  maxlength="9" white (keyup)="noSpaces($event)"></ion-input>
       <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
-        <div *ngIf="username.errors?.required">Username is required</div>
+        <div *ngIf="username.errors?.required" translate>signup.usernameIsRequired</div>
       </div>
     </ion-item>
     <ion-item lines="full">
-      <ion-label position="floating">Email</ion-label>
+      <ion-label position="floating" translate>signup.email</ion-label>
       <ion-input type="text" name="email" class="form-control" [(ngModel)]="signup.email" #email="ngModel"
                  [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" (keyup)="noSpaces($event)" required="true" email ></ion-input>
       <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
-        <div *ngIf="email.errors?.required">Email is required</div>
-        <div *ngIf="email.errors?.email">Email must be a valid email address</div>
+        <div *ngIf="email.errors?.required" translate>signup.emailIsRequired</div>
+        <div *ngIf="email.errors?.email" translate>signup.emailInvalid</div>
       </div>
     </ion-item>
     <ion-item lines="full">
-      <ion-label position="floating">Password</ion-label>
+      <ion-label position="floating" translate>signup.password</ion-label>
       <ion-input type="password" name="password1" class="form-control" [(ngModel)]="signup.password1"
                  #password1="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password1.invalid }" required
                  minlength="6"></ion-input>
       <div *ngIf="f.submitted && password1.invalid" class="invalid-feedback">
-        <div *ngIf="password1.errors?.required">Password is required</div>
-        <div *ngIf="password1.errors?.minlength">Password must be at least 6 characters</div>
+        <div *ngIf="password1.errors?.required" translate>signup.passwordIsRequired</div>
+        <div *ngIf="password1.errors?.minlength" translate>signup.passwordInvalid</div>
       </div>
     </ion-item>
     <ion-item lines="full">
-      <ion-label position="floating">Retype password</ion-label>
+      <ion-label position="floating" translate>signup.retypePassword</ion-label>
       <ion-input type="password" name="password2" class="form-control" [(ngModel)]="signup.password2"
                  #password2="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password2.invalid }"
                  required></ion-input>
       <div *ngIf="f.submitted && password2.invalid" class="invalid-feedback">
-        <div *ngIf="password2.errors?.required">Confirm Password is required</div>
-        <div *ngIf="password2.errors?.mustMatch">Passwords must match</div>
+        <div *ngIf="password2.errors?.required" translate>signup.confirmPasswordIsRequired</div>
+        <div *ngIf="password2.errors?.mustMatch" translate>signup.passwordsDontMatch</div>
       </div>
     </ion-item>
     <ion-row>
       <ion-col>
-        <label for="file-upload" class="custom-file-upload">
-          <i class="fa fa-cloud-upload"></i> Upload photo
+        <label for="file-upload" class="custom-file-upload"translate>
+          <i class="fa fa-cloud-upload"></i> signup.uploadPhoto
         </label>
         <input id="file-upload" type="file" name="profilePic" accept="image/*" (input)="onFileChanged($event)"/>
-        <ion-button type="submit" color="danger" expand="block">Sign Up</ion-button>
+        <ion-button type="submit" color="danger" expand="block"translate>signup.signUp</ion-button>
       </ion-col>
     </ion-row>
   </form>

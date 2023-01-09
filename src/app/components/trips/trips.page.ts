@@ -15,6 +15,7 @@ import {ReactionsComponent} from "../react-to-post/reactions.component";
 import {ShowReactionsComponent} from "../show-reactions/show-reactions.component";
 import {catchError} from "rxjs/operators";
 import GeneralUtils from "../../util/general.utils";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-trips',
@@ -53,7 +54,8 @@ export class TripsPage implements OnInit {
     , public modalService: ModalService
     , private sharedService: SharedService
     , private popoverCtrl: PopoverController
-    , public generalUtils: GeneralUtils) {
+    , public generalUtils: GeneralUtils
+    , public translate: TranslateService) {
   }
 
 

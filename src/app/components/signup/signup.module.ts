@@ -8,6 +8,7 @@ import {SignupPageRoutingModule} from './signup-routing.module';
 
 import {SignupPage} from './signup.page';
 import {DisallowSpacesDirective} from "../../util/no-spaces.directive";
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import {DisallowSpacesDirective} from "../../util/no-spaces.directive";
     FormsModule,
     IonicModule,
     SignupPageRoutingModule,
+    TranslateModule
   ],
   declarations: [SignupPage, DisallowSpacesDirective]
 })

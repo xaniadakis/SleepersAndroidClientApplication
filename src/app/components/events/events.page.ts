@@ -104,8 +104,7 @@ export class EventsPage {
   }
 
   goBack() {
-    this.sharedService.checkingPosts(true);
-    GeneralUtils.goBack(this.router);
+    GeneralUtils.goBack(this.router, this.sharedService);
   }
 
 

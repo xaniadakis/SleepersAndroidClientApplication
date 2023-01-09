@@ -1,5 +1,7 @@
 import {PostType} from "../dto/post-type";
 import {Router} from "@angular/router";
+import {TranslateService} from "@ngx-translate/core";
+import {SharedService} from "../service/shared.service";
 
 export default class GeneralUtils {
 
@@ -14,26 +16,30 @@ export default class GeneralUtils {
       return true;
   }
 
-  public static goBack(router: Router){
+  public static goBack(router: Router, sharedService: SharedService){
     let postType: PostType = PostType[localStorage.getItem("postType") as PostType]
     console.log("IMMA GO BACK TO: "+postType);
     switch (postType) {
       case PostType.ART:
+        sharedService.checkingPosts(postType);
         router.navigateByUrl('/home/tabs/tab1');
         break;
       case PostType.CAR:
+        sharedService.checkingPosts(postType);
         router.navigateByUrl('/home/tabs/tab2');
         break;
       case PostType.STORY:
+        sharedService.checkingPosts(postType);
         router.navigateByUrl('/home/tabs/tab3');
         break;
       default:
+        sharedService.checkingPosts(PostType.STORY);
         router.navigateByUrl('/home/tabs/tab3');
         break;
     }
   }
 
-  getDate(didAt: string): string {
+  getDate(didAt: string, translate: TranslateService): string {
     var didAtDate = new Date(didAt);
     var now = new Date();
     var diffMins = this.diffMinutes(didAtDate, now)
@@ -41,28 +47,34 @@ export default class GeneralUtils {
 
     switch (true) {
       case (diffMins < 1):
-        return "just now";
+        return translate.instant('posts.justNow');
       case (diffMins < 60):
-        return diffMins + " minutes ago";
+        return diffMins + translate.instant('posts.minutesAgo');
       case (diffMins < 1440):
         diff = this.diffHoursFromMinutes(diffMins);
-        return diff+ " hour"+this.addPlural(diff)+" ago";
+        if(!this.needsPlural(diff))
+          return translate.instant('posts.1hourAgo');
+        else
+          return diff + translate.instant('posts.hoursAgo');
       case (diffMins < 10080):
         diff = this.diffDaysFromMinutes(diffMins);
-        return diff+ " day"+this.addPlural(diff)+" ago";
+        if(!this.needsPlural(diff))
+          return translate.instant('posts.1dayAgo');
+        else
+          return diff + translate.instant('posts.daysAgo');
       case (diffMins > 10080):
-        diff = this.diffHoursFromMinutes(diffMins);
-        return diff+ " week"+this.addPlural(diff)+" ago";
+        diff = this.diffWeeksFromMinutes(diffMins);
+        if(!this.needsPlural(diff))
+          return translate.instant('posts.1weekAgo');
+        else
+          return diff + translate.instant('posts.weeksAgo');
       default:
         return "";
     }
   }
 
-  addPlural(number: number): string{
-    if(number>1)
-      return "s";
-    else
-      return "";
+  needsPlural(number: number): boolean{
+    return number > 1;
   }
 
   diffMinutes(date1: Date, date2: Date) {

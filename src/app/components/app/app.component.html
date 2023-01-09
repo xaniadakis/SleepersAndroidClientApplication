@@ -226,9 +226,6 @@
           </ion-card>
         </ion-row>
 
-
-        <!--        <input type="checkbox" id="switch" name="switch">-->
-        <!--        <label for="switch" class="switch"></label>-->
       </ion-menu-toggle>
 
       <!--          RECEIVE NOTIFADOS    -->
@@ -282,7 +279,8 @@
               <input name="switch" id="one" type="radio" (click)="changeDefaultLanguage('el')"/>
               <label for="one" class="switch__label"><img style="width: 40px; height: 20px;"
                                                           src="assets/icons/greeko.png"></label>
-              <input name="switch" id="two" type="radio" [checked]="currentLanguageIsEnglish" (click)="changeDefaultLanguage('en')"/>
+              <input name="switch" id="two" type="radio" [checked]="currentLanguageIsEnglish"
+                     (click)="changeDefaultLanguage('en')"/>
               <label for="two" class="switch__label"><img style="width: 40px; height: 20px;"
                                                           src="assets/icons/englo.png"></label>
               <div class="switch__indicator"></div>
@@ -349,13 +347,17 @@
           </ion-menu-toggle>
         </ion-buttons>
         <ion-buttons *ngIf="loggedIn" slot="end">
-          <!--          <div *ngIf="onPostsTab">-->
-          <!--            <div ontouchstart="">-->
-          <!--              <div id="postbutton" (click)="modalService.openCreatePostModal()">-->
-          <!--                <a style="color: #1e1e00;">Post</a>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
+          <div *ngIf="onPostsTab">
+            <h6 *ngIf="onStoriesTab" class="tab-sign" translate>tabs.stories</h6>
+            <h6 *ngIf="onArtPostsTab" class="tab-sign" translate>tabs.art</h6>
+            <h6 *ngIf="onTripPostsTab" class="tab-sign" translate>tabs.trips</h6>
+            <h6 *ngIf="onCarPostsTab" class="tab-sign" translate>tabs.wheels</h6>
+            <!--                      <div ontouchstart="">-->
+            <!--                        <div id="postbutton" (click)="modalService.openCreatePostModal()">-->
+            <!--                          <a style="color: #1e1e00;">Post</a>-->
+            <!--                        </div>-->
+            <!--                      </div>-->
+          </div>
           <div *ngIf="onMyProfileTab" ontouchstart="">
             <div id="editbutton" (click)="editProfile()">
               <a style="color: #1e1e00;">Edit</a>

@@ -54,8 +54,7 @@ export class UserPostsPage {
       this.router.navigateByUrl('/home/sleepers');
     }
     else {
-      this.sharedService.checkingPosts(true);
-      GeneralUtils.goBack(this.router);
+      GeneralUtils.goBack(this.router, this.sharedService);
     }
   }
 }

@@ -17,7 +17,7 @@ import {Update} from "../../dto/update";
 import {Clipboard} from '@awesome-cordova-plugins/clipboard/ngx';
 import {UserService} from "../../service/user.service";
 import {PushNotificationsService} from "../../service/push-notifications.service";
-import SwiperCore, { Autoplay, Keyboard, Pagination, Scrollbar, Zoom } from 'swiper';
+import SwiperCore, {Autoplay, Keyboard, Pagination, Scrollbar, Zoom} from 'swiper';
 import {catchError} from "rxjs/operators";
 import {TranslateConfigService} from "../../service/translate-config.service";
 
@@ -42,6 +42,10 @@ export class AppComponent {
   onSbsProfileTab: boolean = false;
   onMyProfileTab: boolean = false;
   onPostsTab: boolean = true;
+  onArtPostsTab: boolean = false;
+  onStoriesTab: boolean = true;
+  onTripPostsTab: boolean = false;
+  onCarPostsTab: boolean = false;
   onEventsTab: boolean = false;
   onOtherTab: boolean = false;
   receiveNotifications: boolean;
@@ -66,12 +70,29 @@ export class AppComponent {
       localStorage.setItem("postType", PostType.STORY)
       router.navigateByUrl("/home/tabs/tab3")
     }
+    this.getDefaultLanguage();
+    this.getCurrentNotificationsIntention();
     this.pushNotificationsService.initPush();
-
   }
 
-  changeDefaultLanguage(langType: string){
+  changeDefaultLanguage(langType: string) {
     this.translateConfigService.changeLanguage(langType);
+    localStorage.setItem("language", langType);
+  }
+
+  getDefaultLanguage() {
+    let lang: string | null = localStorage.getItem("language");
+    switch (lang) {
+      case "el":
+        this.currentLanguageIsEnglish = false;
+        break;
+      case "en":
+      case null:
+      default:
+        lang = "en";
+        this.currentLanguageIsEnglish = true;
+    }
+    this.translateConfigService.changeLanguage(lang);
   }
 
   ngOnInit() {
@@ -96,12 +117,12 @@ export class AppComponent {
     this.userService.receiveNotificationsIntention()
       .pipe(catchError(err => {
         this.receiveNotifications = false;
-        console.log("error while getting notification intention: "+err);
+        console.log("error while getting notification intention: " + err);
         return throwError(err);
       }))
       .subscribe(data => {
         this.receiveNotifications = data.intention;
-        console.log("receiveNotificationsIntention: "+data.message+", "+this.receiveNotifications)
+        console.log("receiveNotificationsIntention: " + data.message + ", " + this.receiveNotifications)
       });
     this.sharedServiceSubscription = this.sharedService.onChange.subscribe({
       next: (event: boolean) => {
@@ -110,17 +131,63 @@ export class AppComponent {
       }
     })
     this.sharedServiceSubscription = this.sharedService.onPostsTabsNow.subscribe({
-      next: (event: boolean) => {
+      next: (event: PostType) => {
         console.log(`Received message onEventsTab #${event}`);
-        if(event)
-          this.onOtherTab = this.onEventsTab = this.onMyProfileTab = false;
-        this.onPostsTab = event;
+        this.onOtherTab = this.onEventsTab = this.onMyProfileTab = false;
+        this.onPostsTab = true;
+        switch (event) {
+          case PostType.CAR:
+            this.onCarPostsTab = true;
+            this.onTripPostsTab = this.onArtPostsTab = this.onStoriesTab = false;
+            break;
+          case PostType.ART:
+            this.onArtPostsTab = true;
+            this.onCarPostsTab = this.onTripPostsTab = this.onStoriesTab = false;
+            break;
+          case PostType.TRIP:
+            this.onTripPostsTab = true;
+            this.onCarPostsTab = this.onArtPostsTab = this.onStoriesTab = false;
+            break;
+          case PostType.STORY:
+          default:
+            this.onStoriesTab = true;
+            this.onCarPostsTab = this.onArtPostsTab = this.onTripPostsTab = false;
+            break;
+        }
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onArtRefresh.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message onArtRefresh #${event}`);
+        this.onArtPostsTab = true;
+        this.onCarPostsTab = this.onTripPostsTab = this.onStoriesTab = false;
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onCarRefresh.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message onCarRefresh #${event}`);
+        this.onCarPostsTab = true;
+        this.onStoriesTab = this.onTripPostsTab = this.onArtPostsTab = false;
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onStoryRefresh.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message onStoryRefresh #${event}`);
+        this.onStoriesTab = true;
+        this.onCarPostsTab = this.onTripPostsTab = this.onArtPostsTab = false;
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onTripRefresh.subscribe({
+      next: (event: boolean) => {
+        console.log(`Received message onTripRefresh #${event}`);
+        this.onTripPostsTab = true;
+        this.onCarPostsTab = this.onStoriesTab = this.onArtPostsTab = false;
       }
     })
     this.sharedServiceSubscription = this.sharedService.onMyProfileNow.subscribe({
       next: (event: boolean) => {
         console.log(`Received message onProfileTab #${event}`);
-        if(event)
+        if (event)
           this.onEventsTab = this.onPostsTab = this.onOtherTab = this.onSbsProfileTab = false;
         this.onMyProfileTab = event;
       }
@@ -128,7 +195,7 @@ export class AppComponent {
     this.sharedServiceSubscription = this.sharedService.onSbsProfileNow.subscribe({
       next: (event: boolean) => {
         console.log(`Received message onProfileTab #${event}`);
-        if(event)
+        if (event)
           this.onEventsTab = this.onPostsTab = this.onOtherTab = this.onMyProfileTab = false;
         this.onSbsProfileTab = event;
       }
@@ -136,15 +203,15 @@ export class AppComponent {
     this.sharedServiceSubscription = this.sharedService.onOtherTab.subscribe({
       next: (event: boolean) => {
         console.log(`Received message onFriendosProfileTab #${event}`);
-        if(event)
-          this.onEventsTab = this.onPostsTab = this.onMyProfileTab = this.onSbsProfileTab =false;
+        if (event)
+          this.onEventsTab = this.onPostsTab = this.onMyProfileTab = this.onSbsProfileTab = false;
         this.onOtherTab = event;
       }
     })
     this.sharedServiceSubscription = this.sharedService.onEventsTab.subscribe({
       next: (event: boolean) => {
         console.log(`Received message onEventsTab #${event}`);
-        if(event)
+        if (event)
           this.onOtherTab = this.onPostsTab = this.onMyProfileTab = this.onSbsProfileTab = false;
         this.onEventsTab = event;
       }
@@ -374,18 +441,25 @@ export class AppComponent {
   clickedCheckBox() {
     // localStorage.getItem()
     this.receiveNotifications = !this.receiveNotifications;
-    console.log("receiveNotifications: "+this.receiveNotifications);
+    localStorage.setItem("receiveNotifications", JSON.stringify(this.receiveNotifications));
+    console.log("receiveNotifications: " + this.receiveNotifications);
     this.userService.setNotificationsIntention(this.receiveNotifications)
       .pipe(catchError(err => {
         this.receiveNotifications = false;
-        console.log("error while settin notification intention: "+err);
+        console.log("error while settin notification intention: " + err);
         return throwError(err);
       }))
       .subscribe(data => {
         this.receiveNotifications = data.intention;
-        console.log("setNotificationsIntention: "+data.message+", "+this.receiveNotifications)
+        console.log("setNotificationsIntention: " + data.message + ", " + this.receiveNotifications)
       });
   }
 
+  getCurrentNotificationsIntention() {
+    let currentNotificationsIntention: string | null = localStorage.getItem("receiveNotifications")
+    if (currentNotificationsIntention == null)
+      currentNotificationsIntention = JSON.stringify(true);
+    this.receiveNotifications = JSON.parse(currentNotificationsIntention);
+  }
 
 }

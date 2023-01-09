@@ -7,26 +7,26 @@
 <ion-content class="center">
   <form #form="ngForm" (ngSubmit)="onLogin(form)" #f="ngForm">
     <ion-item lines="full">
-      <ion-label position="floating">Username</ion-label>
+      <ion-label position="floating" translate>login.username</ion-label>
       <ion-input type="text" name="username" class="form-control" [(ngModel)]="login.username" #username="ngModel"
                  [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required minlength="3"></ion-input>
       <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
-        <div *ngIf="username.errors?.required">Username is required</div>
+        <div *ngIf="username.errors?.required" translate>login.usernameIsRequired</div>
       </div>
     </ion-item>
     <ion-item lines="full">
-      <ion-label position="floating">Password</ion-label>
+      <ion-label position="floating" translate>login.password</ion-label>
       <ion-input type="password" name="password" class="form-control" [(ngModel)]="login.password" #password="ngModel"
                  [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required minlength="4"></ion-input>
       <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
-        <div *ngIf="password.errors?.required">Password is required</div>
-        <div *ngIf="password.errors?.minlength">Passwords contain at least 4 characters</div>
+        <div *ngIf="password.errors?.required" translate>login.passwordIsRequired</div>
+        <div *ngIf="password.errors?.minlength" translate>login.passwordInvalid</div>
       </div>
     </ion-item>
     <ion-row>
       <ion-col>
-        <ion-button type="submit" color="danger" expand="block">Sign In</ion-button>
-        <a class="center" [routerLink]="['/forgot-password']" class="small-text">Forgot Password?</a>
+        <ion-button type="submit" color="danger" expand="block" translate>login.signIn</ion-button>
+        <a class="center" [routerLink]="['/forgot-password']" class="small-text" translate>login.forgotPassword?</a>
       </ion-col>
     </ion-row>
 

@@ -17,6 +17,6 @@ export class Tab3Page {
   }
 
   ngOnInit() {
-    this.sharedService.checkingPosts(true);
+    this.sharedService.checkingPosts(this.postType);
   }
 }

@@ -6,7 +6,7 @@ import {PostType} from "../dto/post-type";
 export class SharedService {
   public onChange: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
-  public onPostsTabsNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onPostsTabsNow: EventEmitter<PostType> = new EventEmitter<PostType>();
   public onMyProfileNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onSbsProfileNow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onEventsTab: EventEmitter<Boolean> = new EventEmitter<Boolean>();
@@ -21,6 +21,7 @@ export class SharedService {
   public onCarRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onArtRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onStoryRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  public onTripRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onFriendRequestRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onSleeperRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public onRefresh: EventEmitter<Boolean> = new EventEmitter<Boolean>();
@@ -51,6 +52,9 @@ export class SharedService {
       case PostType.STORY:
         this.onStoryRefresh.emit(true);
         break;
+      case PostType.TRIP:
+        this.onTripRefresh.emit(true);
+        break;
       case PostType.ALL:
       default:
         this.onRefresh.emit(true);
@@ -70,8 +74,8 @@ export class SharedService {
     this.onEventsTab.emit(value);
   }
 
-  public checkingPosts(value: boolean) {
-    this.onPostsTabsNow.emit(value);
+  public checkingPosts(postType: PostType) {
+    this.onPostsTabsNow.emit(postType);
   }
 
   public checkingMyProfile(value: boolean) {

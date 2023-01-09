@@ -118,8 +118,7 @@ export class ProfilePage implements OnInit {
 
   goBack() {
     if (!this.backToSleepersList) {
-      this.sharedService.checkingPosts(true);
-      GeneralUtils.goBack(this.router);
+      GeneralUtils.goBack(this.router, this.sharedService);
     } else {
       this.sharedService.checkingOtherSection(true);
       this.router.navigateByUrl('/home/sleepers');

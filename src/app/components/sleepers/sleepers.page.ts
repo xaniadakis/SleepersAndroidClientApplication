@@ -10,6 +10,7 @@ import {FriendRequestStatusEnum, UiUserDto} from "../../dto/get-user-details-res
 import {GlobalConstants} from "../../util/global-constants";
 import {ToastService} from "../../service/toast.service";
 import GeneralUtils from "../../util/general.utils";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-tab1',
@@ -36,7 +37,8 @@ export class SleepersPage {
               private platform: Platform,
               private sharedService: SharedService,
               private userService: UserService,
-              private toastService: ToastService) {
+              private toastService: ToastService,
+              public translate: TranslateService) {
     let userIdString = this.route.snapshot.paramMap.get('userId');
 
     if (userIdString != null)
@@ -48,18 +50,18 @@ export class SleepersPage {
   }
 
   ngOnInit() {
-    this.getAllFriends();
-    this.getNonFriends();
-    // this.getAllUsers(this.pageNumber, this.pageLimit);
+    // this.getAllFriends();
+    // this.getNonFriends();
+    this.getAllUsers(this.pageNumber, this.pageLimit);
     this.sharedService.onSleeperRefresh.subscribe({
       next: (value: boolean) => {
         console.log("refreshin sleepers");
         this.pageNumber = 0;
-        this.sleepers.splice(0, this.sleepers.length)
-        this.friends.splice(0, this.friends.length)
-        this.getAllFriends();
-        this.getNonFriends();
-        // this.getAllUsers(this.pageNumber, this.pageLimit);
+        // this.sleepers.splice(0, this.sleepers.length)
+        // this.friends.splice(0, this.friends.length)
+        // this.getAllFriends();
+        // this.getNonFriends();
+        this.getAllUsers(this.pageNumber, this.pageLimit);
       }
     });
   }
@@ -132,8 +134,7 @@ export class SleepersPage {
   }
 
   goBack() {
-    this.sharedService.checkingPosts(true);
-    GeneralUtils.goBack(this.router);
+    GeneralUtils.goBack(this.router, this.sharedService);
   }
 
   goToProfilePage(id: bigint) {
@@ -141,29 +142,43 @@ export class SleepersPage {
   }
 
   setBadge(lastActedAt: string): string {
+    const html = (color: string, diff: string) => `<ion-badge style=\"margin-right: 10px\" color=\"${color}\">${diff}</ion-badge>`;
     if (this.empty(lastActedAt))
-      return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">offline</ion-badge>";
+      return html('dark', this.translate.instant('sleepers.offline'));
     var lastActedAtDate = new Date(lastActedAt);
     var now = new Date();
-    // var diffMs = (new Date().valueOf() - lastActedAtDate.valueOf()); // milliseconds between now & Christmas
-    var diffMins = this.diffMinutes(lastActedAtDate, now)
-    // let string = "<ion-badge style=\"margin-right: 15px\" [color]=\"\"></ion-badge>"
-    // return '<ion-badge style=\"margin-right: 15px\" color=\"success\">d:'+diffMins+', '+lastActedAtDate.toString()+'</ion-badge>';
-
+    var diffMins = this.diffMinutes(lastActedAtDate, now);
+    let diff;
     switch (true) {
       case (diffMins < 5):
-        return "<ion-badge style=\"margin-right: 10px\" color=\"success\">active</ion-badge>";
+        return html('success', this.translate.instant('sleepers.active'));
       case (diffMins < 60):
-        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + diffMins + " minutes</ion-badge>";
-      case (diffMins < 1500):
-        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + this.diffHoursFromMinutes(diffMins) + " hours</ion-badge>";
+        return html('warning', this.translate.instant('sleepers.activeBeforeMinutes', {n: diffMins}));
+      case (diffMins < 1380):
+        diff = this.diffHoursFromMinutes(diffMins);
+        if(!this.needsPlural(diff))
+          return html('warning', this.translate.instant('sleepers.activeBefore1hour'));
+        else
+          return html('warning', this.translate.instant('sleepers.activeBeforeHours', {n: diff}));
       case (diffMins < 10080):
-        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + this.diffDaysFromMinutes(diffMins) + " days</ion-badge>";
+        diff = this.diffDaysFromMinutes(diffMins);
+        if(!this.needsPlural(diff))
+          return html('danger', this.translate.instant('sleepers.activeBefore1day'));
+        else
+          return html('danger', this.translate.instant('sleepers.activeBeforeDays', {n: diff}));
       case (diffMins > 10080):
-        return "<ion-badge style=\"margin-right: 10px\" color=\"warning\">active before " + this.diffWeeksFromMinutes(diffMins) + " weeks</ion-badge>";
+        diff = this.diffWeeksFromMinutes(diffMins);
+        if(!this.needsPlural(diff))
+          return html('danger', this.translate.instant('sleepers.activeBefore1week'));
+        else
+          return html('danger', this.translate.instant('sleepers.activeBeforeWeeks', {n: diff}));
       default:
-        return "<ion-badge style=\"margin-right: 10px\" color=\"danger\">offline</ion-badge>";
+        return html('dark', this.translate.instant('sleepers.offline'));
     }
+  }
+
+  needsPlural(number: number): boolean {
+    return number > 1;
   }
 
   diffMinutes(date1: Date, date2: Date) {
