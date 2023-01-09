@@ -4,6 +4,8 @@ import {PostType} from "../dto/post-type";
 
 @Injectable()
 export class SharedService {
+
+  public onLogin: EventEmitter<String> = new EventEmitter<String>();
   public onChange: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   public onPostsTabsNow: EventEmitter<PostType> = new EventEmitter<PostType>();
@@ -68,6 +70,10 @@ export class SharedService {
 
   public fire(value: boolean) {
     this.onChange.emit(value);
+  }
+
+  public justLoggedIn(value: string) {
+    this.onLogin.emit(value);
   }
 
   public checkingEvents(value: boolean) {

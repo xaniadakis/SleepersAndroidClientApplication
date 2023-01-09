@@ -11,6 +11,9 @@ import {SharedService} from "../../service/shared.service";
 import GeneralUtils from "../../util/general.utils";
 import {UserService} from "../../service/user.service";
 import {TranslateService} from "@ngx-translate/core";
+// import {debounce, Observable} from "rxjs";
+// import { interval, take } from 'rxjs';
+import { debounce } from 'lodash';
 
 async function presentToast(toastController: ToastController, position: 'top' | 'middle' | 'bottom', message: string) {
   const toast = await toastController.create({
@@ -57,26 +60,55 @@ function onLoginLoadProfilePicado(username: string, profilePicName: string) {
 })
 export class SignupPage {
 
-  signup = {
+  checkedUsername: boolean = false;
+  checkedMailAddress: boolean = false;
+
+  shortUsername: boolean | null = false;
+  validUsername: boolean | null = null;
+  checkingUsernameValidity: boolean = false;
+  startedCheckingUsernameValidity: boolean = false;
+
+  validMailAddress: boolean | null = null;
+  shortMailAddress: boolean | null = false;
+  checkingMailValidity: boolean = false;
+  startedCheckingMailValidity: boolean = false;
+  usernameMinlength: number = 3;
+
+  signUp: FormGroup = new FormBuilder().group({
     email: '',
-    username: '',
+    nickname: '',
     password1: '',
     password2: '',
     profilePic: ''
-  };
+  });
+  nicknamePlaceholder: string = this.translate.instant('signup.nicknamePlaceholder');
+  emailPlaceholder: string = this.translate.instant('signup.emailPlaceholder');
+  password2Placeholder: string = this.translate.instant('signup.password1Placeholder');
+  password1Placeholder: string = this.translate.instant('signup.password2Placeholder');
+
+  //
+  // signup = {
+  //   email: '',
+  //   username: '',
+  //   password1: '',
+  //   password2: '',
+  //   profilePic: ''
+  // };
 
   constructor(private toastController: ToastController,
               private router: Router,
               private sharedService: SharedService,
               private userService: UserService,
               private translate: TranslateService) {
+    this.checkIfUserExistsWithMailUnauth = debounce(this.checkIfUserExistsWithMailUnauth, 1000);
+    this.checkIfUserExistsUnauth = debounce(this.checkIfUserExistsUnauth, 1000);
   }
 
   ngOnInit(): void {
   }
 
   onFileChanged(event: any): void {
-    this.signup.profilePic = event.target.files[0];
+    this.signUp.controls["profilePic"].setValue( event.target.files[0]);
     console.log(event);
   }
 
@@ -100,7 +132,7 @@ export class SignupPage {
       "&password2=" + form.controls["password2"].value +
       "&email=" + form.controls["email"].value;
     var formData: FormData = new FormData()
-    formData.append("profilePic", this.signup.profilePic)
+    formData.append("profilePic", this.signUp.controls["profilePic"].value)
     const options = {
       url: GlobalConstants.APIURL + "/user/signup" + requestParams,
       data: formData,
@@ -124,6 +156,7 @@ export class SignupPage {
           localStorage.setItem('name', tokenPayload.name);
           localStorage.setItem('email', tokenPayload.email);
           localStorage.setItem('profilePic', jsonResponse.profilePic);
+          this.sharedService.justLoggedIn(tokenPayload.name);
           console.log(tokenPayload);
           presentToast(myToastController, "middle", "Welcome aboard " + tokenPayload.name + "!");
           myRouter.navigateByUrl("/home/tabs/tab2");
@@ -147,7 +180,7 @@ export class SignupPage {
       "&password2=" + form.controls["password2"].value +
       "&email=" + form.controls["email"].value;
     var formData: FormData = new FormData()
-    formData.append("profilePic", this.signup.profilePic)
+    formData.append("profilePic", this.signUp.controls["profilePic"].value)
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     var myRouter = this.router;
@@ -172,6 +205,7 @@ export class SignupPage {
           localStorage.setItem('profilePic', jsonResponse.profilePic);
           sharedService.fire(true);
           console.log(tokenPayload);
+          sharedService.justLoggedIn(tokenPayload.name);
           // onLoginLoadProfilePicado(tokenPayload.name, jsonResponse.profilePic)
           presentToast(myToastController, "middle", "Welcome aboard " + tokenPayload.name + "!");
           myRouter.navigateByUrl("/home/tabs/tab3");
@@ -202,32 +236,6 @@ export class SignupPage {
     }
   }
 
-  checkedUsername: boolean = false;
-  checkedMailAddress: boolean = false;
-
-  shortUsername: boolean | null = false;
-  validUsername: boolean | null = null;
-  checkingUsernameValidity: boolean = false;
-  startedCheckingUsernameValidity: boolean = false;
-
-  validMailAddress: boolean | null = null;
-  shortMailAddress: boolean | null = false;
-  checkingMailValidity: boolean = false;
-  startedCheckingMailValidity: boolean = false;
-  usernameMinlength: number = 3;
-
-  signUp: FormGroup = new FormBuilder().group({
-    email: '',
-    nickname: '',
-    password1: '',
-    password2: ''
-  });
-  nicknamePlaceholder: string = this.translate.instant('signup.nicknamePlaceholder');
-  emailPlaceholder: string = this.translate.instant('signup.emailPlaceholder');
-  password2Placeholder: string = this.translate.instant('signup.password1Placeholder');
-  password1Placeholder: string = this.translate.instant('signup.password2Placeholder');
-
-
   checkIfUserExistsWithMailUnauth(event: any) {
     // @ts-ignore
     let mail = (event.target as HTMLInputElement).value;
@@ -238,7 +246,9 @@ export class SignupPage {
     this.shortMailAddress = null;
     this.validMailAddress = null;
     if (mail.trim().length >= 9) {
-      this.userService.checkIfUserExistsWithMailUnauth(mail).subscribe(data => {
+      this.userService.checkIfUserExistsWithMailUnauth(mail)
+        // .pipe(debounce(()=>interval(5000)))
+        .subscribe(data => {
         console.log("got this exists: " + data);
         this.validMailAddress = !data;
         this.checkedMailAddress = true;
@@ -253,6 +263,37 @@ export class SignupPage {
     }
   }
 
+  // debounce<Params extends any[]>(
+  //   func: (...args: Params) => any,
+  //   timeout: number,
+  // ): (...args: Params) => void {
+  //   // @ts-ignore
+  //   let timer: NodeJS.Timeout
+  //   return (...args: Params) => {
+  //     clearTimeout(timer)
+  //     timer = setTimeout(() => {
+  //       func(...args)
+  //     }, timeout)
+  //   }
+  // }
+
+  // debounceCheckIfUserExistsUnauth = this.debounce(this.checkIfUserExistsUnauth, 1000);
+  //
+  // debounceCheckIfUserExistsWithMailUnauth = this.debounce(this.checkIfUserExistsWithMailUnauth, 1000);
+
+
+  // debounceCheckIfUserExistsUnauth(event: any){
+  //   setTimeout(() => {
+  //         this.checkIfUserExistsUnauth(event);
+  //       }, 1000);
+  // }
+  //
+  // debounceCheckIfUserExistsWithMailUnauth(event: any){
+  //   setTimeout(() => {
+  //     this.checkIfUserExistsWithMailUnauth(event);
+  //   }, 1000);
+  // }
+
   checkIfUserExistsUnauth(event: any) {
     // @ts-ignore
     let username = (event.target as HTMLInputElement).value;
@@ -263,6 +304,7 @@ export class SignupPage {
     this.validUsername = null;
     if (username.trim().length >= this.usernameMinlength) {
       this.userService.checkIfUserExistsUnauth(username)
+        // .pipe(debounce(()=>interval(1000)))
         .subscribe(data => {
           this.validUsername = !data;
           this.checkedUsername = true;

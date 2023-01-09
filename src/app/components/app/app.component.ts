@@ -50,7 +50,7 @@ export class AppComponent {
   onEventsTab: boolean = false;
   onOtherTab: boolean = false;
   receiveNotifications: boolean = true;
-  currentLanguageIsEnglish: boolean = true;
+  currentLanguageIsEnglish: boolean = false;
   username: string | null = localStorage.getItem('name');
   whatToRefresh: PostType = PostType.SLEEPERS;
 
@@ -86,14 +86,14 @@ export class AppComponent {
   getDefaultLanguage() {
     let lang: string | null = localStorage.getItem("language");
     switch (lang) {
-      case "el":
-        this.currentLanguageIsEnglish = false;
-        break;
       case "en":
+        this.currentLanguageIsEnglish = true;
+        break;
+      case "el":
       case null:
       default:
-        lang = "en";
-        this.currentLanguageIsEnglish = true;
+        lang = "el";
+        this.currentLanguageIsEnglish = false;
     }
     this.translateConfigService.changeLanguage(lang);
   }
@@ -131,6 +131,12 @@ export class AppComponent {
       next: (event: boolean) => {
         console.log(`Received message onChange #${event}`);
         this.toggleLoggedIn(event);
+      }
+    })
+    this.sharedServiceSubscription = this.sharedService.onLogin.subscribe({
+      next: (event: string) => {
+        console.log(`Received name onLogin #${event}`);
+        this.username = event;
       }
     })
     this.sharedServiceSubscription = this.sharedService.onPostsTabsNow.subscribe({
@@ -460,8 +466,10 @@ export class AppComponent {
 
   getCurrentNotificationsIntention() {
     let currentNotificationsIntention: string | null = localStorage.getItem("receiveNotifications")
-    if (currentNotificationsIntention == null)
-      currentNotificationsIntention = JSON.stringify(true);
+    if (currentNotificationsIntention == null) {
+      this.receiveNotifications = true;
+      return;
+    }
     console.log("currentNotificationsIntention: "+currentNotificationsIntention)
     this.receiveNotifications = JSON.parse(currentNotificationsIntention);
   }

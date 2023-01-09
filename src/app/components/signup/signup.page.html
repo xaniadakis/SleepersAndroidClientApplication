@@ -97,8 +97,8 @@
       <ion-input type="text" (keyup)="noSpaces($event)" [clearInput]="true"
                  [placeholder]="emailPlaceholder"
                  type="email" name="email" class="form-control" formControlName="email" required="true"
-                 (ionChange)="checkIfUserExistsWithMailUnauth($event)"
-      ></ion-input>
+                 (ionChange)="checkIfUserExistsWithMailUnauth($event)">
+      </ion-input>
 
       <ion-avatar *ngIf="validMailAddress && startedCheckingMailValidity else invalidMailBlock" slot="end">
         <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"

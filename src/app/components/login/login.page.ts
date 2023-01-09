@@ -87,12 +87,13 @@ export class LoginPage implements OnInit {
             let tokenPayload: JwtTokenPayload = JSON.parse(JSON.stringify(jwt_decode(jsonResponse.jwt)));
             localStorage.setItem('userId', tokenPayload.sub);
             localStorage.setItem('name', tokenPayload.name);
+            sharedService.fire(true);
             localStorage.setItem('email', tokenPayload.email);
             localStorage.setItem('profilePic', jsonResponse.profilePic);
-            sharedService.fire(true);
             console.log(tokenPayload);
             presentToast(myToastController, "middle", "Welcome " + tokenPayload.name + "!");
             // onLoginLoadProfilePicado(tokenPayload.name, jsonResponse.profilePic)
+            sharedService.justLoggedIn(tokenPayload.name);
             myRouter.navigateByUrl("/home/tabs/tab3");
           } else
             alert(xhr.status + xhr.responseText)
